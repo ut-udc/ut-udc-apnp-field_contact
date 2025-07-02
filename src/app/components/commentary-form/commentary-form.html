@@ -17,7 +17,9 @@
       {{currentContact?.contactDate | date: 'HH:mm'}}</span
     >
     <span class="on-surface-variant">Primary Interviewer</span>
-    <span class="body_large">{{currentAgent?.fullName}}</span>
+    <span class="body_large">{{currentContact.agentId ?
+      this.navigationService.getOfficerByAgentId(currentContact.agentId)?.fullName
+      : 'Refresh Data'}}</span>
     <span class="on-surface-variant">Secondary Interviewer</span>
     <span class="body_large"
       >{{currentContact.secondaryAgentId ?
@@ -25,9 +27,9 @@
       : 'N/A'}}</span
     >
     <span class="on-surface-variant">Contact Type</span>
-    <span class="body_large">{{currentContact?.contactType}}</span>
+    <span class="body_large">{{currentContact.contactType ? this.navigationService.getContactTypeById(currentContact.contactType)?.text : 'N/A'}}</span>
     <span class="on-surface-variant">Location</span>
-    <span class="body_large">{{currentContact?.location}}</span>
+    <span class="body_large">{{currentContact.location ? this.navigationService.getLocationById(currentContact.location)?.text : 'N/A'}}</span>
   </div>
   <div class="type-of-contact-btn-container">
     <button class="type-of-contact-btn on-surface-variant">Made Contact</button>

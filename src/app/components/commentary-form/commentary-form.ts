@@ -77,7 +77,7 @@ export class CommentaryForm implements OnInit {
   }
 
   ngOnInit() {
-    // debugger
+    debugger
     const contactId: number = Number(this.route.snapshot.params['id']);
     this.currentContact =
         this.contactData.getContactById(

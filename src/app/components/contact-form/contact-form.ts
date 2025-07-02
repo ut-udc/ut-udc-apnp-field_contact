@@ -82,56 +82,24 @@ export class ContactForm implements OnInit {
       id: element.agentId,
       text: element.fullName,
     }));
+    contactTypeList: Select2Model[] = this.navigationService.contactTypeList;
+    locationList: Select2Model[] = this.navigationService.locationList;
 
-  // agentList2: Select2Model[] = this.navigationService
-  //   .getOfficerList()
-  //   .map((element) => ({
-  //     id: element.agentId.toString(),
-  //     text: element.fullName,
-  //   }));
 
   filteredOptions: Observable<Select2Model[]> = of([...this.agentList]);
-  filteredOptions2: Observable<Select2Model[]> = of([...this.agentList]);
+  secondaryInterviewerOptions: Observable<Select2Model[]> = of([
+    ...this.agentList,
+  ]);
+  contactTypeOptions: Observable<Select2Model[]> = of([
+    ...this.contactTypeList
+  ]);
+  locationOptions: Observable<Select2Model[]> = of([
+    ...this.locationList
+  ]);
+    
   searchTerm: string = '';
   searchTerm2: string = '';
-  onSearchTermChange() {
-    if (!this.searchTerm) {
-      this.filteredOptions = of([...this.agentList]);
-      return;
-    } else {
-      this.filteredOptions = of(
-        this.agentList.filter((option) =>
-          option.text.toLowerCase().includes(this.searchTerm.toLowerCase())
-        )
-      );
-    }
-  }
-  onSearchTermChange2() {
-    if (!this.searchTerm2) {
-      this.filteredOptions2 = of([...this.agentList]);
-      return;
-    } else {
-      this.filteredOptions2 = of(
-        this.agentList.filter((option) =>
-          option.text.toLowerCase().includes(this.searchTerm2.toLowerCase())
-        )
-      );
-    }
-  }
 
-  filterOptions(event: Event) {
-    const target = event.target as HTMLInputElement;
-    const value = target.value;
-    if (!value) {
-      this.filteredOptions = of([...this.agentList]);
-    } else {
-      this.filteredOptions = of(
-        this.agentList.filter((option) =>
-          option.text.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    }
-  }
 
   onSubmit() {
     // debugger;

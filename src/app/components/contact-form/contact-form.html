@@ -47,22 +47,19 @@
       <mat-timepicker #timePicker />
     </mat-form-field>
 
-
     <mat-form-field class="contact_form_input_field">
       <mat-label>Primary Interviewer</mat-label>
       <mat-select [formControl]="myControl1">
         <mat-option>
           <input
             matInput
-            placeholder="Search..."
-            (keyup)="filterOptions($event)"
+            formControlName="primaryInterviewer"
           />
         </mat-option>
         @for (option of filteredOptions | async; track option) {
         <mat-option [value]="option.id">{{option.text}}</mat-option>
         }
       </mat-select>
-      <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
 
     <mat-form-field class="contact_form_input_field">
@@ -71,67 +68,47 @@
         <mat-option>
           <input
             matInput
-            formControlName="secondaryInterviewer"
-            placeholder="Search..."
-            (keyup)="filterOptions($event)"
-          />
+            formControlName="secondaryInterviewer" />
         </mat-option>
-        @for (option of filteredOptions2 | async; track option) {
+        @for (option of secondaryInterviewerOptions | async; track option) {
         <mat-option [value]="option.id">{{option.text}}</mat-option>
         }
       </mat-select>
-      <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
-
-
-    <!-- <mat-form-field class="contact_form_input_field">
-      <mat-label>Secondary Interviewer</mat-label>
-      <input
-        type="text"
-        placeholder="Start typing a name"
-        aria-label="Secondary Interviewer"
-        matInput
-        formControlName="secondaryInterviewer"
-        [formControl]="myControl2"
-        [matAutocomplete]="auto2"
-      />
-      <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
-        @for (option of filteredOptions2 | async; track option) {
-        <mat-option [value]="option.id">{{option.text}}</mat-option>
-        }
-      </mat-autocomplete>
-      <mat-icon matPrefix>search</mat-icon>
-    </mat-form-field> -->
-
-
+    
     <mat-form-field class="contact_form_input_field">
       <mat-label>Contact Type</mat-label>
-      <select
-        matNativeControl
+      <mat-select
+      required
+      
+      [formControl]="myControl3"
+      >
+      <mat-option>
+        <input
+        matInput
         formControlName="contactType"
-        [formControl]="myControl3"
-        required
-      >
-        <option value="Field_Visit">Field Visit</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-      </select>
-    </mat-form-field>
-    <mat-form-field class="contact_form_input_field">
-      <mat-label>Location</mat-label>
-      <select
-        matNativeControl
-        formControlName="location"
-        [formControl]="myControl4"
-        required
-      >
-        <option value="Primary_Residence">Primary Residence</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
-      </select>
-    </mat-form-field>
+        />
+      </mat-option>
+      @for (option of contactTypeOptions | async; track option) {
+        <mat-option [value]="option.id">{{option.text}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field class="contact_form_input_field">
+    <mat-label>Location</mat-label>
+    <mat-select [formControl]="myControl4" required>
+      <mat-option>
+        <input
+          matInput
+          formControlName="location" />
+      </mat-option>
+      @for (option of locationOptions | async; track option) {
+      <mat-option [value]="option.id">{{option.text}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
   </form>
   <div>
     <mat-divider style="color: lightgray"></mat-divider>
