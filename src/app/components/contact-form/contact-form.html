@@ -47,8 +47,9 @@
       <mat-timepicker #timePicker />
     </mat-form-field>
 
+
     <mat-form-field class="contact_form_input_field">
-      <mat-label> Primary Interviewer</mat-label>
+      <mat-label>Primary Interviewer</mat-label>
       <mat-select [formControl]="myControl1">
         <mat-option>
           <input
@@ -63,7 +64,27 @@
       </mat-select>
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
+
     <mat-form-field class="contact_form_input_field">
+      <mat-label>Secondary Interviewer</mat-label>
+      <mat-select [formControl]="myControl2">
+        <mat-option>
+          <input
+            matInput
+            formControlName="secondaryInterviewer"
+            placeholder="Search..."
+            (keyup)="filterOptions($event)"
+          />
+        </mat-option>
+        @for (option of filteredOptions2 | async; track option) {
+        <mat-option [value]="option.id">{{option.text}}</mat-option>
+        }
+      </mat-select>
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+
+    <!-- <mat-form-field class="contact_form_input_field">
       <mat-label>Secondary Interviewer</mat-label>
       <input
         type="text"
@@ -80,7 +101,9 @@
         }
       </mat-autocomplete>
       <mat-icon matPrefix>search</mat-icon>
-    </mat-form-field>
+    </mat-form-field> -->
+
+
     <mat-form-field class="contact_form_input_field">
       <mat-label>Contact Type</mat-label>
       <select
