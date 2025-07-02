@@ -1,0 +1,20 @@
+<div class="surface">
+<mat-toolbar>
+        <mat-toolbar-row>
+            <span>&nbsp;</span>
+            <span class="header-spacer"></span>
+            <mat-icon class="header-icon" svgIcon="search" aria-hidden="false" aria-label="Search Icon"></mat-icon>
+            <mat-icon class="header-icon" svgIcon="bell" aria-hidden="false" aria-label="Notifications Icon"></mat-icon>
+            <div class="primary-container">
+                <span class="initials" routerLink="/agent-profile">{{agent.firstName.substring(0, 1)}}{{agent.lastName.substring(0, 1)}}</span>
+            </div>
+        </mat-toolbar-row>
+        <mat-toolbar-row>
+            <h2 class="flex-item headline_small" style="font-size: 24px; font-family: 'Merriweather', serif;">Supervision Contacts</h2>
+        </mat-toolbar-row>
+        
+
+</mat-toolbar>
+<app-my-caseload [myCaseload]="agent.myCaseload"></app-my-caseload>
+<app-other-offenders-list [otherOffenders]="agent.otherOffenders"></app-other-offenders-list>
+</div>

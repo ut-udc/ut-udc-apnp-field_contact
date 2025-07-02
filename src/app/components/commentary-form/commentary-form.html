@@ -1,0 +1,75 @@
+<div class="surface">
+  <span class="detail-header">
+    <mat-icon
+      class="header-icon"
+      svgIcon="arrow_back"
+      aria-hidden="false"
+      aria-label="Back Icon"
+      style="cursor: pointer"
+      [routerLink]="['/contact-form', offender?.ofndrNum, currentContact?.contactId]"
+    ></mat-icon>
+    <span class="title_large">Add Commentary</span>
+  </span>
+  <div class="surface-container-low">
+    <span class="on-surface-variant">Date</span>
+    <span class="body_large"
+      >{{currentContact?.contactDate | date: 'MM/dd/yyyy'}} |
+      {{currentContact?.contactDate | date: 'HH:mm'}}</span
+    >
+    <span class="on-surface-variant">Primary Interviewer</span>
+    <span class="body_large">{{currentAgent?.fullName}}</span>
+    <span class="on-surface-variant">Secondary Interviewer</span>
+    <span class="body_large"
+      >{{currentContact.secondaryAgentId ?
+      this.navigationService.getOfficerByAgentId(currentContact.secondaryAgentId)?.fullName
+      : 'N/A'}}</span
+    >
+    <span class="on-surface-variant">Contact Type</span>
+    <span class="body_large">{{currentContact?.contactType}}</span>
+    <span class="on-surface-variant">Location</span>
+    <span class="body_large">{{currentContact?.location}}</span>
+  </div>
+  <div class="type-of-contact-btn-container">
+    <button class="type-of-contact-btn on-surface-variant">Made Contact</button>
+    <button class="type-of-contact-btn on-surface-variant">
+      Attempted Contact
+    </button>
+  </div>
+  <div class="surface-container-low on-surface-variant">
+    <span>Summary of Contact</span>
+    <form [formGroup]="commentaryForm" (submit)="onSubmit()">
+      <mat-form-field class="contact_form_input_field">
+        <textarea
+          matInput
+          formControlName="commentary"
+          placeholder="Include details related to the R&R efforts of the visit."
+        >{{currentContact?.commentary}}</textarea>
+      </mat-form-field>
+    </form>
+    <!-- <textarea class="commentary-textarea body_large" placeholder="Include details related to the R&R efforts of the visit."></textarea> -->
+    <span>Tap the mic next to your keyboard to initiate voice to text</span>
+  </div>
+
+  <div class="on-surface-variant">
+    <span>
+      <mat-icon class="info-field-icon">info_outline</mat-icon> Field Visit
+      Guidelines
+    </span>
+  </div>
+
+  <div>
+    <mat-divider style="color: lightgray"></mat-divider>
+    <section>
+      <div class="button-row">
+        <button matButton="outlined">Cancel</button>
+        <button
+          style="background-color: #030303; color: white"
+          (click)="onSubmit()"
+          matButton="filled"
+        >
+          Save
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

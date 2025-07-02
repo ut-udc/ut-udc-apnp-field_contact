@@ -24,10 +24,27 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "input": "src/assets/images",
+                "output": "assets/images",
+                "glob": "**/*"
+              },
+              {
+                "input": "src/assets/icons",
+                "output": "assets/icons",
+                "glob": "**/*"
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/app/css/light.css",
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/app/app.scss"
+            ],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -44,7 +61,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,

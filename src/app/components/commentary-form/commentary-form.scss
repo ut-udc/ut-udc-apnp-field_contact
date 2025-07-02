@@ -1,0 +1,17 @@
+.type-of-contact-btn {
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid var(--UDC-styles-sys-light-outline-variant, #CBC6BC);
+}
+
+.type-of-contact-btn-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    flex: 1 0 0;
+    align-self: stretch;
+}

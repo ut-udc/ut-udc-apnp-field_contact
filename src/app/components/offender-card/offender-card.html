@@ -1,0 +1,17 @@
+<div class="offender-card ripple-container" style="display: flex; cursor: pointer;" 
+    matRipple
+     [matRippleCentered]="centered"
+     [matRippleDisabled]="disabled"
+     [matRippleUnbounded]="unbounded"
+     [matRippleRadius]="radius"
+     [matRippleColor]="color" 
+     [routerLink]="['/offender-detail', offender.ofndrNum]" >
+    <div style="flex: 1;">
+        <img >
+    </div>
+    <div style="flex: 2;">
+        <div class="label_medium">{{offender.ofndrNum}}</div>
+        <div class="title_medium">{{offender.lastName}}, {{offender.firstName}}</div>
+        <div class="body_small">{{offender.address}}<br />{{offender.city}}, {{offender.state}} {{offender.zip}}</div>
+    </div>
+</div>

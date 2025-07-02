@@ -1,0 +1,18 @@
+<div class="surface">
+    <div class="surface-container-low">
+        <div class="surface-container flex-container">
+            <h2 class="flex-item headline_small">My Caseload</h2>
+            <mat-divider style="color: lightgray;"></mat-divider>
+            <div class="on-surface-variant" style="display: flex; align-items: center;">
+                <span class="source-sans">{{myCaseload.length}} offenders</span>
+                <span class="header-spacer"></span>
+                <mat-icon class="header-icon" svgIcon="search" aria-hidden="false" aria-label="Search Icon"></mat-icon>
+                <mat-icon class="header-icon" svgIcon="filter" aria-hidden="false" aria-label="Filter Icon"></mat-icon>
+            </div>
+            <div>
+                <app-offender-card *ngFor="let offender of myCaseload" [offender]="offender"></app-offender-card>
+            </div>
+
+        </div>
+    </div>
+</div>
