@@ -33,7 +33,7 @@ export class CommentaryForm implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
-  
+
   currentContact: Contact = {
     contactId: 0,
     ofndrNum: 0,
@@ -71,30 +71,24 @@ export class CommentaryForm implements OnInit {
     this.currentContact.formCompleted = true;
     this.currentContact.commentary = this.commentaryForm.value.commentary ?? '';
     this.contactData.updateContact(
-      this.currentContact.contactId,
       this.currentContact
     );
   }
 
-  ngOnInit() {
-    debugger
+  async ngOnInit() {
+    // debugger
     const contactId: number = Number(this.route.snapshot.params['id']);
-    this.currentContact =
-        this.contactData.getContactById(
-          contactId
-        ) ?? this.currentContact;
-        this.commentaryForm.patchValue({
-          commentary: this.currentContact?.commentary,
-        });
+    const contact = await this.contactData.getContactById(contactId);
+    this.currentContact = contact ?? this.currentContact;
+    this.commentaryForm.patchValue({
+      commentary: this.currentContact?.commentary,
+    });
     this.currentAgent =
       this.navigationService.getOfficerByAgentId(
         this.currentContact?.agentId
       ) ?? this.navigationService.getAgent();
   }
 
-  contact: Contact | undefined = this.contactData.getContactById(
-    Number(this.route.snapshot.params['id'])
-  );
   //this needs to be fixed wrong "id" is referenced but fine for now
   offender: Offender | undefined =
     this.navigationService.getCaseloadOffenderById(

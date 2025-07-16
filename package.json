@@ -20,6 +20,8 @@
     "@angular/router": "^20.0.0",
     "@angular/service-worker": "^20.0.0",
     "bootstrap": "^5.3.7",
+    "dexie": "^4.0.11",
+    "idb": "^8.0.3",
     "jquery": "^3.7.1",
     "mui": "^0.0.1",
     "rxjs": "~7.8.0",

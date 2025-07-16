@@ -8,7 +8,6 @@
       "resources": {
         "files": [
           "/favicon.ico",
-          "/index.csr.html",
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
@@ -24,6 +23,63 @@
         "files": [
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
+      }
+    },
+    {
+      "name": "styles",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/**/*.(css|scss)"
+        ]
+      }
+    },
+    {
+      "name": "scripts",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/**/*.(js)"
+        ]
+      }
+    },
+    {
+      "name": "images",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/**/*.(jpg|jpeg|png|apng|webp|avif|gif)"
+        ]
+      }
+    },{
+      "name": "data",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/**/*.(json)"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "urls": [
+        "**/api/**"
+      ],
+      "cacheQueryOptions": {
+        "ignoreVary": true,
+        "ignoreSearch": true
+      },
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "4h",
+        "timeout": "3s",
+        "strategy": "performance"
       }
     }
   ]

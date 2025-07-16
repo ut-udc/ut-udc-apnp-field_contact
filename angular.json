@@ -34,7 +34,11 @@
                 "input": "src/assets/icons",
                 "output": "assets/icons",
                 "glob": "**/*"
-              }
+              },
+              "src/manifest.webmanifest",
+              "src/service-worker.js",
+              "src/sw-register.js",
+              "src/ngsw-worker.js"
             ],
             "styles": [
               "src/app/css/light.css",
@@ -52,13 +56,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "5MB"
                 }
               ],
               "outputHashing": "all",
