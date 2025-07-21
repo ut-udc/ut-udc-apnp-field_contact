@@ -61,8 +61,13 @@ export class ContactForm implements OnInit {
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
 
+  offender: Offender | undefined = undefined;
+  contact: Contact | undefined = undefined;
+
   selectedDateTime: Date = new Date();
   primaryInterviewer: string = '';
+  ofndrNum: number = 0;
+  contactId: number = 0;
 
   currentContact: Contact = {
     contactId: 0,
@@ -83,24 +88,20 @@ export class ContactForm implements OnInit {
       id: element.agentId,
       text: element.fullName,
     }));
-    contactTypeList: Select2Model[] = this.navigationService.contactTypeList;
-    locationList: Select2Model[] = this.navigationService.locationList;
-
+  contactTypeList: Select2Model[] = this.navigationService.contactTypeList;
+  locationList: Select2Model[] = this.navigationService.locationList;
 
   filteredOptions: Observable<Select2Model[]> = of([...this.agentList]);
   secondaryInterviewerOptions: Observable<Select2Model[]> = of([
     ...this.agentList,
   ]);
   contactTypeOptions: Observable<Select2Model[]> = of([
-    ...this.contactTypeList
+    ...this.contactTypeList,
   ]);
-  locationOptions: Observable<Select2Model[]> = of([
-    ...this.locationList
-  ]);
-    
+  locationOptions: Observable<Select2Model[]> = of([...this.locationList]);
+
   searchTerm: string = '';
   searchTerm2: string = '';
-
 
   async onSubmit() {
     // debugger;
@@ -110,7 +111,7 @@ export class ContactForm implements OnInit {
       this.currentContact.previouslySuccessful = true;
       this.currentContact = {
         contactId: this.currentContact.contactId,
-        ofndrNum: Number(this.offender?.ofndrNum) ?? 0,
+        ofndrNum: Number(this.route.snapshot.params['ofndrNum']),
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
@@ -128,7 +129,7 @@ export class ContactForm implements OnInit {
       this.currentContact.contactId = this.currentContact.contactId;
       this.currentContact = {
         contactId: this.currentContact.contactId,
-        ofndrNum: Number(this.offender?.ofndrNum) ?? 0,
+        ofndrNum: Number(this.route.snapshot.params['ofndrNum']),
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
@@ -138,15 +139,11 @@ export class ContactForm implements OnInit {
         formCompleted: false,
         previouslySuccessful: this.currentContact.previouslySuccessful,
       };
-      this.contactData.updateContact(
-        this.currentContact
-      );
+      this.contactData.updateContact(this.currentContact);
     }
 
-    console.log(this.contactData.getAllContacts());
+    // console.log(this.contactData.getAllContacts());
   }
-  offender: Offender | undefined = undefined;
-  contact: Contact | undefined = undefined;
 
   contactForm: FormGroup = new FormGroup({
     contactId: new FormControl<number | null>(null),
@@ -159,12 +156,6 @@ export class ContactForm implements OnInit {
   });
 
   constructor() {
-    const offenderNum = Number(this.route.snapshot.params['id']);
-    this.offender = this.navigationService.getCaseloadOffenderById(offenderNum);
-    if (!this.offender) {
-      this.offender =
-        this.navigationService.getOtherOffendersOffenderById(offenderNum);
-    }
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
@@ -183,14 +174,25 @@ export class ContactForm implements OnInit {
 
   async ngOnInit() {
     // debugger;
-    if (this.route.snapshot.params['contactId']) {
-      const contactId: number = Number(this.route.snapshot.params['contactId']);
-      const contact = await this.contactData.getContactById(contactId);
+    const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
+    this.offender = await this.navigationService.getCaseloadOffenderById(
+      offenderNum
+    );
+    if (!this.offender) {
+      this.offender =
+        await this.navigationService.getOtherOffendersOffenderById(offenderNum);
+    }
+    this.ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
+    this.currentContact.ofndrNum = this.ofndrNum;
+    this.contactId = Number(this.route.snapshot.params['contactId']);
+    if (this.contactId || this.contactId > 0) {
+      const contact = await this.contactData.getContactById(this.contactId);
       this.currentContact = contact ?? this.currentContact;
-    };
-    if (this.route.snapshot.params['id']) {
-      const offenderNum = Number(this.route.snapshot.params['id']);
-      this.contact = await this.contactData.getUncompletedContactByOffenderNumber(offenderNum);
+    } else if (this.ofndrNum > 0) {
+      this.contact =
+        await this.contactData.getUncompletedContactByOffenderNumber(
+          this.ofndrNum
+        );
       this.currentContact = this.contact ?? this.currentContact;
     }
     if (this.currentContact.contactId > 0) {
@@ -210,7 +212,9 @@ export class ContactForm implements OnInit {
       setTimeout(() => {
         // this.contactForm.updateValueAndValidity();
         this.contactForm.patchValue({
-          primaryInterviewer: this.navigationService.getAgent().agentId,
+          primaryInterviewer: this.contactData
+            .getAgent()
+            .then((agent) => agent?.agentId ?? ''),
           contactDate: new Date(),
           contactTime: new Date(),
         });
@@ -229,35 +233,6 @@ export class ContactForm implements OnInit {
     console.log('Contact count', this.contactData.getAllContacts());
 
     const contactCount = await this.contactData.getContactCount();
-    // if (contactCount > 0) {
-    //   const contactId: number = Number(this.route.snapshot.params['contactId']);
-    //   const contact = await this.contactData.getContactById(contactId);
-    //   this.currentContact = contact ?? this.currentContact;
-
-    //   // contactDate:
-    //   this.contactForm.value.contactDate = this.currentContact?.contactDate;
-    //   // contactTime:
-    //   this.contactForm.value.contactTime = this.currentContact?.contactDate;
-    //   // primaryInterviewer:
-    //   this.contactForm.value.primaryInterviewer = this.currentContact?.agentId;
-    //   // secondaryInterviewer:
-    //   this.contactForm.value.secondaryInterviewer =
-    //     this.currentContact?.secondaryAgentId;
-    //   // contactType:
-    //   this.contactForm.value.contactType = this.currentContact?.contactType;
-    //   // location:
-    //   this.contactForm.value.location = this.currentContact?.location;
-    // } else {
-    //   // Initialize the primaryInterviewer property
-    //   setTimeout(() => {
-    //     // this.contactForm.updateValueAndValidity();
-    //     this.contactForm.patchValue({
-    //       primaryInterviewer: this.navigationService.getAgent().agentId,
-    //       contactDate: new Date(),
-    //       contactTime: new Date(),
-    //     });
-    //   }, 100);
-    // }
     console.log('Contact form', this.contactForm);
     console.log('Contact data', this.currentContact);
   }

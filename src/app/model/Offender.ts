@@ -1,9 +1,7 @@
 import { Contact } from './Contact';
+import { OffenderBase } from './OffenderBase';
 
-export interface Offender {
-  ofndrNum: number;
-  firstName: string;
-  lastName: string;
+export interface Offender extends OffenderBase {
   image: string;
   address: string;
   city: string;

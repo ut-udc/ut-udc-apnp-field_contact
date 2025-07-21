@@ -1,57 +1,100 @@
 <div class="surface">
-    <span class="detail-header">
-        <mat-icon class="header-icon" svgIcon="arrow_back" aria-hidden="false" aria-label="Back Icon"
-            style="cursor: pointer;" routerLink="/"></mat-icon>
-        <span class="title_large">Offender Panel</span>
-    </span>
-    <div>
-        <div class="detail-card">
-            <div style="display: flex;">
-                <div style="flex: 1;">
-                    <img>
-                </div>
-                <div style="flex: 2;">
-                    <div class="label_medium">{{offender?.ofndrNum}}</div>
-                    <div class="title_xlarge">{{offender?.lastName}}, {{offender?.firstName}}</div>
-                    <div class="label_medium">Last Successful Contact: {{offender?.lastSuccessfulContactDate | date: 'MM/dd/yyyy'}}</div>
-                </div>
-            </div>
-            <br />
-            <button class="add-contact-button" [routerLink]="['/contact-form', offender?.ofndrNum]" style="cursor: pointer;" matRipple
-                [matRippleCentered]="centered" [matRippleDisabled]="disabled" [matRippleUnbounded]="unbounded"
-                [matRippleRadius]="radius" [matRippleColor]="color"><mat-icon class="state-icon" svgIcon="add-white"
-                    aria-hidden="false" aria-label="Notifications Icon"></mat-icon>Supervision Contact Entry</button>
+  <span class="detail-header">
+    <mat-icon
+      class="header-icon"
+      svgIcon="arrow_back"
+      aria-hidden="false"
+      aria-label="Back Icon"
+      style="cursor: pointer"
+      routerLink="/"
+    ></mat-icon>
+    <span class="title_large">Offender Panel</span>
+  </span>
+  <div>
+    <div class="detail-card">
+      <div style="display: flex">
+        <div style="flex: 1">
+          <img />
         </div>
-        <br />
-        <div class="detail-card">
-            <span class="label_large_prominent">Contact Information</span>
-            <div style="display: flex; margin-top: 15px;">
-                <div style="flex: 0;">
-                    <mat-icon class="header-icon" svgIcon="phone" aria-hidden="false" aria-label="Back Icon"
-                        style="cursor: pointer;"></mat-icon>
-                </div>
-                <div style="flex: 1;">
-                    <div class="label_medium">Primary Phone</div>
-                    <div class="body_small">{{offender?.phone}}</div>
-                </div>
-            </div>
-            <div style="display: flex; margin-top: 15px">
-                <div style="flex: 0;">
-                    <mat-icon class="header-icon" svgIcon="location_on" aria-hidden="false" aria-label="Back Icon"
-                        style="cursor: pointer;"></mat-icon>
-                </div>
-
-                <div style="flex: 1;">
-                    <div class="label_medium">Home Address</div>
-                    <div class="body_small">{{offender?.address}}<br />{{offender?.city}}, {{offender?.state}} {{offender?.zip}}</div>
-                </div>
-            </div>
+        <div style="flex: 2">
+          <div class="label_medium">{{offender?.ofndrNum}}</div>
+          <div class="title_xlarge">
+            {{offender?.lastName}}, {{offender?.firstName}}
+          </div>
+          <div class="label_medium">
+            Last Successful Contact: {{offender?.lastSuccessfulContactDate |
+            date: 'MM/dd/yyyy'}}
+          </div>
         </div>
-
-        <!-- **********iterate************ -->
-        <app-contact-listing-month></app-contact-listing-month>
-
-        <!-- ********************** -->
-
+      </div>
+      <br />
+      <button
+        class="add-contact-button"
+        [routerLink]="['/contact-form', offender?.ofndrNum]"
+        style="cursor: pointer"
+        matRipple
+        [matRippleCentered]="centered"
+        [matRippleDisabled]="disabled"
+        [matRippleUnbounded]="unbounded"
+        [matRippleRadius]="radius"
+        [matRippleColor]="color"
+      >
+        <mat-icon
+          class="state-icon"
+          svgIcon="add-white"
+          aria-hidden="false"
+          aria-label="Notifications Icon"
+        ></mat-icon
+        >Supervision Contact Entry
+      </button>
     </div>
+    <br />
+    <div class="detail-card">
+      <span class="label_large_prominent">Contact Information</span>
+      <div style="display: flex; margin-top: 15px">
+        <div style="flex: 0">
+          <mat-icon
+            class="header-icon"
+            svgIcon="phone"
+            aria-hidden="false"
+            aria-label="Back Icon"
+            style="cursor: pointer"
+          ></mat-icon>
+        </div>
+        <div style="flex: 1">
+          <div class="label_medium">Primary Phone</div>
+          <div class="body_small">{{offender?.phone}}</div>
+        </div>
+      </div>
+      <div style="display: flex; margin-top: 15px">
+        <div style="flex: 0">
+          <mat-icon
+            class="header-icon"
+            svgIcon="location_on"
+            aria-hidden="false"
+            aria-label="Back Icon"
+            style="cursor: pointer"
+          ></mat-icon>
+        </div>
+
+        <div style="flex: 1">
+          <div class="label_medium">Home Address</div>
+          <div class="body_small">
+            {{offender?.address}}<br />{{offender?.city}}, {{offender?.state}}
+            {{offender?.zip}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- **********iterate************ -->
+    <ng-container *ngIf="contactList && contactList.length > 0">
+      <app-contact-listing-card
+        *ngFor="let contact of contactList"
+        [contact]="contact"
+      >
+      </app-contact-listing-card>
+    </ng-container>
+    <!-- ********************** -->
+  </div>
 </div>

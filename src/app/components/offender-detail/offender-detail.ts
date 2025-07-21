@@ -9,9 +9,13 @@ import { MatRippleModule } from '@angular/material/core';
 import { DatePipe } from '@angular/common';
 import { Offender } from '../../model/Offender';
 import { Navigation } from '../../services/navigation';
+import { Contact } from '../../model/Contact';
+import { ContactData } from '../../services/contact-data';
+import { ContactListingCard } from "../contact-listing-card/contact-listing-card";
 
 @Component({
   selector: 'app-offender-detail',
+  standalone: true,
   imports: [
     MatIconModule,
     MatToolbarModule,
@@ -19,7 +23,8 @@ import { Navigation } from '../../services/navigation';
     ContactListingMonth,
     MatRippleModule,
     DatePipe,
-  ],
+    ContactListingCard
+],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
 })
@@ -27,13 +32,11 @@ export class OffenderDetail implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   navigationService: Navigation = inject(Navigation);
   offender: Offender | undefined = undefined;
+  contactList: Contact[] = [];
+  contactData: ContactData = inject(ContactData);
   constructor() {
-    const offenderNum = Number(this.route.snapshot.params['id']);
-    this.offender = this.navigationService.getCaseloadOffenderById(offenderNum);
-    if (!this.offender) {
-      this.offender =
-        this.navigationService.getOtherOffendersOffenderById(offenderNum);
-    }
+    const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
+    
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
@@ -64,8 +67,24 @@ export class OffenderDetail implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/note.svg')
     );
   }
-  ngOnInit(): void {
-    console.log(this.offender);
+  async ngOnInit(): Promise<void> {
+    const ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
+    if (ofndrNum) {
+      await this.loadOffenderData(ofndrNum);
+      await this.loadContactList(ofndrNum);
+    }
+  }
+  async loadOffenderData(ofndrNum: number): Promise<void> {
+    this.offender = await this.navigationService.getCaseloadOffenderById(ofndrNum);
+    if (!this.offender) {
+      this.offender =
+        await this.navigationService.getOtherOffendersOffenderById(ofndrNum);
+      console.log('Offender', this.offender);
+    }
+  }
+  async loadContactList(ofndrNum: number): Promise<void> {
+    this.contactList =
+      await this.contactData.getAllContactsByOffenderNumberDesc(ofndrNum);
   }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {

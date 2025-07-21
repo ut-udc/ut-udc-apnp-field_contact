@@ -119,7 +119,7 @@
           style="background-color: #030303; color: white"
           matButton="filled"
           (click)="onSubmit()"
-          [routerLink]="['/commentary-form', offender?.ofndrNum]"
+          [routerLink]="['/commentary-form', currentContact?.ofndrNum, currentContact?.contactId]"
         >
           Next
         </button>

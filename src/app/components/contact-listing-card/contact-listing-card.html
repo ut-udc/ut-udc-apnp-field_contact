@@ -4,8 +4,8 @@
                 style="cursor: pointer;"></mat-icon>
             </div>
             <div style="flex: 1;">
-                <span class="label_medium">April 12, 2025 | 2:52pm</span>
-                <div class="body_large">Contact Type</div>
-                <div class="body_medium">Comment preview text displays text up to 80 characters into two lines and adding ellip...</div>
+                <span class="label_medium">{{contact?.contactDate | date: 'longDate'}} | {{contact?.contactDate | date: 'HH:mm'}}</span>
+                <div class="body_large">{{contact?.contactType}}</div>
+                <div class="body_medium">{{contact?.commentary}}</div>
             </div>
         </div>

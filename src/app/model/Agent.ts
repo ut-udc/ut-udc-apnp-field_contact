@@ -12,6 +12,5 @@ export interface Agent {
   state: string;
   zip: string;
   supervisorId: string;
-  myCaseload: Offender[];
-  otherOffenders: Offender[];
+  ofndrNumList: number[];
 }

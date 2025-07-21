@@ -13,7 +13,6 @@ import { Contact } from '../../model/Contact';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Agent } from '../../model/Agent';
-import { ContactForm } from '../contact-form/contact-form';
 
 @Component({
   selector: 'app-commentary-form',
@@ -33,6 +32,8 @@ export class CommentaryForm implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
+  ofndrNum: number = 0;
+  contactId: number = 0;
 
   currentContact: Contact = {
     contactId: 0,
@@ -58,9 +59,10 @@ export class CommentaryForm implements OnInit {
     state: '',
     zip: '',
     supervisorId: '',
-    myCaseload: [],
-    otherOffenders: [],
+    ofndrNumList: ([] = []),
   };
+
+  offender?: Offender;
 
   commentaryForm: FormGroup = new FormGroup({
     commentary: new FormControl<string | null>(null),
@@ -70,30 +72,35 @@ export class CommentaryForm implements OnInit {
     // debugger
     this.currentContact.formCompleted = true;
     this.currentContact.commentary = this.commentaryForm.value.commentary ?? '';
-    this.contactData.updateContact(
-      this.currentContact
-    );
+    this.contactData.updateContact(this.currentContact);
   }
 
   async ngOnInit() {
     // debugger
-    const contactId: number = Number(this.route.snapshot.params['id']);
-    const contact = await this.contactData.getContactById(contactId);
-    this.currentContact = contact ?? this.currentContact;
+    this.ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
+    this.contactId = Number(this.route.snapshot.params['contactId']);
+    this.offender = await this.contactData.getCaseloadOffenderById(
+      this.ofndrNum
+    );
+    if (this.contactId > 0) {
+      const contact = await this.contactData.getContactById(this.contactId);
+      this.currentContact = contact ?? this.currentContact;
+    } else {
+      const contact =
+        await this.contactData.getUncompletedContactByOffenderNumber(
+          this.ofndrNum
+        );
+      this.currentContact = contact ?? this.currentContact;
+    }
     this.commentaryForm.patchValue({
       commentary: this.currentContact?.commentary,
     });
-    this.currentAgent =
-      this.navigationService.getOfficerByAgentId(
-        this.currentContact?.agentId
-      ) ?? this.navigationService.getAgent();
-  }
-
-  //this needs to be fixed wrong "id" is referenced but fine for now
-  offender: Offender | undefined =
-    this.navigationService.getCaseloadOffenderById(
-      Number(this.route.snapshot.params['id'])
+    const agent = await this.contactData.getAgentById(
+      this.currentContact.agentId, 'Commentary Form'
     );
+    console.log('Agent from commentary-form line 98:', agent);
+    this.currentAgent = agent ?? this.currentAgent;
+  }
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);

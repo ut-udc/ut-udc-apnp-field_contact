@@ -1,23 +1,43 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Contact } from '../model/Contact';
-import { Dexie } from 'dexie';
+import Dexie, { Table } from 'dexie';
+import { Agent } from '../model/Agent';
+import { Offender } from '../model/Offender';
+import { MyCaseload } from '../components/my-caseload/my-caseload';
+import { OffenderBase } from '../model/OffenderBase';
+import { Dao } from './dao';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactData extends Dexie {
-  public contacts!: Dexie.Table<Contact, number>;
-
+  dao: Dao = inject(Dao);
+  public contacts!: Table<Contact, number>;
+  public agents!: Table<Agent, string>;
+  public allOffenders!: Table<OffenderBase, number>;
+  public myCaseload!: Table<Offender, number>;
+  public otherOffenders!: Table<Offender, number>;
 
   constructor() {
-    super('ContactData');
+    super('contactDatabase');
     this.version(1).stores({
       contacts:
         'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
+      agents:
+        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
+      allOffenders: 'ofndrNum, firstName, lastName, birthDate',
+      myCaseload:
+        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
+      otherOffenders:
+        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
     });
     this.contacts = this.table('contacts');
+    this.agents = this.table('agents');
+    this.allOffenders = this.table('allOffenders');
+    this.myCaseload = this.table('myCaseload');
+    this.otherOffenders = this.table('otherOffenders');
   }
-  
+
   async addContact(contact: Contact) {
     await this.contacts.add(contact);
   }
@@ -36,8 +56,8 @@ export class ContactData extends Dexie {
   getAllContacts() {
     return this.contacts.toArray();
   }
-  async getAllContactsByOffenderNumber(id: number) {
-    return await this.contacts.where('ofndrNum').equals(id).toArray();
+  async getAllContactsByOffenderNumberDesc(id: number) {
+    return await this.contacts.where('ofndrNum').equals(id).reverse().toArray();
   }
   async getAllContactsByAgentId(id: string) {
     return await this.contacts.where('agentId').equals(id).toArray();
@@ -49,7 +69,10 @@ export class ContactData extends Dexie {
     return await this.contacts.where('contactDate').equals(date).toArray();
   }
   async getAllContactsByContactType(contactType: string) {
-    return await this.contacts.where('contactType').equals(contactType).toArray();
+    return await this.contacts
+      .where('contactType')
+      .equals(contactType)
+      .toArray();
   }
   async getAllContactsByLocation(location: string) {
     return await this.contacts.where('location').equals(location).toArray();
@@ -61,5 +84,55 @@ export class ContactData extends Dexie {
       .and((x) => x.formCompleted === false)
       .toArray();
     return contactList[0];
+  }
+  async getAgent() {
+    return await this.agents.get(this.dao.agent.agentId);
+  }
+  async getAgentById(id: string, source: string) {
+    const agent = await this.agents.get(id);
+    console.log('Agend from contact-data line91:', source + ' ', agent);
+    return agent;
+  }
+  async getAgentInitials(id:string, source:string): Promise<string> {
+    const agent = await this.agents.get(id);
+    console.log('Agent from contactData line 96 getInitials:', source + ' ', agent);
+    if (!agent) {
+      throw new Error('Agent not found navigation.ts line 55');
+    }
+    return agent.firstName.substring(0, 1) + agent.lastName.substring(0, 1);
+  }
+  async populateAgent() {
+    await this.agents.clear();
+    await this.agents.add(this.dao.agent);
+  }
+  async populateMyCaseload() {
+    await this.myCaseload.clear();
+    await this.myCaseload.bulkAdd(this.dao.myCaseload);
+  }
+  async getMyCaseload() {
+    return await this.myCaseload.toArray();
+  }
+  async populateOtherOffenders() {
+    await this.otherOffenders.clear();
+    await this.otherOffenders.bulkAdd(this.dao.otherOffenders);
+  }
+  async getOtherOffenders() {
+    return await this.otherOffenders.toArray();
+  }
+  async populateAllOffenders() {
+    await this.allOffenders.clear();
+    await this.allOffenders.bulkAdd(this.dao.allOtherOffenders);
+  }
+  async getAllOffenders() {
+    return await this.allOffenders.toArray();
+  }
+  async getOffenderById(id: number) {
+    return await this.allOffenders.get(id);
+  }
+  async getCaseloadOffenderById(id: number) {
+    return await this.myCaseload.get(id);
+  }
+  async getOtherOffendersOffenderById(id: number) {
+    return await this.otherOffenders.get(id);
   }
 }

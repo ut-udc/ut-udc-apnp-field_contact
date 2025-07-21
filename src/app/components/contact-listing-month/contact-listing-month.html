@@ -1,5 +1,5 @@
 <div class="month_label">
-    <span class="title_small">April</span>
+    <span class="title_small">{{contact?.contactDate | date: 'MMMM'}}</span>
 </div>
-<app-contact-listing-card></app-contact-listing-card>
+<app-contact-listing-card *ngFor="let contact of contactList" [contact]="contact"></app-contact-listing-card>
 <mat-divider style="color: lightgray;"></mat-divider>
