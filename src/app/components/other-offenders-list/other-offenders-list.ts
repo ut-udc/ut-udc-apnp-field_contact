@@ -9,6 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-other-offenders-list',
+  standalone: true,
   imports: [CommonModule, MatIconModule, MatDividerModule, OffenderCard],
   templateUrl: './other-offenders-list.html',
   styleUrl: './other-offenders-list.scss',

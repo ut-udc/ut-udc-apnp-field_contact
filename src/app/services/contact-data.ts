@@ -6,11 +6,16 @@ import { Offender } from '../model/Offender';
 import { MyCaseload } from '../components/my-caseload/my-caseload';
 import { OffenderBase } from '../model/OffenderBase';
 import { Dao } from './dao';
+import { environment } from '../../environment/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactData extends Dexie {
+  private path = environment.apiUrl;
+
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
   public agents!: Table<Agent, string>;
@@ -18,7 +23,7 @@ export class ContactData extends Dexie {
   public myCaseload!: Table<Offender, number>;
   public otherOffenders!: Table<Offender, number>;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     super('contactDatabase');
     this.version(1).stores({
       contacts:
@@ -36,6 +41,22 @@ export class ContactData extends Dexie {
     this.allOffenders = this.table('allOffenders');
     this.myCaseload = this.table('myCaseload');
     this.otherOffenders = this.table('otherOffenders');
+  }
+
+  getMyCaseload1(agentId: string): Observable<Offender[]> {
+    const header = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    });
+    return this.http.get<Offender[]>(this.path + '/agentId=' + agentId, { headers: header, withCredentials: true });
+  }
+
+  addContact1(contact: Contact): Observable<Contact> {
+    const header = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    });
+    return this.http.post<Contact>(this.path + '/contact', contact, { headers: header, withCredentials: true });
   }
 
   async addContact(contact: Contact) {

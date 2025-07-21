@@ -16,6 +16,7 @@ import { Agent } from '../../model/Agent';
 
 @Component({
   selector: 'app-commentary-form',
+  standalone: true,
   imports: [
     MatIconModule,
     RouterLink,

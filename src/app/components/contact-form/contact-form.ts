@@ -36,6 +36,7 @@ import { openDB } from 'idb';
 
 @Component({
   selector: 'app-contact-form',
+  standalone: true,
   imports: [
     MatIconModule,
     RouterLink,

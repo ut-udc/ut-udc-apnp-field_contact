@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -13,6 +13,7 @@ import { Offender } from '../../model/Offender';
 import { Dao } from '../../services/dao';
 import { Observable, from } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -52,7 +53,14 @@ export class Home implements OnInit {
   myCaseload: Offender[] = [];
   otherOffenders: Offender[] = [];
 
-  constructor() {
+  constructor( private asyncPipe: AsyncPipe, 
+    private changeDetectorRef: ChangeDetectorRef, 
+    private ContactData: ContactData,
+    private Navigation: Navigation,
+    private Dao: Dao,
+    private Router: Router,
+    private ActivatedRoute: ActivatedRoute,
+  ) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
     

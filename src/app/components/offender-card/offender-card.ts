@@ -9,6 +9,7 @@ import { Navigation } from '../../services/navigation';
 
 @Component({
   selector: 'app-offender-card',
+  standalone: true,
   imports: [
     CommonModule,
     MatGridListModule,
