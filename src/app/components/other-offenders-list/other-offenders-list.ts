@@ -6,6 +6,8 @@ import { OffenderCard } from '../offender-card/offender-card';
 import { Offender } from '../../model/Offender';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, of } from 'rxjs';
+import { ContactData } from '../../services/contact-data';
 
 @Component({
   selector: 'app-other-offenders-list',
@@ -15,7 +17,9 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './other-offenders-list.scss',
 })
 export class OtherOffendersList implements OnInit {
-  @Input() otherOffenders: Offender[] = [];
+  otherOffenders: Observable<Offender[]> = new Observable<Offender[]>();
+  contactData: ContactData = inject(ContactData);
+
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
@@ -29,7 +33,12 @@ export class OtherOffendersList implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
     );
   }
+  async loadOtherOffenders(): Promise<void> {
+    this.otherOffenders = of(await this.contactData.getOtherOffenders());
+  }
+
   ngOnInit(): void {
+    this.loadOtherOffenders();
     console.log(this.otherOffenders);
   }
 }

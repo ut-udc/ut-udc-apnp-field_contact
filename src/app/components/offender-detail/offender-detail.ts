@@ -6,12 +6,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { ContactListingMonth } from '../contact-listing-month/contact-listing-month';
 import { MatRippleModule } from '@angular/material/core';
-import { DatePipe, NgIf, CommonModule } from '@angular/common';
+import { DatePipe, NgIf, CommonModule, AsyncPipe } from '@angular/common';
 import { Offender } from '../../model/Offender';
 import { Navigation } from '../../services/navigation';
 import { Contact } from '../../model/Contact';
 import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from "../contact-listing-card/contact-listing-card";
+import { Observable, from } from 'rxjs';
 
 @Component({
   selector: 'app-offender-detail',
@@ -80,8 +81,8 @@ export class OffenderDetail implements OnInit {
     if (!this.offender) {
       this.offender =
         await this.navigationService.getOtherOffendersOffenderById(ofndrNum);
-      console.log('Offender', this.offender);
-    }
+      }
+    console.log('Offender', this.offender);
   }
   async loadContactList(ofndrNum: number): Promise<void> {
     this.contactList =

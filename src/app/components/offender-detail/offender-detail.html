@@ -1,4 +1,5 @@
 <div class="surface">
+  < div *ngIf="offender | async as data; else loading">
   <span class="detail-header">
     <mat-icon
       class="header-icon"

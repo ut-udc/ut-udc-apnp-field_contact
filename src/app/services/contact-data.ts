@@ -111,12 +111,10 @@ export class ContactData extends Dexie {
   }
   async getAgentById(id: string, source: string) {
     const agent = await this.agents.get(id);
-    console.log('Agend from contact-data line91:', source + ' ', agent);
     return agent;
   }
   async getAgentInitials(id:string, source:string): Promise<string> {
     const agent = await this.agents.get(id);
-    console.log('Agent from contactData line 96 getInitials:', source + ' ', agent);
     if (!agent) {
       throw new Error('Agent not found navigation.ts line 55');
     }
@@ -130,14 +128,14 @@ export class ContactData extends Dexie {
     await this.myCaseload.clear();
     await this.myCaseload.bulkAdd(this.dao.myCaseload);
   }
-  async getMyCaseload() {
+  async getMyCaseload(): Promise<Offender[]> {
     return await this.myCaseload.toArray();
   }
   async populateOtherOffenders() {
     await this.otherOffenders.clear();
     await this.otherOffenders.bulkAdd(this.dao.otherOffenders);
   }
-  async getOtherOffenders() {
+  async getOtherOffenders(): Promise<Offender[]> {
     return await this.otherOffenders.toArray();
   }
   async populateAllOffenders() {

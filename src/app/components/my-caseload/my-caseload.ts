@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { OffenderCard } from '../offender-card/offender-card';
@@ -7,6 +7,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Offender } from '../../model/Offender';
+import { Observable, of } from 'rxjs';
+import { ContactData } from '../../services/contact-data';
 
 @Component({
   selector: 'app-my-caseload',
@@ -17,12 +19,14 @@ import { Offender } from '../../model/Offender';
     MatIconModule,
     MatDividerModule,
     OffenderCard,
+    AsyncPipe,
   ],
   templateUrl: './my-caseload.html',
   styleUrl: './my-caseload.scss',
 })
 export class MyCaseload implements OnInit {
-  @Input() myCaseload: Offender[] = [];
+  myCaseload: Observable<Offender[]> = new Observable<Offender[]>();
+  contactData: ContactData = inject(ContactData);
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
@@ -37,7 +41,11 @@ export class MyCaseload implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
     );
   }
+  async loadMyCaseload(): Promise<void> {
+    this.myCaseload = of(await this.contactData.getMyCaseload());
+  }
   ngOnInit(): void {
-    console.log(this.myCaseload);
+    this.loadMyCaseload();
+    console.log('My Caseload from my-caseload line 24:', this.myCaseload);
   }
 }

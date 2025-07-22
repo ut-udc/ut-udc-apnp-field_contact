@@ -17,7 +17,7 @@
       ></mat-icon>
       <div class="primary-container">
         <span class="initials" routerLink="/agent-profile">
-          {{agentInitials}}
+          {{ agentInitials | async }}
         </span>
       </div>
     </mat-toolbar-row>
@@ -30,8 +30,11 @@
       </h2>
     </mat-toolbar-row>
   </mat-toolbar>
-  <app-my-caseload [myCaseload]="myCaseload"></app-my-caseload>
+  <app-my-caseload>
+    <ng-template #loading>
+      <div>Loading...</div>
+    </ng-template>
+  </app-my-caseload>
   <app-other-offenders-list
-    [otherOffenders]="otherOffenders"
   ></app-other-offenders-list>
 </div>

@@ -10,4 +10,6 @@ export interface Offender extends OffenderBase {
   phone: string;
   lastSuccessfulContactDate: Date;
   contactArray: Contact[];
+
+  
 }

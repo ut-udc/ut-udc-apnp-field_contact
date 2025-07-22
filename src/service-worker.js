@@ -1,4 +1,4 @@
-importScripts('./ngsw-worker.js');
+// importScripts('./ngsw-worker.js');
 // import { registerRoute } from 'workbox-routing';
 // import { NetworkFirst } from 'workbox-strategies';
 // import { ExpirationPlugin } from 'workbox-expiration';
@@ -18,7 +18,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  respondWith(
+  event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
     })
@@ -29,7 +29,7 @@ const CACHE_NAME = 'sup-contact-cache-v1';
 const urlsToCache = [
     './index.html',
     './styles.scss',
-    './offline.html',
+    // './offline.html',
     './favicon.ico',
     './icons/*',
     './assets/icons/*',

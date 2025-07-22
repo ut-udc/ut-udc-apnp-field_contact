@@ -28,7 +28,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     OtherOffendersList,
     MyCaseload,
     AsyncPipe,
-    CommonModule
+    CommonModule,
   ],
 })
 export class Home implements OnInit {
@@ -36,7 +36,8 @@ export class Home implements OnInit {
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
 
-  agentInitials: Promise<Observable<string>> = Promise.resolve(of(''));
+  agentInitials: Observable<string> = new Observable<string>();
+  initials: string = '';
   currentAgent: Agent = {
     agentId: '',
     firstName: 'default',
@@ -51,21 +52,25 @@ export class Home implements OnInit {
     supervisorId: '',
     ofndrNumList: ([] = []),
   };
-  myCaseload: Offender[] = [];
-  otherOffenders: Offender[] = [];
-
-  constructor( 
-    // private asyncPipe: AsyncPipe, 
-    // private changeDetectorRef: ChangeDetectorRef, 
-    // private ContactData: ContactData,
-    // private Navigation: Navigation,
-    // private Dao: Dao,
-    // private Router: Router,
-    // private ActivatedRoute: ActivatedRoute,
-  ) {
+  
+  constructor() // private asyncPipe: AsyncPipe,
+  // private changeDetectorRef: ChangeDetectorRef,
+  // private ContactData: ContactData,
+  // private Navigation: Navigation,
+  // private Dao: Dao,
+  // private Router: Router,
+  // private ActivatedRoute: ActivatedRoute,
+  {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
-    
+
+    this.agentInitials = from(
+      this.contactData.getAgentInitials(this.dao.agent.agentId, 'OnInit')
+    );
+    this.agentInitials.subscribe((value) => {
+      console.log('Agent Initials subscribed:', value);
+      this.initials = value;
+    });
 
     iconRegistry.addSvgIcon(
       'bell',
@@ -77,30 +82,42 @@ export class Home implements OnInit {
     );
   }
   async getAgentInitials(): Promise<string> {
-    const agent = await this.contactData.getAgentById(this.dao.agent.agentId, 'getInitials');
+    const agent = await this.contactData.getAgentById(
+      this.dao.agent.agentId,
+      'getInitials'
+    );
     if (!agent) {
       throw new Error('Agent not found');
     }
-    return agent.firstName.substring(0, 1) + agent.lastName.substring(0, 1);
+    var initials = '';
+    setTimeout(() => {
+      initials =
+        agent.firstName.substring(0, 1) + agent.lastName.substring(0, 1);
+      console.log('Agent Initials from getAgentInitials****:', this.initials);
+    }, 1000);
+    // console.log('Agent Initials from getAgentInitials:', initials);
+    return initials;
   }
+
+  
   async ngOnInit(): Promise<void> {
     // this.currentAgent = await this.navigationService.getAgent();
     // console.log('Current Agent:', this.currentAgent);
-    const agent = await this.contactData.getAgentById(this.dao.agent.agentId, 'OnInit');
+    const agent = await this.contactData.getAgentById(
+      this.dao.agent.agentId,
+      'OnInit'
+    );
     console.log('Agent from home line 66:', agent);
     this.currentAgent = agent ?? this.currentAgent;
-    console.log('This Agent currentAgent gets set by agent:', this.currentAgent);
+    console.log(
+      'This Agent currentAgent gets set by agent:',
+      this.currentAgent
+    );
     // console.log('Agent', agent);
-    console.log('Promise from home line 71:', this.contactData.getAgentById(this.dao.agent.agentId, 'promise'));
+    console.log(
+      'Promise from home line 71:',
+      this.contactData.getAgentById(this.dao.agent.agentId, 'promise')
+    );
 
-    this.agentInitials = this.contactData.getAgentInitials(this.dao.agent.agentId, 'OnInit').then((value) => {
-      return of(value);
-    });
-    console.log('Agent Initials:', this.agentInitials.then((value) => {return value;}));
-    this.myCaseload = await this.contactData.getMyCaseload();
-    console.log('My Caseload:', this.myCaseload);
-    this.otherOffenders = await this.contactData.getOtherOffenders();
-    console.log('Other Offenders:', this.otherOffenders);
-    // debugger;
   }
 }
