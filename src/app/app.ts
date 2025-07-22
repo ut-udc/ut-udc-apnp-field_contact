@@ -1,28 +1,37 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
 import { ContactData } from './services/contact-data';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { Home } from "./components/home/home";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    HttpClientModule
+    RouterModule,
+    Home,
+    CommonModule
 ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App implements OnInit {
   contactData: ContactData = inject(ContactData);
+  http: HttpClient = inject(HttpClient);
   protected title = 'sup-contact';
-  constructor() {}
+  constructor() {
+
+  }
   ngOnInit(): void {
-    this.contactData.open();
-    // this.contactData.populateAgent();
-    // this.contactData.populateMyCaseload();
-    // this.contactData.populateOtherOffenders();
-    // this.contactData.populateAllOffenders();
+    if(!this.contactData.open()) {
+      this.contactData.open();
+      console.log('Populating Contact Database');
+      this.contactData.populateAgent();
+      this.contactData.populateMyCaseload();
+      this.contactData.populateOtherOffenders();
+      this.contactData.populateAllOffenders();
+    }
   }
 }

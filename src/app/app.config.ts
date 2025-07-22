@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { MatIconModule } from '@angular/material/icon';
 
+
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 
@@ -13,11 +14,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(),
     MatIconModule,
-    provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          }), provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
+    provideServiceWorker('service-worker.js', {
+            enabled: true,
             registrationStrategy: 'registerWhenStable:30000'
           })
   ]

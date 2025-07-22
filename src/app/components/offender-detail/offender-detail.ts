@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { ContactListingMonth } from '../contact-listing-month/contact-listing-month';
 import { MatRippleModule } from '@angular/material/core';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf, CommonModule } from '@angular/common';
 import { Offender } from '../../model/Offender';
 import { Navigation } from '../../services/navigation';
 import { Contact } from '../../model/Contact';
@@ -23,7 +23,8 @@ import { ContactListingCard } from "../contact-listing-card/contact-listing-card
     ContactListingMonth,
     MatRippleModule,
     DatePipe,
-    ContactListingCard
+    ContactListingCard,
+    CommonModule
 ],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',

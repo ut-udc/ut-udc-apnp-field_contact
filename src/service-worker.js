@@ -27,14 +27,14 @@ self.addEventListener('fetch', (event) => {
 
 const CACHE_NAME = 'sup-contact-cache-v1';
 const urlsToCache = [
-    'index.html',
-    'styles.scss',
-    // 'offline.html',
-    'favicon.ico',
-    '/icons/*',
-    '/assets/icons/*',
-    '/assets/images/*',
-    '/assets/data/*'
+    './index.html',
+    './styles.scss',
+    './offline.html',
+    './favicon.ico',
+    './icons/*',
+    './assets/icons/*',
+    './assets/images/*',
+    './assets/data/*'
 ]
 
 self.addEventListener('install', event => {

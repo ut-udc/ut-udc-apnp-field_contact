@@ -10,6 +10,7 @@ import { Offender } from '../../model/Offender';
 
 @Component({
   selector: 'app-my-caseload',
+  standalone: true,
   imports: [
     CommonModule,
     MatToolbarModule,

@@ -6,15 +6,15 @@
       aria-hidden="false"
       aria-label="Back Icon"
       style="cursor: pointer"
-      [routerLink]="['/contact-form', currentContact?.ofndrNum, currentContact?.contactId]"
+      [routerLink]="['/contact-form', currentContact.ofndrNum, currentContact.contactId]"
     ></mat-icon>
     <span class="title_large">Add Commentary</span>
   </span>
   <div class="surface-container-low">
     <span class="on-surface-variant">Date</span>
     <span class="body_large"
-      >{{currentContact?.contactDate | date: 'MM/dd/yyyy'}} |
-      {{currentContact?.contactDate | date: 'HH:mm'}}</span
+      >{{currentContact.contactDate | date: 'MM/dd/yyyy'}} |
+      {{currentContact.contactDate | date: 'HH:mm'}}</span
     >
     <span class="on-surface-variant">Primary Interviewer</span>
     <span class="body_large">{{currentContact.agentId ?

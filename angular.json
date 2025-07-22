@@ -72,6 +72,15 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "production-no-opt": {
+              "optimization": false,
+              "outputHashing": "none",
+              "sourceMap": true,
+              "namedChunks": true,
+              "aot": true,
+              "extractLicenses": false,
+              "buildOptimizer": false
             }
           },
           "defaultConfiguration": "production"

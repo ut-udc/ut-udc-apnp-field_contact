@@ -11,8 +11,8 @@ import { Agent } from '../../model/Agent';
 import { ContactData } from '../../services/contact-data';
 import { Offender } from '../../model/Offender';
 import { Dao } from '../../services/dao';
-import { Observable, from } from 'rxjs';
-import { AsyncPipe } from '@angular/common';
+import { Observable, from, of } from 'rxjs';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -28,6 +28,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     OtherOffendersList,
     MyCaseload,
     AsyncPipe,
+    CommonModule
   ],
 })
 export class Home implements OnInit {
@@ -35,7 +36,7 @@ export class Home implements OnInit {
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
 
-  agentInitials: Observable<string> = new Observable<string>();
+  agentInitials: Promise<Observable<string>> = Promise.resolve(of(''));
   currentAgent: Agent = {
     agentId: '',
     firstName: 'default',
@@ -53,13 +54,14 @@ export class Home implements OnInit {
   myCaseload: Offender[] = [];
   otherOffenders: Offender[] = [];
 
-  constructor( private asyncPipe: AsyncPipe, 
-    private changeDetectorRef: ChangeDetectorRef, 
-    private ContactData: ContactData,
-    private Navigation: Navigation,
-    private Dao: Dao,
-    private Router: Router,
-    private ActivatedRoute: ActivatedRoute,
+  constructor( 
+    // private asyncPipe: AsyncPipe, 
+    // private changeDetectorRef: ChangeDetectorRef, 
+    // private ContactData: ContactData,
+    // private Navigation: Navigation,
+    // private Dao: Dao,
+    // private Router: Router,
+    // private ActivatedRoute: ActivatedRoute,
   ) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
@@ -90,8 +92,11 @@ export class Home implements OnInit {
     console.log('This Agent currentAgent gets set by agent:', this.currentAgent);
     // console.log('Agent', agent);
     console.log('Promise from home line 71:', this.contactData.getAgentById(this.dao.agent.agentId, 'promise'));
-    this.agentInitials = from(this.contactData.getAgentInitials(this.dao.agent.agentId, 'OnInit'));
-    console.log('Agent Initials:', this.agentInitials);
+
+    this.agentInitials = this.contactData.getAgentInitials(this.dao.agent.agentId, 'OnInit').then((value) => {
+      return of(value);
+    });
+    console.log('Agent Initials:', this.agentInitials.then((value) => {return value;}));
     this.myCaseload = await this.contactData.getMyCaseload();
     console.log('My Caseload:', this.myCaseload);
     this.otherOffenders = await this.contactData.getOtherOffenders();
