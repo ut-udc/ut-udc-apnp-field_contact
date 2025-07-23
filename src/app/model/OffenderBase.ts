@@ -3,4 +3,5 @@ export interface OffenderBase {
   firstName: string;
   lastName: string;
   birthDate: Date;
+  agentId: string;
 }

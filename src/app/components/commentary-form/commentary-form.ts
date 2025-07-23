@@ -97,7 +97,7 @@ export class CommentaryForm implements OnInit {
       commentary: this.currentContact?.commentary,
     });
     const agent = await this.contactData.getAgentById(
-      this.currentContact.agentId, 'Commentary Form'
+      this.contactData.applicationUserName
     );
     console.log('Agent from commentary-form line 98:', agent);
     this.currentAgent = agent ?? this.currentAgent;

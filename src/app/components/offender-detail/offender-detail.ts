@@ -12,7 +12,7 @@ import { Navigation } from '../../services/navigation';
 import { Contact } from '../../model/Contact';
 import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from "../contact-listing-card/contact-listing-card";
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 
 @Component({
   selector: 'app-offender-detail',
@@ -32,15 +32,33 @@ import { Observable, from } from 'rxjs';
 })
 export class OffenderDetail implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
-  navigationService: Navigation = inject(Navigation);
-  offender: Offender | undefined = undefined;
-  contactList: Contact[] = [];
+  currentOffender = new Observable<Offender>((observer) => {
+    this.contactData.getCaseloadOffenderById(Number(this.route.snapshot.params['ofndrNum'])).then((offender) => {
+      if (offender) {
+        observer.next(offender);
+      } else {
+        this.contactData.getOtherOffendersOffenderById(Number(this.route.snapshot.params['ofndrNum'])).then((offender) => {
+          if (offender) {
+            observer.next(offender);
+          } else {
+            observer.next({} as Offender);
+          }
+        });
+      }
+    });
+  });
+  // currentOffender: Observable<Offender> = new Observable<Offender>();
+  contactList: Observable<Contact[]> = new Observable<Contact[]>();
   contactData: ContactData = inject(ContactData);
+
   constructor() {
     const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
     
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
+
+    // this.loadOffenderData(offenderNum);
+    this.loadContactList(offenderNum);
 
     iconRegistry.addSvgIcon(
       'arrow_back',
@@ -69,24 +87,12 @@ export class OffenderDetail implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/note.svg')
     );
   }
-  async ngOnInit(): Promise<void> {
-    const ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
-    if (ofndrNum) {
-      await this.loadOffenderData(ofndrNum);
-      await this.loadContactList(ofndrNum);
-    }
-  }
-  async loadOffenderData(ofndrNum: number): Promise<void> {
-    this.offender = await this.navigationService.getCaseloadOffenderById(ofndrNum);
-    if (!this.offender) {
-      this.offender =
-        await this.navigationService.getOtherOffendersOffenderById(ofndrNum);
-      }
-    console.log('Offender', this.offender);
-  }
   async loadContactList(ofndrNum: number): Promise<void> {
-    this.contactList =
-      await this.contactData.getAllContactsByOffenderNumberDesc(ofndrNum);
+    const contacts = await this.contactData.getAllContactsByOffenderNumberDesc(ofndrNum);
+    this.contactList = of(contacts);
+  }
+  async ngOnInit(): Promise<void> {
+    console.log('Applicaiton User: ', this.contactData.applicationUserName);
   }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
@@ -99,3 +105,38 @@ export class OffenderDetail implements OnInit {
   radius = 300;
   color = 'rgba(207, 207, 207, 0.39)';
 }
+function switchMap<T, R>(project: (value: T, index: number) => Observable<R>): import("rxjs").OperatorFunction<T, R> {
+  return (source: Observable<T>) =>
+    new Observable<R>(observer => {
+      let innerSubscription: any;
+      let index = 0;
+      const outerSubscription = source.subscribe({
+        next(value) {
+          if (innerSubscription) {
+            innerSubscription.unsubscribe();
+          }
+          let result$: Observable<R>;
+          try {
+            result$ = project(value, index++);
+          } catch (err) {
+            observer.error(err);
+            return;
+          }
+          innerSubscription = result$.subscribe({
+            next: val => observer.next(val),
+            error: err => observer.error(err),
+            complete: () => { /* do nothing */ }
+          });
+        },
+        error: err => observer.error(err),
+        complete: () => observer.complete()
+      });
+      return () => {
+        outerSubscription.unsubscribe();
+        if (innerSubscription) {
+          innerSubscription.unsubscribe();
+        }
+      };
+    });
+}
+

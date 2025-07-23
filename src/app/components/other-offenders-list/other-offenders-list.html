@@ -24,15 +24,13 @@
           aria-label="Filter Icon"
         ></mat-icon>
       </div>
-      <div>
-        <div><div *ngIf="otherOffenders | async as data; else loading">
-                <app-offender-card *ngFor="let offender of (otherOffenders | async)" [offender]="offender"></app-offender-card>
-                </div>
-                <ng-template #loading>
-                    <div>Loading...</div>
-                </ng-template>
-            </div>
+    <div>
+      <div *ngIf="otherOffenders | async as data; else loading">
+        <app-offender-card *ngFor="let offender of data" [offender]="offender"></app-offender-card>
       </div>
+      <ng-template #loading>
+        <div>Loading...</div>
+      </ng-template>
     </div>
-  </div>
+    </div>
 </div>

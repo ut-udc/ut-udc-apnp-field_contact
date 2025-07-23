@@ -26,6 +26,7 @@ export class OffenderCard implements OnInit {
     firstName: '',
     lastName: '',
     birthDate: new Date(),
+    agentId: '',
     image: '',
     address: '',
     city: '',

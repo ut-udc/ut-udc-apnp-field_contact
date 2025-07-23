@@ -213,9 +213,7 @@ export class ContactForm implements OnInit {
       setTimeout(() => {
         // this.contactForm.updateValueAndValidity();
         this.contactForm.patchValue({
-          primaryInterviewer: this.contactData
-            .getAgent()
-            .then((agent) => agent?.agentId ?? ''),
+          primaryInterviewer: this.contactData.applicationUserName,
           contactDate: new Date(),
           contactTime: new Date(),
         });

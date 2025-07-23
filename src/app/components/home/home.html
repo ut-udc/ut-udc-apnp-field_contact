@@ -1,4 +1,5 @@
 <div class="surface">
+  
   <mat-toolbar>
     <mat-toolbar-row>
       <span>&nbsp;</span>
@@ -17,7 +18,9 @@
       ></mat-icon>
       <div class="primary-container">
         <span class="initials" routerLink="/agent-profile">
-          {{ agentInitials | async }}
+          <div *ngIf="currentAgent | async; let agent">
+            {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }}  
+          </div>
         </span>
       </div>
     </mat-toolbar-row>

@@ -36,42 +36,30 @@ export class Home implements OnInit {
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
 
-  agentInitials: Observable<string> = new Observable<string>();
-  initials: string = '';
-  currentAgent: Agent = {
-    agentId: '',
-    firstName: 'default',
-    lastName: '',
-    fullName: '',
-    email: '',
-    image: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-    supervisorId: '',
-    ofndrNumList: ([] = []),
-  };
-  
-  constructor() // private asyncPipe: AsyncPipe,
-  // private changeDetectorRef: ChangeDetectorRef,
-  // private ContactData: ContactData,
-  // private Navigation: Navigation,
-  // private Dao: Dao,
-  // private Router: Router,
-  // private ActivatedRoute: ActivatedRoute,
+  currentAgent = new Observable<Agent>((observer) => {
+    this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
+      if (agent) {
+        observer.next(agent);
+        console.log('Agent from home line 41:', agent);
+      } else {
+        observer.next({} as Agent);
+      }
+    });
+  });
+
+  time = new Observable<string>((observer) => {
+    setInterval(() => observer.next(new Date().toString()), 1000);
+    console.log('Time from home line 41:', this.time);
+  });
+
+  constructor() 
   {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
-    this.agentInitials = from(
-      this.contactData.getAgentInitials(this.dao.agent.agentId, 'OnInit')
-    );
-    this.agentInitials.subscribe((value) => {
-      console.log('Agent Initials subscribed:', value);
-      this.initials = value;
+    this.currentAgent.subscribe((agent) => {
+      this.contactData.applicationUserName = agent.agentId;
     });
-
     iconRegistry.addSvgIcon(
       'bell',
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/bell.svg')
@@ -81,43 +69,6 @@ export class Home implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
     );
   }
-  async getAgentInitials(): Promise<string> {
-    const agent = await this.contactData.getAgentById(
-      this.dao.agent.agentId,
-      'getInitials'
-    );
-    if (!agent) {
-      throw new Error('Agent not found');
-    }
-    var initials = '';
-    setTimeout(() => {
-      initials =
-        agent.firstName.substring(0, 1) + agent.lastName.substring(0, 1);
-      console.log('Agent Initials from getAgentInitials****:', this.initials);
-    }, 1000);
-    // console.log('Agent Initials from getAgentInitials:', initials);
-    return initials;
-  }
-
-  
   async ngOnInit(): Promise<void> {
-    // this.currentAgent = await this.navigationService.getAgent();
-    // console.log('Current Agent:', this.currentAgent);
-    const agent = await this.contactData.getAgentById(
-      this.dao.agent.agentId,
-      'OnInit'
-    );
-    console.log('Agent from home line 66:', agent);
-    this.currentAgent = agent ?? this.currentAgent;
-    console.log(
-      'This Agent currentAgent gets set by agent:',
-      this.currentAgent
-    );
-    // console.log('Agent', agent);
-    console.log(
-      'Promise from home line 71:',
-      this.contactData.getAgentById(this.dao.agent.agentId, 'promise')
-    );
-
   }
 }

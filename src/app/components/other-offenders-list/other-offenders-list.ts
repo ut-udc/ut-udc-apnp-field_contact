@@ -23,6 +23,7 @@ export class OtherOffendersList implements OnInit {
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
+    this.loadOtherOffenders();
 
     iconRegistry.addSvgIcon(
       'filter',
@@ -38,7 +39,5 @@ export class OtherOffendersList implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadOtherOffenders();
-    console.log(this.otherOffenders);
   }
 }

@@ -7,7 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Offender } from '../../model/Offender';
-import { Observable, of } from 'rxjs';
+import { Observable, of, takeUntil, tap } from 'rxjs';
 import { ContactData } from '../../services/contact-data';
 
 @Component({
@@ -26,12 +26,14 @@ import { ContactData } from '../../services/contact-data';
 })
 export class MyCaseload implements OnInit {
   myCaseload: Observable<Offender[]> = new Observable<Offender[]>();
+  caseload: Offender[] = [];
   contactData: ContactData = inject(ContactData);
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
-
+    this.loadMyCaseload();
+    
     iconRegistry.addSvgIcon(
       'filter',
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/filter.svg')
@@ -45,7 +47,5 @@ export class MyCaseload implements OnInit {
     this.myCaseload = of(await this.contactData.getMyCaseload());
   }
   ngOnInit(): void {
-    this.loadMyCaseload();
-    console.log('My Caseload from my-caseload line 24:', this.myCaseload);
   }
 }

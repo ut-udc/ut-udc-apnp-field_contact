@@ -23,6 +23,8 @@ export class ContactData extends Dexie {
   public myCaseload!: Table<Offender, number>;
   public otherOffenders!: Table<Offender, number>;
 
+  public applicationUserName: string = '';
+
   constructor(private http: HttpClient) {
     super('contactDatabase');
     this.version(1).stores({
@@ -109,11 +111,11 @@ export class ContactData extends Dexie {
   async getAgent() {
     return await this.agents.get(this.dao.agent.agentId);
   }
-  async getAgentById(id: string, source: string) {
+  async getAgentById(id: string) {
     const agent = await this.agents.get(id);
     return agent;
   }
-  async getAgentInitials(id:string, source:string): Promise<string> {
+  async getAgentInitials(id:string): Promise<string> {
     const agent = await this.agents.get(id);
     if (!agent) {
       throw new Error('Agent not found navigation.ts line 55');
