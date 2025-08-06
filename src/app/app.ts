@@ -25,14 +25,16 @@ export class App implements OnInit {
 
   }
   ngOnInit(): void {
-    this.contactData.close();
     if(!this.contactData.open()) {
       this.contactData.open();
       console.log('Populating Contact Database');
       this.contactData.populateAgent();
+      this.contactData.populateOfficers();
       this.contactData.populateMyCaseload();
       this.contactData.populateOtherOffenders();
       this.contactData.populateAllOffenders();
+      this.contactData.populateLocations();
+      this.contactData.populateContactTypes();
     }
   }
 }

@@ -1,0 +1,62 @@
+<div class="surface">
+  <span class="detail-header">
+    <a
+      [routerLink]="'/offender-detail/' + ((currentContact | async)?.ofndrNum || '')"
+      style="text-decoration: none; color: inherit; cursor: pointer"
+      aria-label="Back to Offender Detail"
+    >
+      <mat-icon
+        class="header-icon"
+        svgIcon="arrow_back"
+        aria-hidden="false"
+        aria-label="Back Icon"
+        style="cursor: pointer"
+      ></mat-icon>
+    </a>
+    <span class="title_large">Supervision Contact Detail</span>
+  </span>
+
+  <div class="surface-container-low-outlined">
+    <div class="contact-info-container">
+      <span class="label_medium">Date</span>
+      <span class="body_large"
+        >{{(currentContact | async)?.contactDate | date: 'MM/dd/yyyy'}} |
+        {{(currentContact | async)?.contactDate | date: 'HH:mm'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Primary Interviewer</span>
+      <span class="body_large"
+        >{{(primaryAgent | async)?.fullName || 'N/A'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Secondary Interviewer</span>
+      <span class="body_large"
+        >{{(secondaryAgent | async)?.fullName || 'N/A'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Contact Type</span>
+      <span class="body_large">{{(currentContact | async)?.contactTypeDesc}}</span>
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Location</span>
+      <span class="body_large"
+        >{{(currentContact | async)?.locationDesc || 'N/A'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Contact Result</span>
+      <span class="body_large"
+        >{{(currentContact | async)?.wasContactSuccessful ? 'Made Contact' : 'Attempted Contact'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Commentary</span>
+      <span class="body_medium"
+        >{{(currentContact | async)?.commentary}}</span
+      >
+    </div>
+  </div>
+</div>

@@ -47,8 +47,12 @@ export class OffenderDetail implements OnInit {
       }
     });
   });
-  // currentOffender: Observable<Offender> = new Observable<Offender>();
-  contactList: Observable<Contact[]> = new Observable<Contact[]>();
+
+  contactList = new Observable<Contact[]>((observer) => {
+    this.contactData.getAllContactsByOffenderNumberDesc(Number(this.route.snapshot.params['ofndrNum'])).then((contacts) => {
+      observer.next(contacts);
+    });
+  });
   contactData: ContactData = inject(ContactData);
 
   constructor() {
@@ -57,8 +61,6 @@ export class OffenderDetail implements OnInit {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
-    // this.loadOffenderData(offenderNum);
-    this.loadContactList(offenderNum);
 
     iconRegistry.addSvgIcon(
       'arrow_back',
@@ -87,12 +89,7 @@ export class OffenderDetail implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/note.svg')
     );
   }
-  async loadContactList(ofndrNum: number): Promise<void> {
-    const contacts = await this.contactData.getAllContactsByOffenderNumberDesc(ofndrNum);
-    this.contactList = of(contacts);
-  }
   async ngOnInit(): Promise<void> {
-    console.log('Applicaiton User: ', this.contactData.applicationUserName);
   }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
@@ -104,39 +101,5 @@ export class OffenderDetail implements OnInit {
 
   radius = 300;
   color = 'rgba(207, 207, 207, 0.39)';
-}
-function switchMap<T, R>(project: (value: T, index: number) => Observable<R>): import("rxjs").OperatorFunction<T, R> {
-  return (source: Observable<T>) =>
-    new Observable<R>(observer => {
-      let innerSubscription: any;
-      let index = 0;
-      const outerSubscription = source.subscribe({
-        next(value) {
-          if (innerSubscription) {
-            innerSubscription.unsubscribe();
-          }
-          let result$: Observable<R>;
-          try {
-            result$ = project(value, index++);
-          } catch (err) {
-            observer.error(err);
-            return;
-          }
-          innerSubscription = result$.subscribe({
-            next: val => observer.next(val),
-            error: err => observer.error(err),
-            complete: () => { /* do nothing */ }
-          });
-        },
-        error: err => observer.error(err),
-        complete: () => observer.complete()
-      });
-      return () => {
-        outerSubscription.unsubscribe();
-        if (innerSubscription) {
-          innerSubscription.unsubscribe();
-        }
-      };
-    });
 }
 

@@ -1,4 +1,4 @@
 export interface Select2Model {
-  id: string;
+  id: number;
   text: string;
 }

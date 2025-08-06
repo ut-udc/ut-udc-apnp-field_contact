@@ -9,34 +9,44 @@ import { Dao } from './dao';
 import { environment } from '../../environment/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { NetworkService } from './network';
+import { Select2Model } from '../model/Select2Model';
+import { Select2String } from '../model/Select2String';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContactData extends Dexie {
+  networkService: NetworkService = inject(NetworkService);
   private path = environment.apiUrl;
 
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
   public agents!: Table<Agent, string>;
+  public officers!: Table<Agent, string>;
   public allOffenders!: Table<OffenderBase, number>;
   public myCaseload!: Table<Offender, number>;
   public otherOffenders!: Table<Offender, number>;
-
-  public applicationUserName: string = '';
+  public locationList!: Table<Select2Model, number>;
+  public contactTypeList!: Table<Select2Model, number>;
+  public applicationUserName: string = 'jshardlow';
 
   constructor(private http: HttpClient) {
     super('contactDatabase');
-    this.version(1).stores({
+    this.version(2).stores({
       contacts:
-        'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
+        'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       agents:
+        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
+      officers:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
       allOffenders: 'ofndrNum, firstName, lastName, birthDate',
       myCaseload:
         'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
       otherOffenders:
         'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
+      locationList: 'id, text',
+      contactTypeList: 'id, text',
     });
     this.contacts = this.table('contacts');
     this.agents = this.table('agents');
@@ -45,12 +55,23 @@ export class ContactData extends Dexie {
     this.otherOffenders = this.table('otherOffenders');
   }
 
+  isOnline(): boolean {
+    let online = false;
+    this.networkService.onlineStatus$
+      .subscribe((status) => (online = status))
+      .unsubscribe();
+    return online;
+  }
+
   getMyCaseload1(agentId: string): Observable<Offender[]> {
     const header = new HttpHeaders({
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     });
-    return this.http.get<Offender[]>(this.path + '/agentId=' + agentId, { headers: header, withCredentials: true });
+    return this.http.get<Offender[]>(this.path + '/agentId=' + agentId, {
+      headers: header,
+      withCredentials: true,
+    });
   }
 
   addContact1(contact: Contact): Observable<Contact> {
@@ -58,10 +79,19 @@ export class ContactData extends Dexie {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     });
-    return this.http.post<Contact>(this.path + '/contact', contact, { headers: header, withCredentials: true });
+    return this.http.post<Contact>(this.path + '/contact', contact, {
+      headers: header,
+      withCredentials: true,
+    });
   }
 
   async addContact(contact: Contact) {
+    const locationDesc = await this.getLocationDescById(contact.location);
+    const contactTypeDesc = await this.getContactTypeDescById(
+      contact.contactType
+    );
+    contact.locationDesc = locationDesc;
+    contact.contactTypeDesc = contactTypeDesc;
     await this.contacts.add(contact);
   }
   async removeContact(contact: Contact) {
@@ -71,7 +101,23 @@ export class ContactData extends Dexie {
     await this.contacts.put(contact);
   }
   async getContactById(id: number) {
-    return await this.contacts.get(id);
+    const contact = await this.contacts.get(id);
+    if (!contact) {
+      throw new Error(`Contact with id ${id} not found`);
+    }
+    contact.agentFullName = (await this.getAgentById(contact.agentId)).fullName;
+    contact.secondaryAgentFullName = (
+      await this.getAgentById(contact.secondaryAgentId)
+    ).fullName;
+    const contactTypeText = await this.getContactTypeDescById(
+      contact.contactType
+    );
+    console.log('Contact Type line 155:', contactTypeText);
+    contact.contactTypeDesc = contactTypeText || 'N/A';
+    const locationText = await this.getLocationDescById(contact.location);
+    console.log('Location line 157:', locationText);
+    contact.locationDesc = locationText || 'N/A';
+    return contact;
   }
   async getContactCount() {
     return await this.contacts.count();
@@ -111,21 +157,43 @@ export class ContactData extends Dexie {
   async getAgent() {
     return await this.agents.get(this.dao.agent.agentId);
   }
-  async getAgentById(id: string) {
-    const agent = await this.agents.get(id);
-    return agent;
-  }
-  async getAgentInitials(id:string): Promise<string> {
+  async getAgentById(id: string): Promise<Agent> {
     const agent = await this.agents.get(id);
     if (!agent) {
-      throw new Error('Agent not found navigation.ts line 55');
+      return {} as Agent;
     }
-    return agent.firstName.substring(0, 1) + agent.lastName.substring(0, 1);
+    return agent;
+  }
+  async getAgentList() {
+    return await this.agents.toArray();
+  }
+  async getInterviewerOptions(): Promise<Select2String[]> {
+    const options: Select2String[] = [];
+    const agentList = await this.getOfficerList();
+    agentList.forEach((agent) => {
+      options.push({ id: agent.agentId, text: agent.fullName });
+    });
+    return options;
   }
   async populateAgent() {
     await this.agents.clear();
     await this.agents.add(this.dao.agent);
   }
+  async populateOfficers() {
+    await this.officers.clear();
+    await this.officers.bulkAdd(this.dao.officerList);
+  }
+  async getOfficerList(): Promise<Agent[]> {
+    return await this.officers.toArray();
+  }
+  async getOfficerById(id: string): Promise<Agent> {
+    const officer = await this.officers.get(id);
+    if (!officer) {
+      return {} as Agent;
+    }
+    return officer;
+  }
+
   async populateMyCaseload() {
     await this.myCaseload.clear();
     await this.myCaseload.bulkAdd(this.dao.myCaseload);
@@ -155,5 +223,40 @@ export class ContactData extends Dexie {
   }
   async getOtherOffendersOffenderById(id: number) {
     return await this.otherOffenders.get(id);
+  }
+  async populateLocations() {
+    await this.locationList.clear();
+    await this.locationList.bulkAdd(this.dao.locationList);
+  }
+  async populateContactTypes() {
+    await this.contactTypeList.clear();
+    await this.contactTypeList.bulkAdd(this.dao.contactTypeList);
+  }
+  async getListOfLocations() {
+    return await this.locationList.toArray();
+  }
+  async getListOfContactTypes() {
+    return await this.contactTypeList.toArray();
+  }
+  async getLocationById(id: string) {
+    return await this.locationList.get(Number(id));
+  }
+  async getLocationDescById(id: string) {
+    console.log('Location line 259:', id);
+    const location = await this.locationList.get(Number(id));
+    console.log('Location line 261:', location);
+    return location?.text || '';
+  }
+  async getContactTypeById(id: string) {
+    return await this.contactTypeList.get(Number(id));
+  }
+  async getContactTypeDescById(id: string) {
+    console.log('Contact Type line 267:', id);
+    const contactType = await this.contactTypeList.get(Number(id));
+    console.log('Contact Type line 269:', contactType);
+    return contactType?.text || '';
+  }
+  deleteDatabase(): void {
+    this.delete();
   }
 }

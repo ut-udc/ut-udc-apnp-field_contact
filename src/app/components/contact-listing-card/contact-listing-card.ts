@@ -1,18 +1,21 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Contact } from '../../model/Contact';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ContactData } from '../../services/contact-data';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contact-listing-card',
   standalone: true,
-  imports: [MatIconModule, DatePipe],
+  imports: [MatIconModule, DatePipe, RouterLink, CommonModule],
   templateUrl: './contact-listing-card.html',
   styleUrl: './contact-listing-card.scss'
 })
 export class ContactListingCard implements OnInit {
   @Input() contact!: Contact;
+  contactData: ContactData = inject(ContactData);
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
@@ -24,6 +27,6 @@ export class ContactListingCard implements OnInit {
     iconRegistry.addSvgIcon('note', sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/note.svg'));
   }
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    console.log('Contact: ', this.contact);
   }
 }

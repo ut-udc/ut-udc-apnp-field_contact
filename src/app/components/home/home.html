@@ -1,5 +1,4 @@
 <div class="surface">
-  
   <mat-toolbar>
     <mat-toolbar-row>
       <span>&nbsp;</span>
@@ -16,10 +15,10 @@
         aria-hidden="false"
         aria-label="Notifications Icon"
       ></mat-icon>
-      <div class="primary-container">
-        <span class="initials" routerLink="/agent-profile">
+      <div class="primary-container" [routerLink]="['/agent-profile']">
+        <span class="initials">
           <div *ngIf="currentAgent | async; let agent">
-            {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }}  
+            {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }}
           </div>
         </span>
       </div>
@@ -33,11 +32,6 @@
       </h2>
     </mat-toolbar-row>
   </mat-toolbar>
-  <app-my-caseload>
-    <ng-template #loading>
-      <div>Loading...</div>
-    </ng-template>
-  </app-my-caseload>
-  <app-other-offenders-list
-  ></app-other-offenders-list>
+  <app-my-caseload> </app-my-caseload>
+  <app-other-offenders-list></app-other-offenders-list>
 </div>

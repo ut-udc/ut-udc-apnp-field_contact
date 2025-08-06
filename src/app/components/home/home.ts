@@ -13,7 +13,7 @@ import { Offender } from '../../model/Offender';
 import { Dao } from '../../services/dao';
 import { Observable, from, of } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -29,6 +29,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     MyCaseload,
     AsyncPipe,
     CommonModule,
+    RouterLink
   ],
 })
 export class Home implements OnInit {
