@@ -72,9 +72,7 @@
           matInput
           formControlName="commentary"
           placeholder="Include details related to the R&R efforts of the visit."
-        >
-        
-        </textarea>
+          [ngModel]="(currentContact | async)?.commentary || ''"></textarea>
       </mat-form-field>
     </form>
     <span class="summary-of-contact-container"

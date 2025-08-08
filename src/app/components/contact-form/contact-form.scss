@@ -1,4 +1,18 @@
-.button-filled {
-    background-color: #030303; 
-    color: white;
-}
+// .button-filled {
+//     background-color: #030303; 
+//     color: white;
+// }
+
+    .button-filled{
+        display:inline-flex;
+        height:40px;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        gap:8px;
+        flex-shrink:0;
+        border-radius:100px;
+        // background:var(--UDC-styles-sys-light-primary);
+        background-color: #030303; 
+        color:#fff
+    }

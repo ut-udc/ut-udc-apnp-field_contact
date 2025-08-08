@@ -8,11 +8,18 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { ContactData } from '../../services/contact-data';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-other-offenders-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatDividerModule, OffenderCard],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    MatDividerModule,
+    OffenderCard,
+    RouterLink,
+  ],
   templateUrl: './other-offenders-list.html',
   styleUrl: './other-offenders-list.scss',
 })
@@ -33,11 +40,16 @@ export class OtherOffendersList implements OnInit {
       'search',
       sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
     );
+    iconRegistry.addSvgIcon(
+      'add-black',
+      sanitizer.bypassSecurityTrustResourceUrl(
+        '../../assets/icons/add-black.svg'
+      )
+    );
   }
   async loadOtherOffenders(): Promise<void> {
     this.otherOffenders = of(await this.contactData.getOtherOffenders());
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

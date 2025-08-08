@@ -1,20 +1,21 @@
 <div class="surface">
   <div *ngIf="currentOffender | async; let offender; else loading">
-  <span class="detail-header">
-    <mat-icon
-      class="header-icon"
-      svgIcon="arrow_back"
-      aria-hidden="false"
-      aria-label="Back Icon"
-      style="cursor: pointer"
-      routerLink="/"
-    ></mat-icon>
-    <span class="title_large">Offender Panel</span>
-  </span>
-  <div>
-    <div class="detail-card">
-      <div style="display: flex">
-        
+    <span class="detail-header">
+      <div> 
+        <mat-icon
+          class="header-icon"
+          svgIcon="arrow_back"
+          aria-hidden="false"
+          aria-label="Back Icon"
+          style="cursor: pointer"
+          routerLink="/"
+        ></mat-icon>
+      </div>
+      <span class="title_large">Offender Panel</span>
+    </span>
+    <div>
+      <div class="detail-card">
+        <div style="display: flex">
           <div style="flex: 1">
             <img />
           </div>
@@ -27,83 +28,83 @@
               Last Successful Contact: {{offender?.lastSuccessfulContactDate |
               date: 'MM/dd/yyyy'}}
             </div>
+          </div>
         </div>
+        <br />
+        <button
+          class="add-contact-button"
+          [routerLink]="['/contact-form', offender?.ofndrNum]"
+          style="cursor: pointer"
+          matRipple
+          [matRippleCentered]="centered"
+          [matRippleDisabled]="disabled"
+          [matRippleUnbounded]="unbounded"
+          [matRippleRadius]="radius"
+          [matRippleColor]="color"
+        >
+          <mat-icon
+            class="state-icon"
+            svgIcon="add-white"
+            aria-hidden="false"
+            aria-label="Notifications Icon"
+          ></mat-icon
+          >Supervision Contact Entry
+        </button>
       </div>
       <br />
-      <button
-        class="add-contact-button"
-        [routerLink]="['/contact-form', offender?.ofndrNum]"
-        style="cursor: pointer"
-        matRipple
-        [matRippleCentered]="centered"
-        [matRippleDisabled]="disabled"
-        [matRippleUnbounded]="unbounded"
-        [matRippleRadius]="radius"
-        [matRippleColor]="color"
-      >
-        <mat-icon
-          class="state-icon"
-          svgIcon="add-white"
-          aria-hidden="false"
-          aria-label="Notifications Icon"
-        ></mat-icon
-        >Supervision Contact Entry
-      </button>
-    </div>
-    <br />
-    <div class="detail-card">
-      <span class="label_large_prominent">Contact Information</span>
-      <div style="display: flex; margin-top: 15px">
-        <div style="flex: 0">
-          <mat-icon
-            class="header-icon"
-            svgIcon="phone"
-            aria-hidden="false"
-            aria-label="Back Icon"
-            style="cursor: pointer"
-          ></mat-icon>
+      <div class="detail-card">
+        <span class="label_large_prominent">Contact Information</span>
+        <div style="display: flex; margin-top: 15px">
+          <div style="flex: 0">
+            <mat-icon
+              class="header-icon"
+              svgIcon="phone"
+              aria-hidden="false"
+              aria-label="Back Icon"
+              style="cursor: pointer"
+            ></mat-icon>
+          </div>
+          <div style="flex: 1">
+            <div class="label_medium">Primary Phone</div>
+            <div class="body_small">{{offender?.phone}}</div>
+          </div>
         </div>
-        <div style="flex: 1">
-          <div class="label_medium">Primary Phone</div>
-          <div class="body_small">{{offender?.phone}}</div>
-        </div>
-      </div>
-      <div style="display: flex; margin-top: 15px">
-        <div style="flex: 0">
-          <mat-icon
-            class="header-icon"
-            svgIcon="location_on"
-            aria-hidden="false"
-            aria-label="Back Icon"
-            style="cursor: pointer"
-          ></mat-icon>
-        </div>
+        <div style="display: flex; margin-top: 15px">
+          <div style="flex: 0">
+            <mat-icon
+              class="header-icon"
+              svgIcon="location_on"
+              aria-hidden="false"
+              aria-label="Back Icon"
+              style="cursor: pointer"
+            ></mat-icon>
+          </div>
 
-        <div style="flex: 1">
-          <div class="label_medium">Home Address</div>
-          <div class="body_small">
-            {{offender?.address}}<br />{{offender?.city}}, {{offender?.state}}
-            {{offender?.zip}}
+          <div style="flex: 1">
+            <div class="label_medium">Home Address</div>
+            <div class="body_small">
+              {{offender?.address}}<br />{{offender?.city}}, {{offender?.state}}
+              {{offender?.zip}}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- **********iterate************ -->
-    <ng-container *ngIf="contactList | async as contacts; else loading">
-      <app-contact-listing-card
-        *ngFor="let contact of contacts"
-        [contact]="contact"
-      >
-      </app-contact-listing-card>
-    </ng-container>
-    <ng-template #loading>
-      <div>Loading...</div>
-    </ng-template>
-    <!-- ********************** -->
+      <!-- **********iterate************ -->
+      <ng-container *ngIf="contactList | async as contacts; else loading">
+        <app-contact-listing-card
+          *ngFor="let contact of contacts"
+          [contact]="contact"
+        >
+        </app-contact-listing-card>
+      </ng-container>
+      <ng-template #loading>
+        <div>Loading...</div>
+      </ng-template>
+      <!-- ********************** -->
+    </div>
   </div>
-</div>
-<ng-template #loading>
-  <div>Loading...</div>
-</ng-template>
+  <ng-template #loading>
+    <div>Loading...</div>
+  </ng-template>
 </div>

@@ -105,10 +105,6 @@ export class ContactData extends Dexie {
     if (!contact) {
       throw new Error(`Contact with id ${id} not found`);
     }
-    contact.agentFullName = (await this.getAgentById(contact.agentId)).fullName;
-    contact.secondaryAgentFullName = (
-      await this.getAgentById(contact.secondaryAgentId)
-    ).fullName;
     const contactTypeText = await this.getContactTypeDescById(
       contact.contactType
     );
@@ -126,7 +122,7 @@ export class ContactData extends Dexie {
     return this.contacts.toArray();
   }
   async getAllContactsByOffenderNumberDesc(id: number) {
-    return await this.contacts.where('ofndrNum').equals(id).reverse().toArray();
+    return await this.contacts.where('ofndrNum').equals(id).and(contact => contact.formCompleted === true).reverse().toArray();
   }
   async getAllContactsByAgentId(id: string) {
     return await this.contacts.where('agentId').equals(id).toArray();

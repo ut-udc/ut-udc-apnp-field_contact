@@ -1,0 +1,27 @@
+<div class="surface">
+  <span class="detail-header">
+    <div>
+      <mat-icon
+        class="header-icon"
+        svgIcon="arrow_back"
+        aria-hidden="false"
+        aria-label="Back Icon"
+        style="cursor: pointer"
+        routerLink="/"
+      ></mat-icon>
+    </div>
+    <span class="title_large">Search for an Offender</span>
+  </span>
+  <form [formGroup]="offenderSearch" (submit)="onSubmit()">
+    <mat-form-field class="contact_form_input_field">
+      <mat-label>Search for offender</mat-label>
+      <input matInput type="text" [(ngModel)]="value"
+      formControlName="offenderSearch" />
+      @if (value) {
+      <button matSuffix matIconButton aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+  </form>
+</div>

@@ -4,7 +4,13 @@ import { RouterLink } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { AsyncPipe, CommonModule, DatePipe, NgClass, NgIf } from '@angular/common';
+import {
+  AsyncPipe,
+  CommonModule,
+  DatePipe,
+  NgClass,
+  NgIf,
+} from '@angular/common';
 import { Offender } from '../../model/Offender';
 import { ActivatedRoute } from '@angular/router';
 import { Navigation } from '../../services/navigation';
@@ -15,7 +21,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Agent } from '../../model/Agent';
 import { Observable, of } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 
 @Component({
   selector: 'app-commentary-form',
@@ -44,18 +49,20 @@ export class CommentaryForm implements OnInit {
   ofndrNum: number = 0;
   contactId: number = 0;
 
-  currentContact= new Observable<Contact>((observer) => {
-    this.contactData.getContactById(Number(this.route.snapshot.params['contactId'])).then((contact) => {
-      if (contact) {
-        observer.next(contact);
-        console.log('Current Contact line 41:', contact);
-      } else {
-        observer.next({} as Contact);
-      }
-    });
+  currentContact = new Observable<Contact>((observer) => {
+    this.contactData
+      .getContactById(Number(this.route.snapshot.params['contactId']))
+      .then((contact) => {
+        if (contact) {
+          observer.next(contact);
+          console.log('Current Contact line 41:', contact);
+        } else {
+          observer.next({} as Contact);
+        }
+      });
   });
-  primaryAgent= new Observable<Agent>((observer) => {
-    this.currentContact.subscribe(contact => {
+  primaryAgent = new Observable<Agent>((observer) => {
+    this.currentContact.subscribe((contact) => {
       this.contactData.getOfficerById(contact.agentId).then((agent) => {
         if (agent) {
           observer.next(agent);
@@ -65,29 +72,35 @@ export class CommentaryForm implements OnInit {
       });
     });
   });
-  secondaryAgent= new Observable<Agent>((observer) => {
-    this.currentContact.subscribe(contact => {
-      this.contactData.getOfficerById(contact.secondaryAgentId).then((agent) => {
-        if (agent) {
-          observer.next(agent);
-        } else {
-          observer.next({} as Agent);
-        }
-      });
+  secondaryAgent = new Observable<Agent>((observer) => {
+    this.currentContact.subscribe((contact) => {
+      this.contactData
+        .getOfficerById(contact.secondaryAgentId)
+        .then((agent) => {
+          if (agent) {
+            observer.next(agent);
+          } else {
+            observer.next({} as Agent);
+          }
+        });
     });
   });
-  contactTypeName= new Observable<string>((observer) => {
-    this.currentContact.subscribe(contact => {
-      this.contactData.getContactTypeDescById(contact.contactType).then((type) => {
-        observer.next(type);
-      });
+  contactTypeName = new Observable<string>((observer) => {
+    this.currentContact.subscribe((contact) => {
+      this.contactData
+        .getContactTypeDescById(contact.contactType)
+        .then((type) => {
+          observer.next(type);
+        });
     });
   });
-  locationName= new Observable<string>((observer) => {
-    this.currentContact.subscribe(contact => {
-      this.contactData.getLocationDescById(contact.location).then((location) => {
-        observer.next(location);
-      });
+  locationName = new Observable<string>((observer) => {
+    this.currentContact.subscribe((contact) => {
+      this.contactData
+        .getLocationDescById(contact.location)
+        .then((location) => {
+          observer.next(location);
+        });
     });
   });
 
@@ -95,6 +108,7 @@ export class CommentaryForm implements OnInit {
 
   commentaryForm: FormGroup = new FormGroup({
     commentary: new FormControl<string | null>(null),
+    commentary1: new FormControl<string | null>(null),
   });
 
   onSubmit() {
@@ -123,10 +137,14 @@ export class CommentaryForm implements OnInit {
         );
       this.currentContact = contact ? of(contact) : this.currentContact;
     }
+    let contact: Contact | undefined;
+    if (this.currentContact instanceof Observable) {
+      contact = await this.currentContact.toPromise();
+    } else {
+      contact = this.currentContact as Contact;
+    }
     this.commentaryForm.patchValue({
-      commentary: this.currentContact.subscribe((contact) => {
-        return contact.commentary;
-      }),
+      commentary: contact?.commentary ?? '',
     });
     const agent = await this.contactData.getAgentById(
       this.contactData.applicationUserName
@@ -146,11 +164,10 @@ export class CommentaryForm implements OnInit {
   }
 
   madeContact() {
-    this.currentContact
-      .subscribe((contact) => {
-        contact.wasContactSuccessful = true;
-        this.contactData.updateContact(contact);
-      });
+    this.currentContact.subscribe((contact) => {
+      contact.wasContactSuccessful = true;
+      this.contactData.updateContact(contact);
+    });
   }
 
   attemptedContact() {
@@ -158,5 +175,5 @@ export class CommentaryForm implements OnInit {
       contact.wasContactSuccessful = false;
       this.contactData.updateContact(contact);
     });
-  } 
+  }
 }

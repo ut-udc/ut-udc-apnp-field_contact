@@ -5,6 +5,7 @@ import { ContactForm } from './components/contact-form/contact-form';
 import { CommentaryForm } from './components/commentary-form/commentary-form';
 import { AgentProfile } from './components/agent-profile/agent-profile';
 import { ContactDetailView } from './components/contact-detail-view/contact-detail-view';
+import { AddOffenderToOtherOffenders } from './components/add-offender-to-other-offenders/add-offender-to-other-offenders';
 
 export const routes: Routes = [
   {
@@ -41,5 +42,10 @@ export const routes: Routes = [
     path: 'contact-detail-view/:contactId',
     component: ContactDetailView,
     title: 'Contact Detail View',
-  }
+  },
+  {
+    path: 'add-offender-to-other-offenders',
+    component: AddOffenderToOtherOffenders,
+    title: 'Add Offender to Other Offenders',
+  },
 ];
