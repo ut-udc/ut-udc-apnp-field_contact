@@ -89,19 +89,6 @@ export class ContactForm implements OnInit {
     wasContactSuccessful: false,
   };
 
-  existingIncompleteContact = new Observable<Contact>((observer) => {
-    this.contactData
-      .getContactById(Number(this.route.snapshot.params['contactId']))
-      .then((contact) => {
-        if (contact) {
-          observer.next(contact);
-          console.log('Current Contact line 41:', contact);
-        } else {
-          observer.next({} as Contact);
-        }
-      });
-  });
-
   agentList = new Observable<Agent[]>((observer) => {
     this.contactData.getAgentList().then((list) => {
       observer.next(list);
@@ -250,7 +237,7 @@ export class ContactForm implements OnInit {
   async ngOnInit() {
     // debugger;
     this.contactCount = await this.contactData.getContactCount();
-    
+
     console.log('Contact id line 180:', this.currentContact.contactId);
     const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
     this.offender = await this.contactData.getCaseloadOffenderById(offenderNum);
@@ -273,16 +260,18 @@ export class ContactForm implements OnInit {
       this.currentContact = this.contact ?? this.currentContact;
     }
     if (this.currentContact.contactId > 0) {
-
       setTimeout(() => {
-      this.contactForm.updateValueAndValidity();
+        this.contactForm.updateValueAndValidity();
 
-      this.contactForm.patchValue({
-        primaryInterviewer: this.contactData.applicationUserName,
-        contactId: this.currentContact?.contactId,
-        contactDate: this.currentContact?.contactDate,
-        contactTime: this.currentContact?.contactDate,
-      });
+        this.contactForm.patchValue({
+          primaryInterviewer: this.contactData.applicationUserName,
+          contactId: this.currentContact?.contactId,
+          contactDate: this.currentContact?.contactDate,
+          contactTime: this.currentContact?.contactDate,
+          secondaryInterviewer: this.currentContact?.secondaryAgentId,
+          contactType: this.currentContact?.contactType,
+          location: this.currentContact?.location,
+        });
       }, 100);
     } else {
       setTimeout(() => {
