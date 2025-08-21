@@ -4,6 +4,7 @@ import { ContactData } from './services/contact-data';
 import { HttpClient } from '@angular/common/http';
 import { Home } from "./components/home/home";
 import { CommonModule } from '@angular/common';
+import { processContactQueue } from '../helpers';
 
 @Component({
   selector: 'app-root',
@@ -24,17 +25,32 @@ export class App implements OnInit {
   constructor() {
 
   }
-  ngOnInit(): void {
-    if(!this.contactData.open()) {
-      this.contactData.open();
-      console.log('Populating Contact Database');
-      this.contactData.populateAgent();
-      this.contactData.populateOfficers();
-      this.contactData.populateMyCaseload();
-      this.contactData.populateOtherOffenders();
-      this.contactData.populateAllOffenders();
-      this.contactData.populateLocations();
-      this.contactData.populateContactTypes();
-    }
+  async checkPopulationWithDexie(): Promise<boolean> {
+    const count = await this.contactData.agents.count();
+    return count > 0;
+  }
+  async ngOnInit(): Promise<void> {
+    await this.checkPopulationWithDexie().then((populated) => {
+        if (!populated) {
+          this.contactData.open();
+          console.log('Populating Contact Database');
+          this.contactData.populateAgent();
+          this.contactData.populateOfficers();
+          this.contactData.populateMyCaseload();
+          this.contactData.populateOtherOffenders();
+          this.contactData.populateAllOffenders();
+          this.contactData.populateLocations();
+          this.contactData.populateContactTypes();
+          //TO-DO find a better way of doing this
+          window.location.reload();
+        }
+      });
+
+      if (navigator.onLine) {
+        await processContactQueue(this.contactData);
+      }
+      window.addEventListener('online', async () => {
+        await processContactQueue(this.contactData);
+      });
   }
 }

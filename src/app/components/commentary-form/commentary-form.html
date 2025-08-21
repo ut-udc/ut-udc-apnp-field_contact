@@ -51,17 +51,29 @@
     class="type-of-contact-btn-container"
     *ngIf="(currentContact | async) as contact"
   >
-    <button
+    <button  matFab extended
       [ngClass]="{'active-class': contact.wasContactSuccessful, 'disabled-class': !contact.wasContactSuccessful}"
       (click)="madeContact()"
     >
-      Made Contact
+    <div *ngIf="contact.wasContactSuccessful" class="successFab">  
+    <mat-icon>checkmark</mat-icon>
+    Made Contact
+  </div>
+    <div *ngIf="!contact.wasContactSuccessful">  
+    Made Contact
+  </div>
     </button>
-    <button
+    <button matFab extended
       [ngClass]="{'active-class': !contact.wasContactSuccessful, 'disabled-class': contact.wasContactSuccessful}"
       (click)="attemptedContact()"
     >
-      Attempted Contact
+    <div *ngIf="!contact.wasContactSuccessful" class="successFab">  
+    <mat-icon>checkmark</mat-icon>
+    Attempted Contact
+  </div>
+    <div *ngIf="contact.wasContactSuccessful">  
+    Attempted Contact
+  </div>
     </button>
   </div>
   <div class="summary-of-contact-container">
@@ -82,8 +94,10 @@
 
   <div class="on-surface-variant">
     <span>
+      <button matButton="text" (click)="openBottomSheet()">
       <mat-icon class="info-field-icon">info_outline</mat-icon> Field Visit
       Guidelines
+      </button>
     </span>
   </div>
 
@@ -97,14 +111,14 @@
         >
           Cancel
         </button>
+        
         <button
-          style="background-color: #030303; color: white"
-          (click)="onSubmit()"
-          matButton="filled"
-          routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
-        >
-          Save
-        </button>
+            matButton="filled"
+            type="submit"
+            (click)="onSubmit()"
+            routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
+            [disabled]="!commentaryForm.valid"
+          >Save</button>
       </div>
     </section>
   </div>

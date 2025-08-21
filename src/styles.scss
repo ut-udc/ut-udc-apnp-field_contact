@@ -1,22 +1,80 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+@use './app/css/light.scss';
+@use './app/app.scss';
+@use './scss_theme-colors.scss';
+:root {
+  --mat-timepicker-container-background-color: #EBE7E6;
+  --mat-select-panel-background-color: #EBE7E6;
+  --mat-button-filled-container-color: #030303;
+  --mat-button-filled-label-text-color: #fff;
+  --mat-sys-on-primary: var(--md-sys-color-on-primary);
+  --mat-sys-primary: var(--md-sys-color-primary);
+  --mat-button-outlined-container-shape: 100px;
+  --mat-button-filled-container-shape: 100px;
+  --mat-button-filled-disabled-container-color: #EBE7E6;
+  --mat-button-filled-disabled-label-text-color: var(--md-sys-color-primary);
+  --mat-fab-extended-container-elevation-shadow: 32px;
+  --mat-button-outlined-label-text-size: 16px;
+  --mat-button-filled-label-text-size: 16px;
+  --mat-sys-title-large-font: "Merriweather";
+  --mat-sys-title-large-size: 24px;
+  --mat-toolbar-standard-height: 56px;
+  --mat-bottom-sheet-container-background-color: var(--md-sys-color-surface-variant);
+  --mat-bottom-sheet-container-shape: 30px;
+}
 
-html {
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
+  // --mat-sys-on-surface: var(--md-sys-color-secondary);
+  // @include mat.fab-overrides((container-color: orange,
+  //       container-elevation-shadow: red,
+  //     ));
+
+  .mat-icon {
+    -webkit-user-select: none;
+    user-select: none;
+    background-repeat: no-repeat;
+    display: inline-block;
+    fill: currentColor;
+    height: 31px;
+    width: 31px;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+}
+
+  @include mat.form-field-overrides((
+    disabled-input-text-placeholder-color: var(--UDC-styles-sys-light-on-surface-variant),
+    disabled-leading-icon-color: var(--UDC-styles-sys-light-on-surface-variant),
   ));
-}/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mdc-text-field--invalid {
+      color: red;
+    }
+.mdc-button:hover {
+  background-color: rgba(255, 255, 255, 0.5); /* Change background on hover */
+  cursor: pointer; /* Indicate interactivity */
+}
+// html {
+//   @include mat.theme((
+//     color: (
+//       theme-type: light,
+//       color-scheme: scss_theme-colors,
+//       primary: mat.$azure-palette,
+//       tertiary: mat.$blue-palette,
+//     ),
+//     typography: Roboto,
+//     density: 0,
+//   ));
+// }/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%;
+  width: 100%;
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+ }
+body { margin: 0; font-family: "Source Sans 3", "Helvetica Neue", sans-serif; }
 textarea {
   width: 100%;
   min-height: 50px;
@@ -27,4 +85,20 @@ textarea {
   background-color: #f8f8f8;
   font-size: 16px;
   resize: none;
+}
+.surface {
+  background: var(--UDC-styles-sys-light-surface, #fcf8f7);
+  display: flex;
+  width: 100%;
+  min-height: 852px;
+  padding: 32px 16px;
+  flex-direction: column;
+  align-items: stretch;
+  align-content: center;
+}
+.mat-bottom-sheet-container {
+  min-width: 384px;
+  max-width: calc(100vw - 128px);
+  border-top-left-radius: var(--mat-bottom-sheet-container-shape, 28px);
+  border-top-right-radius: var(--mat-bottom-sheet-container-shape, 28px);
 }

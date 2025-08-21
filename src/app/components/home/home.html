@@ -1,8 +1,12 @@
 <div class="surface">
   <mat-toolbar>
     <mat-toolbar-row>
-      <span>&nbsp;</span>
-      <span class="header-spacer"></span>
+      <span *ngIf="offlineStatus | async">You are offline</span>
+      <span *ngIf="!offlineStatus">&nbsp;</span>
+      <span class="header-spacer">
+        <div>
+        </div>
+      </span>
       <mat-icon
         class="header-icon"
         svgIcon="search"
@@ -26,7 +30,6 @@
     <mat-toolbar-row>
       <h2
         class="flex-item headline_small"
-        style="font-size: 24px; font-family: 'Merriweather', serif"
       >
         Supervision Contacts
       </h2>

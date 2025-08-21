@@ -21,6 +21,12 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Agent } from '../../model/Agent';
 import { Observable, of } from 'rxjs';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-commentary-form',
@@ -30,6 +36,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     RouterLink,
     MatDividerModule,
     MatButtonModule,
+    MatBottomSheetModule,
+    MatListModule,
     MatInputModule,
     ReactiveFormsModule,
     DatePipe,
@@ -48,6 +56,13 @@ export class CommentaryForm implements OnInit {
   contactData: ContactData = inject(ContactData);
   ofndrNum: number = 0;
   contactId: number = 0;
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openBottomSheet(): void {
+    this._bottomSheet.open(FieldVisitGuidelinesBottomSheet);
+  }
+
 
   currentContact = new Observable<Contact>((observer) => {
     this.contactData
@@ -111,13 +126,23 @@ export class CommentaryForm implements OnInit {
     commentary1: new FormControl<string | null>(null),
   });
 
-  onSubmit() {
-    // debugger
-    this.currentContact.subscribe((contact) => {
-      contact.formCompleted = true;
-      contact.commentary = this.commentaryForm.value.commentary ?? '';
-      this.contactData.updateContact(contact);
-    });
+  async onSubmit() {
+    if (!navigator.onLine) {
+      this.currentContact.subscribe((contact) => {
+        contact.formCompleted = true;
+        contact.commentary = this.commentaryForm.value.commentary ?? '';
+        this.contactData.addPostContactToQueue(contact);
+        this.contactData.removeContactFromContacts(contact.contactId);
+      });
+      return;
+    } else {
+      this.currentContact.subscribe((contact) => {
+        contact.formCompleted = true;
+        contact.commentary = this.commentaryForm.value.commentary ?? '';
+        this.contactData.syncContactWithDatabase(contact);
+        this.contactData.updateContact(contact);
+      });
+    }
   }
 
   async ngOnInit() {
@@ -177,3 +202,20 @@ export class CommentaryForm implements OnInit {
     });
   }
 }
+
+@Component({
+  selector: 'field-visit-guidelines-bottom-sheet',
+  standalone: true,
+  imports: [CommonModule, MatListModule],
+  templateUrl: './field-visit-guidelines-bottom-sheet.html',
+  styleUrl: './field-visit-guidelines-bottom-sheet.scss',
+})
+export class FieldVisitGuidelinesBottomSheet {
+  private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> = inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
+  
+  openLink(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
+}
+

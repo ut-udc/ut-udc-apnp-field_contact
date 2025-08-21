@@ -18,6 +18,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -87,6 +88,7 @@ export class ContactForm implements OnInit {
     formCompleted: false,
     firstPageCompleted: false,
     wasContactSuccessful: false,
+    contactSyncedWithDatabase: false,
   };
 
   agentList = new Observable<Agent[]>((observer) => {
@@ -153,7 +155,10 @@ export class ContactForm implements OnInit {
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
         wasContactSuccessful: false,
+        contactSyncedWithDatabase: false,
       };
+
+      this.currentContact.contactId = this.contactCount + 1;
       this.contactData.addContact(this.currentContact);
     } else if (
       this.currentContact.contactId > 0 &&
@@ -174,6 +179,7 @@ export class ContactForm implements OnInit {
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
         wasContactSuccessful: false,
+        contactSyncedWithDatabase: false,
       };
       this.contactData.updateContact(this.currentContact);
     }
@@ -228,11 +234,11 @@ export class ContactForm implements OnInit {
       this.secondaryInterviewerOptions = options;
     });
   }
-  dateTimeControl = new FormControl('');
-  primaryInterviewerControl = new FormControl('');
+  dateTimeControl = new FormControl('', Validators.required);
+  primaryInterviewerControl = new FormControl('', Validators.required);
   secondaryInterviewerControl = new FormControl('');
-  contactTypeControl = new FormControl('');
-  contactLocationControl = new FormControl('');
+  contactTypeControl = new FormControl('', Validators.required);
+  contactLocationControl = new FormControl('', Validators.required);
 
   async ngOnInit() {
     // debugger;

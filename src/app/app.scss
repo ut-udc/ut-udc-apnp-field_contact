@@ -1,4 +1,4 @@
-@import './css/light.css';
+@use './css/light.scss';
 
 .header-icon {
     padding: 0;
@@ -22,7 +22,9 @@
     background-color: var(--md-sys-color-primary);
     font-family: "Merriweather";
     color: var(--md-sys-color-on-primary);
-    padding: 0.6rem;
+    padding: 0.8rem;
+    width:58px;
+    height:58px;
     border-radius: 50%;
     margin: 0.5rem;
     font-size: 1.5rem;
@@ -188,8 +190,8 @@ hr {
     color: var(--md-sys-light-on-surface);
 
     /* UDC-styles/headline/small */
-    font-family: "Merriweather";
-    font-size: 24px;
+    font-size: 24px; 
+    font-family: 'Merriweather', serif;
     font-style: normal;
     font-weight: 400;
     line-height: 32px;
@@ -238,7 +240,7 @@ hr {
 }
 
 .detail-card {
-    width: 329px;
+    width: 100%;
     padding: 32px 16px;
     align-items: flex-start;
     gap: 16px;
@@ -253,20 +255,6 @@ hr {
     border-radius: 8px;
     flex-shrink: 0;
     background: url(../assets/images/placeholder-image.png) lightgray 50% / cover no-repeat;
-}
-
-.add-contact-button {
-    display: flex;
-    width: 295px;
-    padding: 10px 24px 10px 16px;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    flex: 1 0 0;
-    align-self: stretch;
-    border-radius: 32px;
-    background: var(--md-sys-color-primary);
-    color: var(--md-sys-color-on-primary);
 }
 
 .label_medium {
@@ -393,43 +381,41 @@ hr {
     /* align-self: stretch; */
 }
 
-.MuiPaper-root {
-    background-color: #eaea87;
+ .mat-calendar {
+    background: var(--Schemes-Surface-Container-High, #EBE7E6);
+}
+ .mat-timepicker-panel {
+    background: var(--Schemes-Surface-Container-High, #EBE7E6);
 }
 
 section {
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-start;
     align-self: stretch;
     padding-top: 16px;
-    width: 329px;
+    width: 100%;
 }
 
 .button-row {
     display: flex;
     align-self: stretch;
-    flex: 0 1;
     width: 100%;
-    align-content: flex-end;
-    justify-content: space-between;
-}
-
-.button-row .mat-mdc-button-base {
+    justify-content: flex-end;
     margin: 8px 8px 8px 0;
+    flex-direction: row;
 }
 
-// .button-filled {
-//     display: inline-flex;
-//     height: 40px;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 8px;
-//     flex-shrink: 0;
-//     border-radius: 100px;
-//     background: var(--UDC-styles-sys-light-primary);
-//     color: white;
-// }
+.mat-mdc-button-base {
+    display: inline-flex;
+    height: 40px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 100px;
+}
 .info-field-icon {
     color: var(--md-sys-color-primary);
     font-size: 0.9rem;

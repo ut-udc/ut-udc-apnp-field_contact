@@ -37,14 +37,14 @@
               },
               "src/manifest.webmanifest",
               "src/service-worker.js",
-              "src/sw-register.js",
               "src/ngsw-worker.js"
             ],
             "styles": [
-              "src/app/css/light.css",
-              "src/styles.scss",
+              {
+                "input": "src/scss/scss_theme-colors.scss"
+              },
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/app/app.scss"
+              "src/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

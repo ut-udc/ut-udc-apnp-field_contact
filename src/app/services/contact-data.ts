@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { NetworkService } from './network';
 import { Select2Model } from '../model/Select2Model';
 import { Select2String } from '../model/Select2String';
+import { QueuedContact } from '../model/QueuedContact';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,7 @@ export class ContactData extends Dexie {
 
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
+  public contactsQueue!: Table<QueuedContact, number>;
   public agents!: Table<Agent, string>;
   public officers!: Table<Agent, string>;
   public allOffenders!: Table<OffenderBase, number>;
@@ -33,9 +35,10 @@ export class ContactData extends Dexie {
 
   constructor(private http: HttpClient) {
     super('contactDatabase');
-    this.version(2).stores({
+    this.version(3).stores({
       contacts:
         'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+      contactsQueue: 'url, method, body',
       agents:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
       officers:
@@ -49,6 +52,7 @@ export class ContactData extends Dexie {
       contactTypeList: 'id, text',
     });
     this.contacts = this.table('contacts');
+    this.contactsQueue = this.table('contactsQueue');
     this.agents = this.table('agents');
     this.allOffenders = this.table('allOffenders');
     this.myCaseload = this.table('myCaseload');
@@ -86,16 +90,88 @@ export class ContactData extends Dexie {
   }
 
   async addContact(contact: Contact) {
-    const locationDesc = await this.getLocationDescById(contact.location);
-    const contactTypeDesc = await this.getContactTypeDescById(
-      contact.contactType
-    );
-    contact.locationDesc = locationDesc;
-    contact.contactTypeDesc = contactTypeDesc;
-    await this.contacts.add(contact);
+    try {
+      await fetch(this.path + '/addContact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(contact),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data: Contact) => {
+          this.contacts.add(data);
+          return data;
+        });
+    } catch (error) {
+      console.error('Error inserting data:', error);
+      throw error;
+    }
   }
-  async removeContact(contact: Contact) {
-    await this.contacts.delete(contact.contactId);
+  syncContactWithDatabase(contact: Contact) {
+    try {
+      fetch(this.path + '/addContact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(contact),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data: Contact) => {
+          this.contacts.add(data);
+          return data;
+        });
+    } catch (error) {
+      console.error('Error in syncContactWithDatabase:', error);
+    }
+  }
+  async addPostContactToQueue(contact: Contact) {
+    const queueLength = await this.contactsQueue.count();
+    const queuedContact: QueuedContact = {
+      id: contact.contactId,
+      method: 'POST',
+      url: this.path + '/addContact',
+      body: contact,
+    };
+    queuedContact.id = queueLength + 1;
+    await this.contactsQueue.add(queuedContact);
+  }
+
+  async addUpdateContactToQueue(contact: Contact) {
+    const queueLength = await this.contactsQueue.count();
+    const queuedContact: QueuedContact = {
+      id: queueLength + 1,
+      method: 'PUT',
+      url: 'http://localhost:3000/updateContact',
+      body: contact,
+    };
+    await this.contactsQueue.add(queuedContact);
+  }
+
+  async addDeleteContactToQueue(contact: Contact) {
+    const queueLength = await this.contactsQueue.count();
+    const queuedContact: QueuedContact = {
+      id: queueLength + 1,
+      method: 'DELETE',
+      url: 'http://localhost:3000/deleteContact',
+      body: contact,
+    };
+    await this.contactsQueue.add(queuedContact);
+  }
+
+  async removeContactFromContacts(contactId: number) {
+    await this.contacts.delete(contactId);
   }
   async updateContact(contact: Contact) {
     await this.contacts.put(contact);
@@ -122,8 +198,17 @@ export class ContactData extends Dexie {
     return this.contacts.toArray();
   }
   async getAllContactsByOffenderNumberDesc(id: number) {
-    return await this.contacts.where('ofndrNum').equals(id).and(contact => contact.formCompleted === true).reverse().toArray();
+    return await this.contacts
+      .where('ofndrNum')
+      .equals(id)
+      .and((contact) => contact.formCompleted === true)
+      .reverse()
+      .toArray();
   }
+  async getAllQueuedContacts() {
+    return await this.contactsQueue.toArray();
+  }
+
   async getAllContactsByAgentId(id: string) {
     return await this.contacts.where('agentId').equals(id).toArray();
   }
@@ -254,5 +339,22 @@ export class ContactData extends Dexie {
   }
   deleteDatabase(): void {
     this.delete();
+  }
+  async addOffenderToOtherOffenders(offender: OffenderBase | null) {
+    const newOffender: Offender = {
+      ...(offender == null ? ({} as OffenderBase) : offender),
+      image: '',
+      address: '',
+      city: '',
+      state: '',
+      zip: '',
+      phone: '',
+      lastSuccessfulContactDate: new Date(),
+      contactArray: [],
+    };
+    await this.otherOffenders.add(newOffender);
+  }
+  async removeOffenderFromOtherOffenders(offender: OffenderBase) {
+    await this.otherOffenders.delete(offender.ofndrNum);
   }
 }

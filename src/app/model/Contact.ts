@@ -12,4 +12,5 @@ export interface Contact {
   formCompleted: boolean;
   firstPageCompleted: boolean;
   wasContactSuccessful: boolean;
+  contactSyncedWithDatabase: boolean;
 }

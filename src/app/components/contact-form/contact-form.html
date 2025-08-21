@@ -8,11 +8,12 @@
       style="cursor: pointer"
       [routerLink]="['/offender-detail', offender?.ofndrNum]"
     ></mat-icon>
-    <span class="title_large">Verify Information</span>
+    <span class="title_large">Supervision Contact</span>
   </span>
   <div class="body_large">
     Review the information for this supervision contact entry.
   </div>
+
   <form [formGroup]="contactForm" (submit)="onSubmit()">
     <ng-template #loading>Loading...</ng-template>
     <mat-form-field class="contact_form_input_field">
@@ -98,7 +99,6 @@
         </ng-container>
       </mat-select>
     </mat-form-field> -->
-
     <mat-form-field class="contact_form_input_field">
       <mat-label>Contact Type</mat-label>
       <mat-select required [formControl]="contactTypeControl">
@@ -131,12 +131,15 @@
       <mat-divider style="color: lightgray"></mat-divider>
       <section>
         <div class="button-row">
-          <button matButton="outlined">Cancel</button>
+          <button matButton="outlined"
+            [routerLink]="['/offender-detail', offender?.ofndrNum]"
+          >Cancel</button>
           <button
-            class="button-filled"
             matButton="filled"
+            type="submit"
             (click)="onSubmit()"
             [routerLink]="['/commentary-form', currentContact.ofndrNum, currentContact.contactId]"
+            [disabled]="!contactForm.valid"
           >Next</button>
         </div>
       </section>

@@ -1,5 +1,4 @@
-<div class="surface">
-  <div *ngIf="currentOffender | async; let offender; else loading">
+  <div *ngIf="currentOffender | async; let offender; else loading" class="surface">
     <span class="detail-header">
       <div> 
         <mat-icon
@@ -13,7 +12,6 @@
       </div>
       <span class="title_large">Offender Panel</span>
     </span>
-    <div>
       <div class="detail-card">
         <div style="display: flex">
           <div style="flex: 1">
@@ -34,7 +32,6 @@
         <button
           class="add-contact-button"
           [routerLink]="['/contact-form', offender?.ofndrNum]"
-          style="cursor: pointer"
           matRipple
           [matRippleCentered]="centered"
           [matRippleDisabled]="disabled"
@@ -42,13 +39,8 @@
           [matRippleRadius]="radius"
           [matRippleColor]="color"
         >
-          <mat-icon
-            class="state-icon"
-            svgIcon="add-white"
-            aria-hidden="false"
-            aria-label="Notifications Icon"
-          ></mat-icon
-          >Supervision Contact Entry
+          <mat-icon svgIcon="add-white"></mat-icon> 
+        Supervision Contact Entry
         </button>
       </div>
       <br />
@@ -99,12 +91,10 @@
         </app-contact-listing-card>
       </ng-container>
       <ng-template #loading>
-        <div>Loading...</div>
+        <div class="surface">Loading...</div>
       </ng-template>
       <!-- ********************** -->
     </div>
-  </div>
   <ng-template #loading>
-    <div>Loading...</div>
+    <div class="surface">Loading...</div>
   </ng-template>
-</div>

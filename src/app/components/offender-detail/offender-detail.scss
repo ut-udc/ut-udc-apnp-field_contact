@@ -1,0 +1,14 @@
+.add-contact-button {
+    display: flex;
+    cursor: pointer;
+    width: 100%;
+    flex-direction: row;
+    padding: 10px 24px 10px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+    border-radius: 32px;
+    background: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+}

@@ -36,6 +36,9 @@ export class Home implements OnInit {
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
+  offlineStatus = new Observable<boolean>((observer) => {
+    observer.next(false);
+  });
 
   currentAgent = new Observable<Agent>((observer) => {
     this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
@@ -71,5 +74,12 @@ export class Home implements OnInit {
     );
   }
   async ngOnInit(): Promise<void> {
+    window.addEventListener('online', async () => {
+            if(!navigator.onLine){
+              this.offlineStatus = of(true);
+            } else {
+              this.offlineStatus = of(false);
+            }
+          });
   }
 }

@@ -1,13 +1,5 @@
-// importScripts('./ngsw-worker.js');
-// import { registerRoute } from 'workbox-routing';
-// import { NetworkFirst } from 'workbox-strategies';
-// import { ExpirationPlugin } from 'workbox-expiration';
-// import {StaleWhileRevalidate} from 'workbox-strategies';
-
-// registerRoute(
-//   ({url}) => url.pathname.startsWith('/'),
-//   new StaleWhileRevalidate()
-// );
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+importScripts('./ngsw-worker.js');
 
 self.addEventListener('install', (event) => {
   console.log('Service worker installed');
@@ -27,14 +19,13 @@ self.addEventListener('fetch', (event) => {
 
 const CACHE_NAME = 'sup-contact-cache-v1';
 const urlsToCache = [
-    './index.html',
-    './styles.scss',
+    '/index.html',
     // './offline.html',
-    './favicon.ico',
-    './icons/*',
-    './assets/icons/*',
-    './assets/images/*',
-    './assets/data/*'
+    // './favicon.ico',
+    // './icons/*',
+    // './assets/icons/*',
+    // './assets/images/*',
+    // './assets/data/*'
 ]
 
 self.addEventListener('install', event => {
