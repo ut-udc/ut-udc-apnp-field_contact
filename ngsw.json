@@ -1,0 +1,176 @@
+{
+  "configVersion": 1,
+  "timestamp": 1756230674919,
+  "index": "https://ut-udc.github.io/ut-udc-apnp-field_contact/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/favicon.ico",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/index.html",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/main-ICQZCLFM.js",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/manifest.webmanifest",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/scripts-SGVLTAKK.js",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/service-worker.js",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/styles-L4Z3AMVJ.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/add-black.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/add-white.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/arrow_back.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/bell.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/checkmark.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/filter.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/location_on.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/note.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/phone.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/search.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/today.svg",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/images/placeholder-image.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-128x128.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-144x144.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-152x152.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-192x192.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-384x384.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-512x512.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-72x72.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-96x96.png",
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/media/placeholder-image-N2J62QAA.png"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets/icons",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [],
+      "patterns": []
+    },
+    {
+      "name": "styles",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [],
+      "patterns": []
+    },
+    {
+      "name": "scripts",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [],
+      "patterns": []
+    },
+    {
+      "name": "images",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [],
+      "patterns": []
+    },
+    {
+      "name": "data",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "https://ut-udc.github.io/ut-udc-apnp-field_contact/.well-known/appspecific/com.chrome.devtools.json"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api",
+      "patterns": [
+        "https:\\/\\/ut-udc\\.github\\.io\\/ut-udc-apnp-field_contact\\/(?:.+\\/)?api\\/.*"
+      ],
+      "strategy": "performance",
+      "maxSize": 100,
+      "maxAge": 14400000,
+      "timeoutMs": 3000,
+      "cacheQueryOptions": {
+        "ignoreVary": true,
+        "ignoreSearch": true
+      },
+      "version": 1
+    }
+  ],
+  "hashTable": {
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/.well-known/appspecific/com.chrome.devtools.json": "adc83b19e793491b1c6ea0fd8b46cd9f32e592fc",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/add-black.svg": "d7b048f00a527258bf20dad00ec74edc4488b6b8",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/add-white.svg": "fa1b32557f8279424d7244eb04a016bbaa3d2484",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/arrow_back.svg": "d23264f5b7ce7514db62b963b26d60c28f8b4898",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/bell.svg": "31ffbd591df5689cca28cb4fdeeb682d2cc15920",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/checkmark.svg": "ac29d02f90db3e4c2474ebbf98d4d8df6d9f5617",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/filter.svg": "5e8b3a9667cfc5dcd85c1952d02e971993245ae1",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/location_on.svg": "1e05ba9c01e8a76b950e58b1ec52dd1f56bbc83e",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/note.svg": "17d1ca7b3b8d584e49a767b85fa7b869f61badab",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/phone.svg": "8efed8e989fc6458edce4ce5b6d66fbf22fcebb4",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/search.svg": "f3ef46fde971bafe21c645d3201d52b0712445e0",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/icons/today.svg": "322fe3d167de15165d25ef4e3993052f4a057f3a",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/assets/images/placeholder-image.png": "124134580149516a28221628466ddff5a698ebd9",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-128x128.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-144x144.png": "b155fd5f2fd5d2ea7760721063003c4cd95fd783",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-152x152.png": "eae6e0f0c8afb8aaae339e2a569b43e9238e5e6c",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-192x192.png": "15c4180454633880d98674aa7394656196c91584",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-384x384.png": "94a915751ef6c9282df9aea405ad679230631814",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-512x512.png": "1de182f76f7329dfa8f9fcdd1fdcdd695bea6a99",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/index.html": "4dc5c8e084224632f245c999dc892b6427ddb76b",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/main-ICQZCLFM.js": "10b13599c03f745ee6d3fc68e35f9aec9accfc87",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/manifest.webmanifest": "db606295b7bc90f4d30925fe4e44ff746d3bd0d5",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/media/placeholder-image-N2J62QAA.png": "124134580149516a28221628466ddff5a698ebd9",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/scripts-SGVLTAKK.js": "d9b1f10a91c13c9828eb8ac29811b2349887cba7",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/service-worker.js": "969c0d9425387ae9c586ac39d17e71c7fa563753",
+    "https://ut-udc.github.io/ut-udc-apnp-field_contact/styles-L4Z3AMVJ.css": "4707122eb6fcd5bd4357f3611501e374d53b263c"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ],
+  "navigationRequestStrategy": "performance"
+}
