@@ -27,6 +27,7 @@ import {
   MatBottomSheetRef,
 } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 @Component({
   selector: 'app-commentary-form',
@@ -46,6 +47,7 @@ import { MatListModule } from '@angular/material/list';
     NgIf,
     CommonModule,
     MatFormFieldModule,
+    MatButtonToggleModule,
   ],
   templateUrl: './commentary-form.html',
   styleUrl: './commentary-form.scss',
@@ -56,6 +58,7 @@ export class CommentaryForm implements OnInit {
   contactData: ContactData = inject(ContactData);
   ofndrNum: number = 0;
   contactId: number = 0;
+  errorClass:string = '';
 
   private _bottomSheet = inject(MatBottomSheet);
 
@@ -122,8 +125,9 @@ export class CommentaryForm implements OnInit {
   offender?: Offender;
 
   commentaryForm: FormGroup = new FormGroup({
+    wasContactSuccessful: new FormControl<number | null>(null),
     commentary: new FormControl<string | null>(null),
-    commentary1: new FormControl<string | null>(null),
+    // commentary1: new FormControl<string | null>(null),
   });
 
   async onSubmit() {
@@ -143,6 +147,7 @@ export class CommentaryForm implements OnInit {
         this.contactData.updateContact(contact);
       });
     }
+    window.location.href = '/offender-detail/' + this.ofndrNum;
   }
 
   async ngOnInit() {
@@ -190,14 +195,14 @@ export class CommentaryForm implements OnInit {
 
   madeContact() {
     this.currentContact.subscribe((contact) => {
-      contact.wasContactSuccessful = true;
+      contact.wasContactSuccessful = 1;
       this.contactData.updateContact(contact);
     });
   }
 
   attemptedContact() {
     this.currentContact.subscribe((contact) => {
-      contact.wasContactSuccessful = false;
+      contact.wasContactSuccessful = 0;
       this.contactData.updateContact(contact);
     });
   }

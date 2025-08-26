@@ -46,8 +46,7 @@ background: var(--md-sys-color-surface-container-low);
   flex: 1 0 0;
   align-self: stretch;
 }
-.active-class {
-  color: var(--UDC-styles-sys-light-on-secondary-container, #3e4a54);
+.mat-button-toggle-checked {
   text-align: center;
 
   /* UDC-styles/label/large */
@@ -59,7 +58,7 @@ background: var(--md-sys-color-surface-container-low);
   /* 142.857% */
   letter-spacing: 0.1px;
   border-radius: 8px;
-  background: var(--UDC-styles-sys-light-secondary-container, #d9e5f1);
+  background-color: var(--UDC-styles-sys-light-secondary-container, #d9e5f1) !important;
 }
 .disabled-class {
   color: var(--UDC-styles-sys-light-on-surface-variant, #49473f);
@@ -125,4 +124,12 @@ background: var(--md-sys-color-surface-container-low);
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+.mat-mdc-button:has(.material-icons,mat-icon,[matButtonIcon]) {
+  display: block;
+  gap: 8px;
+  flex-shrink: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-right: 16px;
 }

@@ -87,7 +87,7 @@ export class ContactForm implements OnInit {
     commentary: '',
     formCompleted: false,
     firstPageCompleted: false,
-    wasContactSuccessful: false,
+    wasContactSuccessful: 2,
     contactSyncedWithDatabase: false,
   };
 
@@ -154,7 +154,7 @@ export class ContactForm implements OnInit {
         commentary: '',
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
-        wasContactSuccessful: false,
+        wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
       };
 
@@ -178,7 +178,7 @@ export class ContactForm implements OnInit {
         commentary: '',
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
-        wasContactSuccessful: false,
+        wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
       };
       this.contactData.updateContact(this.currentContact);

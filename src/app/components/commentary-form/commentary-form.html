@@ -50,41 +50,40 @@
   <div
     class="type-of-contact-btn-container"
     *ngIf="(currentContact | async) as contact"
-  >
-    <button  matFab extended
-      [ngClass]="{'active-class': contact.wasContactSuccessful, 'disabled-class': !contact.wasContactSuccessful}"
-      (click)="madeContact()"
-    >
-    <div *ngIf="contact.wasContactSuccessful" class="successFab">  
-    <mat-icon>checkmark</mat-icon>
-    Made Contact
-  </div>
-    <div *ngIf="!contact.wasContactSuccessful">  
-    Made Contact
-  </div>
-    </button>
-    <button matFab extended
-      [ngClass]="{'active-class': !contact.wasContactSuccessful, 'disabled-class': contact.wasContactSuccessful}"
-      (click)="attemptedContact()"
-    >
-    <div *ngIf="!contact.wasContactSuccessful" class="successFab">  
-    <mat-icon>checkmark</mat-icon>
-    Attempted Contact
-  </div>
-    <div *ngIf="contact.wasContactSuccessful">  
-    Attempted Contact
-  </div>
-    </button>
-  </div>
+  ></div>
   <div class="summary-of-contact-container">
     <form [formGroup]="commentaryForm" (submit)="onSubmit()">
+      <mat-button-toggle-group
+        formControlName="wasContactSuccessful"
+        required
+        class="{{errorClass}}"
+        name="fontStyle"
+        aria-label="Font Style"
+      >
+        <mat-button-toggle
+          class="successFab"
+          matFab
+          (click)="madeContact()"
+          value="bold"
+          >Made Contact</mat-button-toggle
+        >
+        <mat-button-toggle
+          class="successFab"
+          matFab
+          (click)="attemptedContact()"
+          value="italic"
+          >Attempted Contact</mat-button-toggle
+        >
+      </mat-button-toggle-group>
       <mat-form-field class="contact_form_input_field">
         <mat-label>Summary of Contact</mat-label>
         <textarea
           matInput
           formControlName="commentary"
           placeholder="Include details related to the R&R efforts of the visit."
-          [ngModel]="(currentContact | async)?.commentary || ''"></textarea>
+          [ngModel]="(currentContact | async)?.commentary || ''"
+          required
+        ></textarea>
       </mat-form-field>
     </form>
     <span class="summary-of-contact-container"
@@ -95,8 +94,8 @@
   <div class="on-surface-variant">
     <span>
       <button matButton="text" (click)="openBottomSheet()">
-      <mat-icon class="info-field-icon">info_outline</mat-icon> Field Visit
-      Guidelines
+        <mat-icon class="info-field-icon">info_outline</mat-icon> Field Visit
+        Guidelines
       </button>
     </span>
   </div>
@@ -111,14 +110,16 @@
         >
           Cancel
         </button>
-        
+
         <button
-            matButton="filled"
-            type="submit"
-            (click)="onSubmit()"
-            routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
-            [disabled]="!commentaryForm.valid"
-          >Save</button>
+          matButton="filled"
+          type="submit"
+          (click)="onSubmit()"
+          [disabled]="!commentaryForm.valid"
+          routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
+        >
+          Save
+        </button>
       </div>
     </section>
   </div>

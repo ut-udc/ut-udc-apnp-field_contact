@@ -1,56 +1,108 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
-@use './app/css/light.scss';
-@use './app/app.scss';
-@use './scss_theme-colors.scss';
+@use "@angular/material" as mat;
+@use "./app/css/light.scss";
+@use "./app/app.scss";
+@use "./scss_theme-colors.scss";
 :root {
-  --mat-timepicker-container-background-color: #EBE7E6;
-  --mat-select-panel-background-color: #EBE7E6;
+  --mat-timepicker-container-background-color: #ebe7e6;
+  --mat-select-panel-background-color: #ebe7e6;
+  --mat-sys-outline: var(--md-sys-color-outline);
+  --mat-button-toggle-divider-color: #fcf8f7;
+
   --mat-button-filled-container-color: #030303;
   --mat-button-filled-label-text-color: #fff;
+  --mat-button-filled-container-shape: 100px;
+  --mat-button-filled-disabled-container-color: #d7d7d7;
+  --mat-button-filled-disabled-label-text-color: var(--md-sys-color-primary);
+  --mat-button-filled-label-text-size: 16px;
+
+  --mat-button-outlined-label-text-size: 16px;
+  --mat-button-outlined-container-shape: 100px;
+
+  --mat-mdc-button-persistent-ripple: false;
+
   --mat-sys-on-primary: var(--md-sys-color-on-primary);
   --mat-sys-primary: var(--md-sys-color-primary);
-  --mat-button-outlined-container-shape: 100px;
-  --mat-button-filled-container-shape: 100px;
-  --mat-button-filled-disabled-container-color: #EBE7E6;
-  --mat-button-filled-disabled-label-text-color: var(--md-sys-color-primary);
   --mat-fab-extended-container-elevation-shadow: 32px;
-  --mat-button-outlined-label-text-size: 16px;
-  --mat-button-filled-label-text-size: 16px;
   --mat-sys-title-large-font: "Merriweather";
+  --mat-form-field-container-text-font: "Source Sans 3";
   --mat-sys-title-large-size: 24px;
   --mat-toolbar-standard-height: 56px;
-  --mat-bottom-sheet-container-background-color: var(--md-sys-color-surface-variant);
+  --mat-bottom-sheet-container-background-color: var(
+    --md-sys-color-surface-variant
+  );
   --mat-bottom-sheet-container-shape: 30px;
+  --mat-sys-surface-variant: var(--mat-bottom-sheet-container-background-color);
+
+  --UDC-styles-sys-light-on-secondary-container: #3e4a54;
 }
 
-  // --mat-sys-on-surface: var(--md-sys-color-secondary);
-  // @include mat.fab-overrides((container-color: orange,
-  //       container-elevation-shadow: red,
-  //     ));
+// --mat-sys-on-surface: var(--md-sys-color-secondary);
+// @include mat.fab-overrides((container-color: orange,
+//       container-elevation-shadow: red,
+//     ));
+@include mat.button-overrides(
+  (
+    filled-container-color: var(--mat-button-filled-container-color),
+    filled-label-text-color: var(--mat-button-filled-label-text-color),
+    filled-container-shape: var(--mat-button-filled-container-shape),
+    filled-disabled-container-color:
+      var(--mat-button-filled-disabled-container-color),
+    outlined-label-text-size: var(--mat-button-outlined-label-text-size),
+    outlined-container-shape: var(--mat-button-outlined-container-shape),
+  )
+);
 
-  .mat-icon {
-    -webkit-user-select: none;
-    user-select: none;
-    background-repeat: no-repeat;
-    display: inline-block;
-    fill: currentColor;
-    height: 31px;
-    width: 31px;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
+.mat-icon {
+  -webkit-user-select: none;
+  user-select: none;
+  background-repeat: no-repeat;
+  display: inline-block;
+  fill: currentColor;
+  height: 31px;
+  width: 31px;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
 }
 
-  @include mat.form-field-overrides((
-    disabled-input-text-placeholder-color: var(--UDC-styles-sys-light-on-surface-variant),
+mat-button-toggle-group {
+  //   margin: 12px 12px 12px 12px;
+  border-width: 0px;
+  border-color: var(--UDC-styles-sys-light-surface, #fcf8f7);
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.toggle-group-error {
+  border-width: 1px !important;
+  border-color: red !important;
+  border-radius: 8px !important;
+}
+
+mat-button-toggle {
+  border-width: 1px;
+  border-style: solid;
+  border-left: solid 1px var(--md-sys-color-outline) !important;
+  border-color: var(--md-sys-color-outline);
+  border-radius: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-right: 16px;
+}
+
+@include mat.form-field-overrides(
+  (
+    disabled-input-text-placeholder-color:
+      var(--UDC-styles-sys-light-on-surface-variant),
     disabled-leading-icon-color: var(--UDC-styles-sys-light-on-surface-variant),
-  ));
+  )
+);
 
 .mdc-text-field--invalid {
-      color: red;
-    }
+  color: red;
+}
 .mdc-button:hover {
   background-color: rgba(255, 255, 255, 0.5); /* Change background on hover */
   cursor: pointer; /* Indicate interactivity */
@@ -68,13 +120,17 @@
 //   ));
 // }/* You can add global styles to this file, and also import other style files */
 
-html, body { 
+html,
+body {
   height: 100%;
   width: 100%;
   background-color: var(--md-sys-color-surface);
   color: var(--md-sys-color-on-surface);
- }
-body { margin: 0; font-family: "Source Sans 3", "Helvetica Neue", sans-serif; }
+}
+body {
+  margin: 0;
+  font-family: "Source Sans 3", "Helvetica Neue", sans-serif;
+}
 textarea {
   width: 100%;
   min-height: 50px;
