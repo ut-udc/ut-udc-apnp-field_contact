@@ -11,9 +11,10 @@ import { Agent } from '../../model/Agent';
 import { ContactData } from '../../services/contact-data';
 import { Offender } from '../../model/Offender';
 import { Dao } from '../../services/dao';
-import { Observable, from, of } from 'rxjs';
+import { Observable, from, of, Subscription } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink, ActivatedRoute } from '@angular/router';
+import { NetworkService } from '../../services/network';
 
 @Component({
   selector: 'app-home',
@@ -29,16 +30,15 @@ import { RouterLink, ActivatedRoute } from '@angular/router';
     MyCaseload,
     AsyncPipe,
     CommonModule,
-    RouterLink
+    RouterLink,
   ],
 })
 export class Home implements OnInit {
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
-  offlineStatus = new Observable<boolean>((observer) => {
-    observer.next(false);
-  });
+  isOnline: boolean = true;
+  
 
   currentAgent = new Observable<Agent>((observer) => {
     this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
@@ -56,8 +56,7 @@ export class Home implements OnInit {
     console.log('Time from home line 41:', this.time);
   });
 
-  constructor() 
-  {
+  constructor(private networkService: NetworkService) {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
@@ -74,12 +73,5 @@ export class Home implements OnInit {
     );
   }
   async ngOnInit(): Promise<void> {
-    window.addEventListener('online', async () => {
-            if(!navigator.onLine){
-              this.offlineStatus = of(true);
-            } else {
-              this.offlineStatus = of(false);
-            }
-          });
   }
 }
