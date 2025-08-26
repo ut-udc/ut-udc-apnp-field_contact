@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1756235920621,
+  "timestamp": 1756236554022,
   "index": "https://ut-udc.github.io/ut-udc-apnp-field_contact/index.html",
   "assetGroups": [
     {
@@ -54,7 +54,7 @@
       "patterns": []
     },
     {
-      "name": "assets/icons",
+      "name": "ut-udc-apnp-field_contact/assets/icons",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "cacheQueryOptions": {
@@ -84,7 +84,7 @@
       "patterns": []
     },
     {
-      "name": "images",
+      "name": "ut-udc-apnp-field_contact/assets/images",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "cacheQueryOptions": {
