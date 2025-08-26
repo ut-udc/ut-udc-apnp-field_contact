@@ -1,6 +1,6 @@
 {
-  "name": "ut-udc-apnp-field_contact",
-  "short_name": "ut-udc-apnp-field_contact",
+  "name": "Supervision Contacts",
+  "short_name": "Sup Contacts",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
