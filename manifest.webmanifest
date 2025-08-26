@@ -1,6 +1,6 @@
 {
-  "name": "sup-contact",
-  "short_name": "sup-contact",
+  "name": "ut-udc-apnp-field_contact",
+  "short_name": "ut-udc-apnp-field_contact",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
