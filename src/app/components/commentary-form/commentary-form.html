@@ -116,7 +116,6 @@
           type="submit"
           (click)="onSubmit()"
           [disabled]="!commentaryForm.valid"
-          routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
         >
           Save
         </button>

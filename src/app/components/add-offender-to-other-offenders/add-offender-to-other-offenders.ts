@@ -3,13 +3,17 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormGroup,
+  FormControl,
+} from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
 
 @Component({
   selector: 'app-add-offender-to-other-offenders',
@@ -39,9 +43,7 @@ export class AddOffenderToOtherOffenders {
 
     iconRegistry.addSvgIcon(
       'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/arrow_back.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
   }
 

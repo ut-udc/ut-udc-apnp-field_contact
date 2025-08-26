@@ -210,16 +210,12 @@ export class ContactForm implements OnInit {
 
     iconRegistry.addSvgIcon(
       'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/arrow_back.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
 
     iconRegistry.addSvgIcon(
       'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/arrow_back.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
 
     // Initialize with empty array and then update when promise resolves

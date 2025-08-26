@@ -30,7 +30,7 @@ SupContact is a Progressive Web Application (PWA) designed for probation and par
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd sup-contact
+cd ut-udc-apnp-field_contact
 
 # Install dependencies
 npm install
@@ -59,21 +59,26 @@ Navigate to `http://localhost:4200/` to access the application.
 ### Core Components
 
 #### 1. Home Component (`/`)
+
 **Purpose:** Application dashboard and navigation hub
 
 **Features:**
+
 - Agent profile display with real-time clock
 - Caseload overview with quick stats
 - Navigation to main application features
 
 **Data Dependencies:**
+
 - Current agent information
 - Caseload summary statistics
 
 #### 2. ContactForm Component (`/contact-form/:ofndrNum/:contactId?`)
+
 **Purpose:** Multi-step form for creating and editing supervision contacts
 
 **Features:**
+
 - Reactive form with validation
 - Auto-save functionality for incomplete contacts
 - Dynamic dropdown population (agents, contact types, locations)
@@ -81,28 +86,34 @@ Navigate to `http://localhost:4200/` to access the application.
 - Support for primary and secondary interviewers
 
 **Data Flow:**
+
 ```
 Route Parameters → Load Offender Data → Initialize Form → User Input → Save/Update Contact
 ```
 
 #### 3. OffenderDetail Component (`/offender-detail/:ofndrNum`)
+
 **Purpose:** Comprehensive offender profile and contact history
 
 **Features:**
+
 - Complete offender profile with contact information
 - Chronological contact history display
 - Quick contact creation access
 - Contact detail navigation
 
 **Data Dependencies:**
+
 - Offender profile data
 - Complete contact history
 - Contact type and location descriptions
 
 #### 4. MyCaseload Component (Embedded in Home)
+
 **Purpose:** Display and manage assigned offender caseload
 
 **Features:**
+
 - Grid/list view of assigned offenders
 - Last contact date tracking
 - Quick navigation to offender details
@@ -111,15 +122,18 @@ Route Parameters → Load Offender Data → Initialize Form → User Input → S
 ### Service Layer
 
 #### ContactData Service
+
 **Primary data management service with comprehensive CRUD operations**
 
 **Key Responsibilities:**
+
 - IndexedDB operations via Dexie.js
 - Data validation and transformation
 - Business logic enforcement
 - Offline data synchronization
 
 **Core Methods:**
+
 ```typescript
 // Contact Operations
 addContact(contact: Contact): Promise<void>
@@ -139,17 +153,21 @@ getListOfLocations(): Promise<Select2Model[]>
 ```
 
 #### Navigation Service
+
 **Centralized routing and navigation management**
 
 **Features:**
+
 - Programmatic navigation between components
 - Route parameter management
 - Navigation history tracking
 
 #### Dao Service
+
 **Data Access Object providing static data initialization**
 
 **Features:**
+
 - Initial seed data for development
 - Data structure definitions
 - Offline data population
@@ -216,14 +234,14 @@ sequenceDiagram
     participant CF as ContactForm
     participant CD as ContactData
     participant DB as IndexedDB
-    
+
     U->>CF: Navigate to /contact-form/:ofndrNum
     CF->>CD: getCaseloadOffenderById(ofndrNum)
     CD->>DB: Query offender data
     DB-->>CD: Return offender
     CD-->>CF: Offender data
     CF->>CF: Initialize form with offender context
-    
+
     U->>CF: Fill form and submit
     CF->>CD: addContact(contactData)
     CD->>DB: Insert contact record
@@ -240,14 +258,14 @@ sequenceDiagram
     participant MC as MyCaseload
     participant CD as ContactData
     participant DB as IndexedDB
-    
+
     H->>MC: Load caseload component
     MC->>CD: getMyCaseload()
     CD->>DB: Query assigned offenders
     DB-->>CD: Return offender list
     CD-->>MC: Offender array
     MC->>MC: Render offender cards
-    
+
     loop For each offender
         MC->>CD: getLastContactDate(ofndrNum)
         CD->>DB: Query latest contact
@@ -264,9 +282,9 @@ sequenceDiagram
     participant OD as OffenderDetail
     participant CD as ContactData
     participant DB as IndexedDB
-    
+
     U->>OD: Navigate to /offender-detail/:ofndrNum
-    
+
     par Load Offender Data
         OD->>CD: getCaseloadOffenderById(ofndrNum)
         CD->>DB: Query offender profile
@@ -278,7 +296,7 @@ sequenceDiagram
         DB-->>CD: Return contact array
         CD-->>OD: Contact history
     end
-    
+
     OD->>OD: Render offender profile and contact list
 ```
 
@@ -287,31 +305,33 @@ sequenceDiagram
 ### Inter-Component Communication Patterns
 
 1. **Route-Based Navigation**
+
    ```typescript
    // Navigation with parameters
-   this.router.navigate(['/contact-form', offenderNum]);
-   
+   this.router.navigate(["/contact-form", offenderNum]);
+
    // Parameter extraction
-   const ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
+   const ofndrNum = Number(this.route.snapshot.params["ofndrNum"]);
    ```
 
 2. **Service-Based Data Sharing**
+
    ```typescript
    // Shared service injection
    contactData: ContactData = inject(ContactData);
-   
+
    // Observable-based data streams
    currentAgent = new Observable<Agent>((observer) => {
-     this.contactData.getAgentById(this.dao.agent.agentId)
-       .then(agent => observer.next(agent));
+     this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => observer.next(agent));
    });
    ```
 
 3. **Parent-Child Component Communication**
+
    ```typescript
    // Parent passes data to child
    <app-offender-card [offender]="offenderData"></app-offender-card>
-   
+
    // Child emits events to parent
    @Output() contactSelected = new EventEmitter<Contact>();
    ```

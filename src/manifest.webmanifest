@@ -1,6 +1,6 @@
 {
-  "name": "sup-contact",
-  "short_name": "sup-contact",
+  "name": "Supervision Contacts",
+  "short_name": "Sup Contacts",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

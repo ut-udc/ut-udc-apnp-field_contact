@@ -26,7 +26,7 @@
       }
     },
     {
-      "name": "assets/icons",
+      "name": "ut-udc-apnp-field_contact/assets/icons",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
@@ -56,7 +56,7 @@
       }
     },
     {
-      "name": "images",
+      "name": "ut-udc-apnp-field_contact/assets/images",
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {

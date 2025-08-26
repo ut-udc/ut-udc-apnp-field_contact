@@ -58,14 +58,13 @@ export class CommentaryForm implements OnInit {
   contactData: ContactData = inject(ContactData);
   ofndrNum: number = 0;
   contactId: number = 0;
-  errorClass:string = '';
+  errorClass: string = '';
 
   private _bottomSheet = inject(MatBottomSheet);
 
   openBottomSheet(): void {
     this._bottomSheet.open(FieldVisitGuidelinesBottomSheet);
   }
-
 
   currentContact = new Observable<Contact>((observer) => {
     this.contactData
@@ -147,7 +146,8 @@ export class CommentaryForm implements OnInit {
         this.contactData.updateContact(contact);
       });
     }
-    window.location.href = '/offender-detail/' + this.ofndrNum;
+    window.location.href =
+      '/ut-udc-apnp-field_contact/offender-detail/' + this.ofndrNum;
   }
 
   async ngOnInit() {
@@ -187,9 +187,7 @@ export class CommentaryForm implements OnInit {
 
     iconRegistry.addSvgIcon(
       'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/arrow_back.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
   }
 
@@ -216,11 +214,11 @@ export class CommentaryForm implements OnInit {
   styleUrl: './field-visit-guidelines-bottom-sheet.scss',
 })
 export class FieldVisitGuidelinesBottomSheet {
-  private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> = inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
-  
+  private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> =
+    inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
+
   openLink(event: MouseEvent): void {
     this._bottomSheetRef.dismiss();
     event.preventDefault();
   }
 }
-

@@ -33,19 +33,18 @@ export class MyCaseload implements OnInit {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
     this.loadMyCaseload();
-    
+
     iconRegistry.addSvgIcon(
       'filter',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/filter.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/filter.svg')
     );
     iconRegistry.addSvgIcon(
       'search',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
   }
   async loadMyCaseload(): Promise<void> {
     this.myCaseload = of(await this.contactData.getMyCaseload());
   }
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -38,7 +44,6 @@ export class Home implements OnInit {
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
   isOnline: boolean = true;
-  
 
   currentAgent = new Observable<Agent>((observer) => {
     this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
@@ -65,13 +70,12 @@ export class Home implements OnInit {
     });
     iconRegistry.addSvgIcon(
       'bell',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/bell.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/bell.svg')
     );
     iconRegistry.addSvgIcon(
       'search',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
   }
-  async ngOnInit(): Promise<void> {
-  }
+  async ngOnInit(): Promise<void> {}
 }

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sup-contact": {
+    "ut-udc-apnp-field_contact": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,11 +24,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "input": "src/assets/images",
-                "output": "assets/images",
-                "glob": "**/*"
               },
               {
                 "input": "src/assets/icons",
@@ -89,10 +84,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sup-contact:build:production"
+              "buildTarget": "ut-udc-apnp-field_contact:build:production"
             },
             "development": {
-              "buildTarget": "sup-contact:build:development"
+              "buildTarget": "ut-udc-apnp-field_contact:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -110,7 +105,7 @@
                 "glob": "**/*",
                 "input": "public"
               },
-              "src/assets"
+              "/assets"
             ],
             "styles": [
               "src/styles.scss"

@@ -34,17 +34,15 @@ export class OtherOffendersList implements OnInit {
 
     iconRegistry.addSvgIcon(
       'filter',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/filter.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/filter.svg')
     );
     iconRegistry.addSvgIcon(
       'search',
-      sanitizer.bypassSecurityTrustResourceUrl('../../assets/icons/search.svg')
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
     iconRegistry.addSvgIcon(
       'add-black',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/add-black.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/add-black.svg')
     );
   }
   async loadOtherOffenders(): Promise<void> {

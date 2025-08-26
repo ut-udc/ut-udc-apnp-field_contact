@@ -19,7 +19,7 @@ export class App implements OnInit, OnDestroy {
   contactData: ContactData = inject(ContactData);
   http: HttpClient = inject(HttpClient);
   private networkSubscription!: Subscription;
-  protected title = 'sup-contact';
+  protected title = 'ut-udc-apnp-field_contact';
   isOnline: boolean = true;
   constructor(private networkService: NetworkService) {}
   async checkPopulationWithDexie(): Promise<boolean> {

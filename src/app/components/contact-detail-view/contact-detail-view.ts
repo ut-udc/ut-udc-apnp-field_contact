@@ -23,17 +23,19 @@ export class ContactDetailView {
   route: ActivatedRoute = inject(ActivatedRoute);
 
   currentContact = new Observable<Contact>((observer) => {
-    this.contactData.getContactById(Number(this.route.snapshot.params['contactId'])).then((contact) => {
-      if (contact) {
-        observer.next(contact);
-        console.log('Current Contact line 28:', contact);
-      } else {
-        observer.next({} as Contact);
-      }
-    });
+    this.contactData
+      .getContactById(Number(this.route.snapshot.params['contactId']))
+      .then((contact) => {
+        if (contact) {
+          observer.next(contact);
+          console.log('Current Contact line 28:', contact);
+        } else {
+          observer.next({} as Contact);
+        }
+      });
   });
-  primaryAgent= new Observable<Agent>((observer) => {
-    this.currentContact.subscribe(contact => {
+  primaryAgent = new Observable<Agent>((observer) => {
+    this.currentContact.subscribe((contact) => {
       this.contactData.getOfficerById(contact.agentId).then((agent) => {
         if (agent) {
           observer.next(agent);
@@ -43,27 +45,27 @@ export class ContactDetailView {
       });
     });
   });
-  secondaryAgent= new Observable<Agent>((observer) => {
-    this.currentContact.subscribe(contact => {
-      this.contactData.getOfficerById(contact.secondaryAgentId).then((agent) => {
-        if (agent) {
-          observer.next(agent);
-        } else {
-          observer.next({} as Agent);
-        }
-      });
+  secondaryAgent = new Observable<Agent>((observer) => {
+    this.currentContact.subscribe((contact) => {
+      this.contactData
+        .getOfficerById(contact.secondaryAgentId)
+        .then((agent) => {
+          if (agent) {
+            observer.next(agent);
+          } else {
+            observer.next({} as Agent);
+          }
+        });
     });
   });
 
   constructor() {
     const iconRegistry = angularInject(MatIconRegistry);
     const sanitizer = angularInject(DomSanitizer);
-  
+
     iconRegistry.addSvgIcon(
       'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl(
-        '../../assets/icons/arrow_back.svg'
-      )
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
   }
 }
