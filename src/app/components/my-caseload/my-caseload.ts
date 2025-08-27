@@ -83,4 +83,8 @@ export class MyCaseload implements OnInit {
       this.myCaseload.next(this.caseload);
     }
   }
+  resetSearch(): void {
+    this.searchForm.reset();
+    this.loadMyCaseload();
+  }
 }

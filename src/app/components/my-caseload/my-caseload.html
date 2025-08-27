@@ -16,7 +16,7 @@
             <mat-label>Search by offender name</mat-label>
             <input matInput type="text" 
             formControlName="searchTerm" />
-            <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="searchForm.reset()" fontIcon="close"></mat-icon>
+            <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
           </mat-form-field>
         </form>
         <span class="header-spacer"></span>
