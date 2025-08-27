@@ -6,7 +6,7 @@ import { Offender } from '../model/Offender';
 import { MyCaseload } from '../components/my-caseload/my-caseload';
 import { OffenderBase } from '../model/OffenderBase';
 import { Dao } from './dao';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NetworkService } from './network';

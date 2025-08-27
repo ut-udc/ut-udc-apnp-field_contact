@@ -18,12 +18,15 @@
           >{{(otherOffenders | async)?.length}} offenders</span
         >
         <span class="header-spacer"></span>
-        <mat-icon
-          class="header-icon"
-          svgIcon="search"
-          aria-hidden="false"
-          aria-label="Search Icon"
-        ></mat-icon>
+        <form [formGroup]="searchForm" (keyup)="filterCaseloadByFirstAndLastNames(searchForm.value.searchTerm)">
+          <mat-form-field class="contact_form_input_field">
+            <mat-label>Search by offender name</mat-label>
+            <input matInput type="text" 
+            formControlName="searchTerm" />
+            <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="searchForm.reset()" fontIcon="close"></mat-icon>
+          </mat-form-field>
+        </form>
+        <span class="header-spacer"></span>
         <mat-icon
           class="header-icon"
           svgIcon="filter"
