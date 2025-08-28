@@ -6,7 +6,7 @@
     </div>
     <div style="flex: 1;">
         <span class="label_medium">{{contact.contactDate | date: 'longDate'}} | {{contact.contactDate | date: 'HH:mm'}}</span>
-        <div class="body_large">{{(this.contactData.getContactTypeById(contact.contactType) | async)?.text}}</div>
+        <div class="body_large">{{(this.contactData.getContactTypeById(contact.contactTypeCd) | async)?.text}}</div>
         <div class="body_medium">{{contact.commentary}}</div>
     </div>
 </a>

@@ -35,11 +35,19 @@ export class OffenderCard implements OnInit {
     phone: '',
     lastSuccessfulContactDate: new Date(),
     contactArray: [],
+    nextScheduledContactDate: new Date(),
   };
   navigation: Navigation = inject(Navigation);
+  
+  constructor() {
 
-  constructor() {}
+  }
   ngOnInit(): void {}
+
+  onSwipeRight(ofndrNum: number) {
+    this.navigation.goToContactForm(ofndrNum);
+  }
+
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
     throw new Error('Method not implemented.');
   }

@@ -4,13 +4,14 @@ export interface Contact {
   agentId: string;
   secondaryAgentId: string;
   contactDate: Date;
-  contactType: string;
+  contactTypeCd: string; //contact type code
   contactTypeDesc: string;
-  location: string;
-  locationDesc: string;
-  commentary: string;
-  formCompleted: boolean;
-  firstPageCompleted: boolean;
-  wasContactSuccessful: number;
-  contactSyncedWithDatabase: boolean;
+  locationCd: string; //location code
+  locationDesc: string; //PWA internal use only
+  commentary: string; //contact commentary
+  formCompleted: boolean; //PWA internal use only
+  firstPageCompleted: boolean; //PWA internal use only
+  wasContactSuccessful: number; // 0 = attempted, 1 = successful
+  contactSyncedWithDatabase: boolean; //always 1 from database
+  userAgent: string; //Device ID on which this app was used
 }

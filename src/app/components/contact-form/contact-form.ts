@@ -83,15 +83,16 @@ export class ContactForm implements OnInit {
     agentId: '',
     secondaryAgentId: '',
     contactDate: new Date(),
-    contactType: '',
+    contactTypeCd: '',
     contactTypeDesc: '',
-    location: '',
+    locationCd: '',
     locationDesc: '',
     commentary: '',
     formCompleted: false,
     firstPageCompleted: false,
     wasContactSuccessful: 2,
     contactSyncedWithDatabase: false,
+    userAgent: '',
   };
 
   agentList = new Observable<Agent[]>((observer) => {
@@ -150,15 +151,16 @@ export class ContactForm implements OnInit {
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
-        contactType: this.contactForm.value.contactType ?? '',
+        contactTypeCd: this.contactForm.value.contactType ?? '',
         contactTypeDesc: '',
-        location: this.contactForm.value.location ?? '',
+        locationCd: this.contactForm.value.location ?? '',
         locationDesc: '',
         commentary: '',
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
         wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
+        userAgent: '',
       };
 
       this.currentContact.contactId = this.contactCount + 1;
@@ -174,15 +176,16 @@ export class ContactForm implements OnInit {
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
-        contactType: this.contactForm.value.contactType ?? '',
+        contactTypeCd: this.contactForm.value.contactType ?? '',
         contactTypeDesc: '',
-        location: this.contactForm.value.location ?? '',
+        locationCd: this.contactForm.value.location ?? '',
         locationDesc: '',
         commentary: '',
         formCompleted: false,
         firstPageCompleted: this.currentContact.firstPageCompleted,
         wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
+        userAgent: '',
       };
       this.contactData.updateContact(this.currentContact);
     }
@@ -211,9 +214,7 @@ export class ContactForm implements OnInit {
     //set this to GB (Great Britain) locale so the timepicker shows 24-hour format
     this._adapter.setLocale('en-GB');
 
-    console.log(
-      'Is Online?:' + this.contactData.isOnline
-    );
+    console.log('Is Online?:' + this.contactData.isOnline);
 
     iconRegistry.addSvgIcon(
       'arrow_back',
@@ -278,8 +279,8 @@ export class ContactForm implements OnInit {
           contactDate: this.currentContact?.contactDate,
           contactTime: this.currentContact?.contactDate,
           secondaryInterviewer: this.currentContact?.secondaryAgentId,
-          contactType: this.currentContact?.contactType,
-          location: this.currentContact?.location,
+          contactType: this.currentContact?.contactTypeCd,
+          location: this.currentContact?.locationCd,
         });
       }, 100);
     } else {

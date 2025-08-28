@@ -38,9 +38,11 @@ export class Dao {
       phone: '801-123-4567',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
   ];
 
+  //self explanatory
   public myCaseload: Offender[] = [
     {
       ofndrNum: 1,
@@ -56,6 +58,7 @@ export class Dao {
       phone: '',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 2,
@@ -71,6 +74,7 @@ export class Dao {
       phone: '801-123-4567',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 3,
@@ -86,6 +90,7 @@ export class Dao {
       phone: '801-234-5678',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 4,
@@ -101,6 +106,7 @@ export class Dao {
       phone: '385-345-6789',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 5,
@@ -116,6 +122,7 @@ export class Dao {
       phone: '385-456-7890',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 6,
@@ -131,6 +138,7 @@ export class Dao {
       phone: '435-567-8901',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 7,
@@ -146,6 +154,7 @@ export class Dao {
       phone: '385-678-9012',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 8,
@@ -161,6 +170,7 @@ export class Dao {
       phone: '435-789-0123',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 9,
@@ -176,6 +186,7 @@ export class Dao {
       phone: '801-890-1234',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 10,
@@ -191,9 +202,11 @@ export class Dao {
       phone: '435-901-2345',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     },
   ];
 
+  //basic offender info for all other offenders in AP&P program
   public allOtherOffenders: OffenderBase[] = [
     {
       ofndrNum: 11,
@@ -282,6 +295,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1980-01-01'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 12,
@@ -297,6 +311,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1975-02-02'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 13,
@@ -312,6 +327,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1985-03-03'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 14,
@@ -327,6 +343,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1986-04-04'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 15,
@@ -342,6 +359,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1992-05-05'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 16,
@@ -357,6 +375,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1987-06-06'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 17,
@@ -372,6 +391,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1988-07-07'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 18,
@@ -387,6 +407,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1989-08-08'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 19,
@@ -402,6 +423,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1991-09-09'),
+      nextScheduledContactDate: new Date(),
     },
     {
       ofndrNum: 20,
@@ -417,6 +439,7 @@ export class Dao {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       birthDate: new Date('1990-01-01'),
+      nextScheduledContactDate: new Date(),
     },
   ];
 

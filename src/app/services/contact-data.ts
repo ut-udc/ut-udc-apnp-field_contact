@@ -14,6 +14,7 @@ import { Subscription } from 'rxjs';
 import { Select2Model } from '../model/Select2Model';
 import { Select2String } from '../model/Select2String';
 import { QueuedContact } from '../model/QueuedContact';
+import { ApiResponse } from '../model/ApiResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -43,21 +44,21 @@ export class ContactData extends Dexie implements OnInit {
   public applicationUserName: string = 'jshardlow';
   private networkSubscription!: Subscription;
 
-  constructor(private http: HttpClient,) {
+  constructor(private http: HttpClient) {
     super('contactDatabase');
-    this.version(3).stores({
+    this.version(4).stores({
       contacts:
         'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       agents:
-        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
+        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated',
       officers:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
       allOffenders: 'ofndrNum, firstName, lastName, birthDate',
       myCaseload:
-        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
+        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
       otherOffenders:
-        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate',
+        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
       locationList: 'id, text',
       contactTypeList: 'id, text',
     });
@@ -68,6 +69,7 @@ export class ContactData extends Dexie implements OnInit {
     this.myCaseload = this.table('myCaseload');
     this.otherOffenders = this.table('otherOffenders');
   }
+
 
   isOnlineNow(): boolean {
     let online = false;
@@ -99,8 +101,37 @@ export class ContactData extends Dexie implements OnInit {
     });
   }
 
+  async getAgentToImpersonate() {
+    return await this.agents.get(this.dao.agent.agentId);
+  }
+
+  async fetchAgentToImpersonate(agentId: string) {
+    let url = this.path + '/agentId=' + agentId;
+    const agent = await this.fetchData<Agent>(url);
+    return agent.data;
+  }
+
+  async fetchMyCaseload(agentId: string) {
+    let url = this.path + '/agentId=' + agentId;
+    const myCaseload = await this.fetchData<Offender[]>(url);
+    return myCaseload.data;
+  }
+
+  async fetchContactTypes() {
+    let url = this.path + '/contactTypes';
+    const contactTypes = await this.fetchData<Select2Model[]>(url);
+    return contactTypes.data;
+  }
+
+  async fetchLocations() {
+    let url = this.path + '/locations';
+    const locations = await this.fetchData<Select2Model[]>(url);
+    return locations.data;
+  }
+
   async addContact(contact: Contact) {
     try {
+      contact.userAgent = navigator.userAgent;
       await fetch(this.path + '/addContact', {
         method: 'POST',
         headers: {
@@ -192,11 +223,11 @@ export class ContactData extends Dexie implements OnInit {
       throw new Error(`Contact with id ${id} not found`);
     }
     const contactTypeText = await this.getContactTypeDescById(
-      contact.contactType
+      contact.contactTypeCd
     );
     console.log('Contact Type line 155:', contactTypeText);
     contact.contactTypeDesc = contactTypeText || 'N/A';
-    const locationText = await this.getLocationDescById(contact.location);
+    const locationText = await this.getLocationDescById(contact.locationCd);
     console.log('Location line 157:', locationText);
     contact.locationDesc = locationText || 'N/A';
     return contact;
@@ -228,14 +259,14 @@ export class ContactData extends Dexie implements OnInit {
   async getAllContactsByDate(date: Date) {
     return await this.contacts.where('contactDate').equals(date).toArray();
   }
-  async getAllContactsByContactType(contactType: string) {
+  async getAllContactsByContactType(contactTypeCd: string) {
     return await this.contacts
-      .where('contactType')
-      .equals(contactType)
+      .where('contactTypeCd')
+      .equals(contactTypeCd)
       .toArray();
   }
-  async getAllContactsByLocation(location: string) {
-    return await this.contacts.where('location').equals(location).toArray();
+  async getAllContactsByLocation(locationCd: string) {
+    return await this.contacts.where('locationCd').equals(locationCd).toArray();
   }
   async getUncompletedContactByOffenderNumber(id: number) {
     let contactList = await this.contacts
@@ -361,10 +392,33 @@ export class ContactData extends Dexie implements OnInit {
       phone: '',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
+      nextScheduledContactDate: new Date(),
     };
     await this.otherOffenders.add(newOffender);
   }
   async removeOffenderFromOtherOffenders(offender: OffenderBase) {
     await this.otherOffenders.delete(offender.ofndrNum);
   }
+
+  //generic GET call method for getting everything we need from the APIs
+  async fetchData<T>(url: string): Promise<ApiResponse<T>> {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      // Handle HTTP errors (e.g., 404, 500)
+      const errorText = await response.text();
+      return { data: null, error: `HTTP Error: ${response.status} - ${errorText}` };
+    }
+
+    const data: T = await response.json();
+    return { data, error: null };
+  } catch (error) {
+    // Handle network errors or other exceptions
+    if (error instanceof Error) {
+      return { data: null, error: error.message };
+    }
+    return { data: null, error: 'An unknown error occurred' };
+  }
+}
 }

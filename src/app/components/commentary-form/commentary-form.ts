@@ -28,7 +28,7 @@ import {
 } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { DetailHeader } from "../detail-header/detail-header";
+import { DetailHeader } from '../detail-header/detail-header';
 
 @Component({
   selector: 'app-commentary-form',
@@ -49,8 +49,8 @@ import { DetailHeader } from "../detail-header/detail-header";
     CommonModule,
     MatFormFieldModule,
     MatButtonToggleModule,
-    DetailHeader
-],
+    DetailHeader,
+  ],
   templateUrl: './commentary-form.html',
   styleUrl: './commentary-form.scss',
 })
@@ -107,7 +107,7 @@ export class CommentaryForm implements OnInit {
   contactTypeName = new Observable<string>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getContactTypeDescById(contact.contactType)
+        .getContactTypeDescById(contact.contactTypeCd)
         .then((type) => {
           observer.next(type);
         });
@@ -116,7 +116,7 @@ export class CommentaryForm implements OnInit {
   locationName = new Observable<string>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getLocationDescById(contact.location)
+        .getLocationDescById(contact.locationCd)
         .then((location) => {
           observer.next(location);
         });
