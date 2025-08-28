@@ -36,6 +36,8 @@ export class OtherOffendersList implements OnInit {
   caseload: Offender[] = [];
   contactData: ContactData = inject(ContactData);
 
+
+
   searchForm: FormGroup = new FormGroup({
     searchTerm: new FormControl<string | null>(null),
   });
@@ -44,6 +46,7 @@ export class OtherOffendersList implements OnInit {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
     this.loadOtherOffenders();
+    
 
     iconRegistry.addSvgIcon(
       'filter',

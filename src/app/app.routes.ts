@@ -11,7 +11,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Home,
-    title: 'Home',
+    title: 'Supervision Contact Home',
   },
   {
     path: 'offender-detail/:ofndrNum',

@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import { Contact } from '../model/Contact';
 import Dexie, { Table } from 'dexie';
 import { Agent } from '../model/Agent';
@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NetworkService } from './network';
+import { Subscription } from 'rxjs';
 import { Select2Model } from '../model/Select2Model';
 import { Select2String } from '../model/Select2String';
 import { QueuedContact } from '../model/QueuedContact';
@@ -17,7 +18,15 @@ import { QueuedContact } from '../model/QueuedContact';
 @Injectable({
   providedIn: 'root',
 })
-export class ContactData extends Dexie {
+export class ContactData extends Dexie implements OnInit {
+  isOnline: boolean = true;
+  ngOnInit(): void {
+    this.networkSubscription = this.networkService.onlineStatus$.subscribe(
+      (status) => {
+        this.isOnline = status;
+      }
+    );
+  }
   networkService: NetworkService = inject(NetworkService);
   private path = environment.apiUrl;
 
@@ -32,8 +41,9 @@ export class ContactData extends Dexie {
   public locationList!: Table<Select2Model, number>;
   public contactTypeList!: Table<Select2Model, number>;
   public applicationUserName: string = 'jshardlow';
+  private networkSubscription!: Subscription;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,) {
     super('contactDatabase');
     this.version(3).stores({
       contacts:
@@ -59,7 +69,7 @@ export class ContactData extends Dexie {
     this.otherOffenders = this.table('otherOffenders');
   }
 
-  isOnline(): boolean {
+  isOnlineNow(): boolean {
     let online = false;
     this.networkService.onlineStatus$
       .subscribe((status) => (online = status))

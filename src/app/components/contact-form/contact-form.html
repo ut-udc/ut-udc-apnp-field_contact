@@ -1,17 +1,9 @@
 <div class="surface">
-  <span class="detail-header">
-    <mat-icon
-      class="header-icon"
-      svgIcon="arrow_back"
-      aria-hidden="false"
-      aria-label="Back Icon"
-      style="cursor: pointer"
-      [routerLink]="['/offender-detail', offender?.ofndrNum]"
-    ></mat-icon>
-    <span class="title_large">Supervision Contact</span>
-  </span>
+  <app-detail-header [title]="'Supervision Contact'" [backLink]="'/offender-detail/' + offender?.ofndrNum"></app-detail-header>
+
   <div class="body_large">
-    Supervision Contact entry for <strong>{{offender?.firstName}} {{offender?.lastName}}</strong>.
+    Supervision Contact entry for
+    <strong>{{offender?.firstName}} {{offender?.lastName}}</strong>.
   </div>
 
   <form [formGroup]="contactForm" (submit)="onSubmit()">
@@ -43,6 +35,7 @@
         matInput
         [formControl]="dateTimeControl"
         [matTimepicker]="timePicker"
+        placeholder="HH:MM"
         formControlName="contactTime"
       />
       <mat-timepicker-toggle matIconSuffix [for]="timePicker" />
@@ -72,7 +65,9 @@
         <mat-option>
           <input matInput formControlName="secondaryInterviewer" />
         </mat-option>
-        <ng-container *ngIf="secondaryOfficers | async as options; else loading">
+        <ng-container
+          *ngIf="secondaryOfficers | async as options; else loading"
+        >
           <mat-option
             *ngFor="let option of options; trackBy: trackOption"
             [value]="option.id"
@@ -125,22 +120,27 @@
           >{{option.text}}</mat-option
         >
       </mat-select>
-    </mat-form-field> 
+    </mat-form-field>
 
     <div>
       <mat-divider style="color: lightgray"></mat-divider>
       <section>
         <div class="button-row">
-          <button matButton="outlined"
+          <button
+            matButton="outlined"
             [routerLink]="['/offender-detail', offender?.ofndrNum]"
-          >Cancel</button>
+          >
+            Cancel
+          </button>
           <button
             matButton="filled"
             type="submit"
             (click)="onSubmit()"
             [routerLink]="['/commentary-form', currentContact.ofndrNum, currentContact.contactId]"
             [disabled]="!contactForm.valid"
-          >Next</button>
+          >
+            Next
+          </button>
         </div>
       </section>
     </div>

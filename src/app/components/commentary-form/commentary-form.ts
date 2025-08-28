@@ -28,6 +28,7 @@ import {
 } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DetailHeader } from "../detail-header/detail-header";
 
 @Component({
   selector: 'app-commentary-form',
@@ -48,7 +49,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     CommonModule,
     MatFormFieldModule,
     MatButtonToggleModule,
-  ],
+    DetailHeader
+],
   templateUrl: './commentary-form.html',
   styleUrl: './commentary-form.scss',
 })

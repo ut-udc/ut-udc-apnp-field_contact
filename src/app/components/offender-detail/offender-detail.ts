@@ -13,6 +13,7 @@ import { Contact } from '../../model/Contact';
 import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from '../contact-listing-card/contact-listing-card';
 import { Observable, from, of } from 'rxjs';
+import { DetailHeader } from "../detail-header/detail-header";
 
 @Component({
   selector: 'app-offender-detail',
@@ -26,7 +27,8 @@ import { Observable, from, of } from 'rxjs';
     DatePipe,
     ContactListingCard,
     CommonModule,
-  ],
+    DetailHeader
+],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
 })

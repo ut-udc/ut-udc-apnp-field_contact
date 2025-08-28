@@ -65,7 +65,7 @@ export class MyCaseload implements OnInit {
       );
     });
   }
-  filterCaseloadByFirstAndLastNames(searchTerm: string): void {
+  filterCaseloadByOffenderInformation(searchTerm: string): void {
     console.log('searchTerm: ' + searchTerm);
     if (!searchTerm) {
       this.loadMyCaseload();
@@ -76,7 +76,7 @@ export class MyCaseload implements OnInit {
       this.myCaseload.subscribe((offenders) => {
         this.caseload = offenders.filter((offender) => {
           const fullName =
-            `${offender.firstName} ${offender.lastName}`.toLowerCase();
+            `${offender.firstName} ${offender.lastName} ${offender.ofndrNum} ${offender.birthDate} ${offender.address} ${offender.city} ${offender.state} ${offender.zip} ${offender.phone}`.toLowerCase();
           return fullName.includes(searchTerm.toLowerCase());
         });
       });

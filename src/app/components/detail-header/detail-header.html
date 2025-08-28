@@ -1,0 +1,18 @@
+
+
+<span class="detail-header">
+    <mat-icon
+      class="header-icon"
+      svgIcon="arrow_back"
+      aria-hidden="false"
+      aria-label="Back Icon"
+      style="cursor: pointer"
+      [routerLink]="[backLink]"
+    ></mat-icon>
+    <span class="title_large">{{title}}</span>
+    @if (!isOnline) {
+      <button matButton="filled" (click)="openBottomSheet()" class="mdc-button offline-mode-button">
+        <mat-icon class="info-field-icon">info_outline</mat-icon>
+        Offline mode</button>
+    }
+  </span>

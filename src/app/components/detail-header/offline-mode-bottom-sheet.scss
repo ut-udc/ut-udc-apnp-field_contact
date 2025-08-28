@@ -1,0 +1,25 @@
+.offline-mode-button {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* UDC-styles/label/large */
+  font-family: "Source Sans 3";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  /* 142.857% */
+  letter-spacing: 0.1px;
+  border-radius: 8px;
+}
+.mat-bottom-sheet-container {
+  min-width: 384px;
+  max-width: calc(100vw - 128px);
+  border-top-left-radius: var(--mat-bottom-sheet-container-shape, 28px);
+  border-top-right-radius: var(--mat-bottom-sheet-container-shape, 28px);
+  background-color: var(--UDC-styles-sys-light-surface-container-low, #F7F3F2) !important;
+}
+.offline-mode-bottom-sheet {
+  padding: 24px;
+}

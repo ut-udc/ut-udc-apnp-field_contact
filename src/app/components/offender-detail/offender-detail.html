@@ -1,17 +1,6 @@
   <div *ngIf="currentOffender | async; let offender; else loading" class="surface">
-    <span class="detail-header">
-      <div> 
-        <mat-icon
-          class="header-icon"
-          svgIcon="arrow_back"
-          aria-hidden="false"
-          aria-label="Back Icon"
-          style="cursor: pointer"
-          routerLink="/"
-        ></mat-icon>
-      </div>
-      <span class="title_large">Offender Panel</span>
-    </span>
+    <app-detail-header [title]="'Offender Panel'" [backLink]="'/'"></app-detail-header>
+    
       <div class="detail-card">
         <div style="display: flex">
           <div style="flex: 1">

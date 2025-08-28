@@ -1,15 +1,5 @@
 <div class="surface">
-  <span class="detail-header">
-    <mat-icon
-      class="header-icon"
-      svgIcon="arrow_back"
-      aria-hidden="false"
-      aria-label="Back Icon"
-      style="cursor: pointer"
-      [routerLink]="['/contact-form', (currentContact | async)?.ofndrNum, (currentContact | async)?.contactId]"
-    ></mat-icon>
-    <span class="title_large">Add Commentary</span>
-  </span>
+  <app-detail-header [title]="'Add Commentary'" [backLink]="'/contact-form/' + (currentContact | async)?.ofndrNum + '/' + (currentContact | async)?.contactId"></app-detail-header>
   <div class="surface-container-low-outlined">
     <div class="contact-info-container">
       <span class="label_medium">Offender</span>

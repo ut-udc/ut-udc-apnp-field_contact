@@ -34,6 +34,8 @@ import { Contact } from '../../model/Contact';
 import { Agent } from '../../model/Agent';
 import { Select2Model } from '../../model/Select2Model';
 import { Select2String } from '../../model/Select2String';
+import { DateAdapter } from '@angular/material/core';
+import { DetailHeader } from '../detail-header/detail-header';
 
 @Component({
   selector: 'app-contact-form',
@@ -55,6 +57,7 @@ import { Select2String } from '../../model/Select2String';
     NgForOf,
     NgIf,
     CommonModule,
+    DetailHeader,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './contact-form.html',
@@ -197,15 +200,19 @@ export class ContactForm implements OnInit {
     location: new FormControl<string | null>(null),
   });
 
+  //This is for the 24-hour clock
+  private readonly _adapter =
+    inject<DateAdapter<unknown, unknown>>(DateAdapter);
+
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
+    //set this to GB (Great Britain) locale so the timepicker shows 24-hour format
+    this._adapter.setLocale('en-GB');
+
     console.log(
-      'Location List line 144:',
-      this.locationList.subscribe((list) => {
-        console.log('Location List line 146:', list);
-      })
+      'Is Online?:' + this.contactData.isOnline
     );
 
     iconRegistry.addSvgIcon(
