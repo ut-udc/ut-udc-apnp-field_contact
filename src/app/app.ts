@@ -32,6 +32,8 @@ export class App implements OnInit, OnDestroy {
         this.isOnline = status;
       }
     );
+    let offender = await this.contactData.fetchData('http://localhost:8080/field_contact_bff/api/offenders/70000');
+    console.log(offender);
     await this.checkPopulationWithDexie().then((populated) => {
       if (!populated) {
         this.contactData.open();
