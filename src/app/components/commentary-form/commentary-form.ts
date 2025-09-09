@@ -74,7 +74,6 @@ export class CommentaryForm implements OnInit {
       .then((contact) => {
         if (contact) {
           observer.next(contact);
-          console.log('Current Contact line 41:', contact);
         } else {
           observer.next({} as Contact);
         }

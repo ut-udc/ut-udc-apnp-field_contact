@@ -5,8 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { Home } from './components/home/home';
 import { CommonModule } from '@angular/common';
 import { processContactQueue } from '../helpers';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NetworkService } from './services/network';
+import { Agent } from './model/Agent';
 
 @Component({
   selector: 'app-root',
@@ -16,26 +17,41 @@ import { NetworkService } from './services/network';
   styleUrl: './app.scss',
 })
 export class App implements OnInit, OnDestroy {
+  user: Agent | null = null;
   contactData: ContactData = inject(ContactData);
   http: HttpClient = inject(HttpClient);
   private networkSubscription!: Subscription;
   protected title = 'ut-udc-apnp-field_contact';
   isOnline: boolean = true;
+
   constructor(private networkService: NetworkService) {}
+
   async checkPopulationWithDexie(): Promise<boolean> {
     const count = await this.contactData.agents.count();
     return count > 0;
   }
+
   async ngOnInit(): Promise<void> {
+    this.contactData.getUser().subscribe(user => {
+      console.log('User from app line 36:', user);
+      this.user = user;
+    });
     this.networkSubscription = this.networkService.onlineStatus$.subscribe(
       (status) => {
         this.isOnline = status;
       }
     );
-    let offender = await this.contactData.fetchData('http://localhost:8080/field_contact_bff/api/offenders/70000');
-    console.log(offender);
+    let offender = await this.contactData.fetchData(
+      'http://localhost:8080/field_contact_bff/api/offenders/70000'
+    );
+
+
+
     await this.checkPopulationWithDexie().then((populated) => {
       if (!populated) {
+        if (this.user !== null) {
+          this.contactData.applicationUserName = this.user.userId;
+        }
         this.contactData.open();
         console.log('Populating Contact Database');
         this.contactData.populateAgent();
@@ -57,6 +73,7 @@ export class App implements OnInit, OnDestroy {
       await processContactQueue(this.contactData);
     });
   }
+
   ngOnDestroy() {
     if (this.networkSubscription) {
       this.networkSubscription.unsubscribe();

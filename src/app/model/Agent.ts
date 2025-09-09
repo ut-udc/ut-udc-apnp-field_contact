@@ -1,11 +1,10 @@
-import { Offender } from './Offender';
-
 export interface Agent {
+  userId: string;
   agentId: string;
   firstName: string;
   lastName: string;
   fullName: string;
-  email: string;
+  agentEmail: string;
   image: string;
   address: string;
   city: string;

@@ -209,6 +209,7 @@ interface Offender {
 }
 
 interface Agent {
+  userId: string;
   agentId: string;
   firstName: string;
   lastName: string;

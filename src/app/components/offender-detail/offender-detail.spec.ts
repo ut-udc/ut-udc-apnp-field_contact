@@ -19,7 +19,7 @@ describe('OffenderDetail', () => {
     firstName: 'Jane',
     lastName: 'Smith',
     birthDate: new Date('1990-01-01'),
-    agentId: 'jshardlow',
+    agentId: 'jshardlo',
     image: 'offender1.jpg',
     address: '456 Oak St',
     city: 'Anytown',
@@ -27,14 +27,14 @@ describe('OffenderDetail', () => {
     zip: '12345',
     phone: '555-0123',
     lastSuccessfulContactDate: new Date('2024-01-01'),
-    contactArray: []
+    contactArray: [],
   };
 
   const mockContacts: Contact[] = [
     {
       contactId: 1,
       ofndrNum: 12345,
-      agentId: 'jshardlow',
+      agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-01'),
       contactType: '1',
@@ -44,12 +44,12 @@ describe('OffenderDetail', () => {
       commentary: 'First contact',
       formCompleted: true,
       firstPageCompleted: true,
-      wasContactSuccessful: true
+      wasContactSuccessful: true,
     },
     {
       contactId: 2,
       ofndrNum: 12345,
-      agentId: 'jshardlow',
+      agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-02'),
       contactType: '2',
@@ -59,15 +59,15 @@ describe('OffenderDetail', () => {
       commentary: 'Second contact',
       formCompleted: true,
       firstPageCompleted: true,
-      wasContactSuccessful: true
-    }
+      wasContactSuccessful: true,
+    },
   ];
 
   beforeEach(async () => {
     const contactDataSpy = jasmine.createSpyObj('ContactData', [
       'getCaseloadOffenderById',
       'getOtherOffendersOffenderById',
-      'getAllContactsByOffenderNumberDesc'
+      'getAllContactsByOffenderNumberDesc',
     ]);
 
     await TestBed.configureTestingModule({
@@ -75,7 +75,7 @@ describe('OffenderDetail', () => {
         OffenderDetail,
         RouterTestingModule,
         HttpClientTestingModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: ContactData, useValue: contactDataSpy },
@@ -83,19 +83,27 @@ describe('OffenderDetail', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { ofndrNum: '12345' }
-            }
-          }
-        }
-      ]
+              params: { ofndrNum: '12345' },
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
-    mockContactData = TestBed.inject(ContactData) as jasmine.SpyObj<ContactData>;
+    mockContactData = TestBed.inject(
+      ContactData
+    ) as jasmine.SpyObj<ContactData>;
 
     // Setup default mock returns
-    mockContactData.getCaseloadOffenderById.and.returnValue(Promise.resolve(mockOffender));
-    mockContactData.getOtherOffendersOffenderById.and.returnValue(Promise.resolve(undefined));
-    mockContactData.getAllContactsByOffenderNumberDesc.and.returnValue(Promise.resolve(mockContacts));
+    mockContactData.getCaseloadOffenderById.and.returnValue(
+      Promise.resolve(mockOffender)
+    );
+    mockContactData.getOtherOffendersOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
+    mockContactData.getAllContactsByOffenderNumberDesc.and.returnValue(
+      Promise.resolve(mockContacts)
+    );
 
     fixture = TestBed.createComponent(OffenderDetail);
     component = fixture.componentInstance;
@@ -106,50 +114,66 @@ describe('OffenderDetail', () => {
   });
 
   it('should load current offender from caseload', (done) => {
-    component.currentOffender.subscribe(offender => {
+    component.currentOffender.subscribe((offender) => {
       expect(offender.ofndrNum).toBe(mockOffender.ofndrNum);
       expect(offender.firstName).toBe(mockOffender.firstName);
       expect(offender.lastName).toBe(mockOffender.lastName);
-      expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(12345);
+      expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(
+        12345
+      );
       done();
     });
   });
 
   it('should fallback to other offenders if not in caseload', (done) => {
-    mockContactData.getCaseloadOffenderById.and.returnValue(Promise.resolve(undefined));
-    mockContactData.getOtherOffendersOffenderById.and.returnValue(Promise.resolve(mockOffender));
+    mockContactData.getCaseloadOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
+    mockContactData.getOtherOffendersOffenderById.and.returnValue(
+      Promise.resolve(mockOffender)
+    );
 
-    component.currentOffender.subscribe(offender => {
+    component.currentOffender.subscribe((offender) => {
       expect(offender.ofndrNum).toBe(mockOffender.ofndrNum);
-      expect(mockContactData.getOtherOffendersOffenderById).toHaveBeenCalledWith(12345);
+      expect(
+        mockContactData.getOtherOffendersOffenderById
+      ).toHaveBeenCalledWith(12345);
       done();
     });
   });
 
   it('should load contact list for offender', (done) => {
-    component.contactList.subscribe(contacts => {
+    component.contactList.subscribe((contacts) => {
       expect(contacts.length).toBe(2);
       expect(contacts[0].contactId).toBe(1);
       expect(contacts[1].contactId).toBe(2);
-      expect(mockContactData.getAllContactsByOffenderNumberDesc).toHaveBeenCalledWith(12345);
+      expect(
+        mockContactData.getAllContactsByOffenderNumberDesc
+      ).toHaveBeenCalledWith(12345);
       done();
     });
   });
 
   it('should handle empty contact list', (done) => {
-    mockContactData.getAllContactsByOffenderNumberDesc.and.returnValue(Promise.resolve([]));
+    mockContactData.getAllContactsByOffenderNumberDesc.and.returnValue(
+      Promise.resolve([])
+    );
 
-    component.contactList.subscribe(contacts => {
+    component.contactList.subscribe((contacts) => {
       expect(contacts.length).toBe(0);
       done();
     });
   });
 
   it('should return empty offender if not found anywhere', (done) => {
-    mockContactData.getCaseloadOffenderById.and.returnValue(Promise.resolve(undefined));
-    mockContactData.getOtherOffendersOffenderById.and.returnValue(Promise.resolve(undefined));
+    mockContactData.getCaseloadOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
+    mockContactData.getOtherOffendersOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
 
-    component.currentOffender.subscribe(offender => {
+    component.currentOffender.subscribe((offender) => {
       expect(offender).toEqual({} as Offender);
       done();
     });
@@ -168,12 +192,14 @@ describe('OffenderDetail', () => {
   it('should render offender information and contact list', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    
+
     // Check if the component template renders
     expect(compiled).toBeTruthy();
   });
 
   it('should handle rgba method', () => {
-    expect(() => component.rgba(207, 207, 207, 0.39)).toThrowError('Method not implemented.');
+    expect(() => component.rgba(207, 207, 207, 0.39)).toThrowError(
+      'Method not implemented.'
+    );
   });
 });

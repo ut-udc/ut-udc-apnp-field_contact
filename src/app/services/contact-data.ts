@@ -30,6 +30,7 @@ export class ContactData extends Dexie implements OnInit {
   }
   networkService: NetworkService = inject(NetworkService);
   private path = environment.apiUrl;
+  private userPath = environment.userApiUrl;
 
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
@@ -41,7 +42,7 @@ export class ContactData extends Dexie implements OnInit {
   public otherOffenders!: Table<Offender, number>;
   public locationList!: Table<Select2Model, number>;
   public contactTypeList!: Table<Select2Model, number>;
-  public applicationUserName: string = 'jshardlow';
+  public applicationUserName: string = 'jshardlo';
   private networkSubscription!: Subscription;
 
   constructor(private http: HttpClient) {
@@ -105,8 +106,23 @@ export class ContactData extends Dexie implements OnInit {
     return await this.agents.get(this.dao.agent.agentId);
   }
 
+  getUser(): Observable<Agent> {
+    return this.http.get<Agent>(this.userPath + '/user');
+  }
+
+  async fetchUser() {
+    let url = this.userPath + '/user';
+    console.log('User URL: ' + url);
+    const user = await this.fetchData<Agent>(url);
+    console.log('Stringyfy User Data from contact data: ' + JSON.stringify(user.data));
+    if (user.data) {
+      return user.data;
+    }
+    throw new Error('User data is null');
+  }
+
   async fetchAgentToImpersonate(agentId: string) {
-    let url = this.path + '/agentId=' + agentId;
+    let url = this.userPath + '/agentEmail=' + agentId;
     const agent = await this.fetchData<Agent>(url);
     return agent.data;
   }
@@ -299,7 +315,10 @@ export class ContactData extends Dexie implements OnInit {
   }
   async populateAgent() {
     await this.agents.clear();
-    await this.agents.add(this.dao.agent);
+    this.getUser().subscribe((user) => {
+      console.log('User from app line 319:', user);
+      this.agents.add(user);
+    });
   }
   async populateOfficers() {
     await this.officers.clear();

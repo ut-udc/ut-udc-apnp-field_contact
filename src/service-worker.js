@@ -20,31 +20,31 @@ self.addEventListener("fetch", (event) => {
 });
 
 const CACHE_NAME = "ut-udc-apnp-field_contact-cache-v1";
-const urlsToCache = [
-  "/index.html",
-  // './offline.html',
-  // './favicon.ico',
-  // './icons/*',
-  // './assets/icons/*',
-  // './assets/images/*',
-  // './assets/data/*'
-];
+// const urlsToCache = [
+//   "/index.html",
+//   // './offline.html',
+//   // './favicon.ico',
+//   // './icons/*',
+//   // './assets/icons/*',
+//   // './assets/images/*',
+//   // './assets/data/*'
+// ];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log("Opened cache");
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+// self.addEventListener("install", (event) => {
+//   event.waitUntil(
+//     caches.open(CACHE_NAME).then((cache) => {
+//       console.log("Opened cache");
+//       return cache.addAll(urlsToCache);
+//     })
+//   );
+// });
 
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    fetch(event.request).catch(() =>
-      caches.match(event.request).then((response) => {
-        return response || caches.match("/offline.html");
-      })
-    )
-  );
-});
+// self.addEventListener("fetch", (event) => {
+//   event.respondWith(
+//     fetch(event.request).catch(() =>
+//       caches.match(event.request).then((response) => {
+//         return response || caches.match("/offline.html");
+//       })
+//     )
+//   );
+// });
