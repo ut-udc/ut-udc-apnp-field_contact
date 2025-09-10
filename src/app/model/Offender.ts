@@ -1,12 +1,10 @@
 import { Contact } from './Contact';
+import { OffenderAddress } from './OffenderAddress';
 import { OffenderBase } from './OffenderBase';
 
 export interface Offender extends OffenderBase {
   image: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
+  offenderAddress: OffenderAddress;
   phone: string;
   lastSuccessfulContactDate: Date;
   contactArray: Contact[];

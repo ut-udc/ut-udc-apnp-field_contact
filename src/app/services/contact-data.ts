@@ -381,14 +381,14 @@ export class ContactData extends Dexie implements OnInit {
 
   async populateContactTypes() {
     await this.contactTypeList.clear();
-    await this.contactTypeList.bulkAdd(this.dao.contactTypeList);
-    // (await this.getContactTypes()).subscribe((contactTypes) => {
-    //   this.contactTypeList.bulkAdd(contactTypes);
-    // });
+    // await this.contactTypeList.bulkAdd(this.dao.contactTypeList);
+    (await this.getContactTypes()).subscribe((contactTypes) => {
+      this.contactTypeList.bulkAdd(contactTypes);
+    });
   }
 
   async getContactTypes() {
-    return this.http.get<Select2Model[]>(this.path + '/contactTypes');
+    return this.http.get<Select2Model[]>(this.path + '/contact-types');
   }
 
   async getListOfLocations() {
@@ -422,10 +422,14 @@ export class ContactData extends Dexie implements OnInit {
     const newOffender: Offender = {
       ...(offender == null ? ({} as OffenderBase) : offender),
       image: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
+      offenderAddress: {
+        offenderNumber: offender?.offenderNumber ?? 0,
+        lineOne: '',
+        lineTwo: '',
+        city: '',
+        state: '',
+        zipCode: '',
+      },
       phone: '',
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
