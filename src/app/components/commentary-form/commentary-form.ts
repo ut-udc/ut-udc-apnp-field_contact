@@ -148,7 +148,7 @@ export class CommentaryForm implements OnInit {
       });
     }
     window.location.href =
-      '/ut-udc-apnp-field_contact/offender-detail/' + this.offenderNumber;
+      'offender-detail/' + this.offenderNumber;
   }
 
   async ngOnInit() {
