@@ -15,7 +15,7 @@ describe('OffenderDetail', () => {
   let mockContactData: jasmine.SpyObj<ContactData>;
 
   const mockOffender: Offender = {
-    ofndrNum: 12345,
+    offenderNumber: 12345,
     firstName: 'Jane',
     lastName: 'Smith',
     birthDate: new Date('1990-01-01'),
@@ -33,7 +33,7 @@ describe('OffenderDetail', () => {
   const mockContacts: Contact[] = [
     {
       contactId: 1,
-      ofndrNum: 12345,
+      offenderNumber: 12345,
       agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-01'),
@@ -48,7 +48,7 @@ describe('OffenderDetail', () => {
     },
     {
       contactId: 2,
-      ofndrNum: 12345,
+      offenderNumber: 12345,
       agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-02'),
@@ -83,7 +83,7 @@ describe('OffenderDetail', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { ofndrNum: '12345' },
+              params: { offenderNumber: '12345' },
             },
           },
         },
@@ -115,7 +115,7 @@ describe('OffenderDetail', () => {
 
   it('should load current offender from caseload', (done) => {
     component.currentOffender.subscribe((offender) => {
-      expect(offender.ofndrNum).toBe(mockOffender.ofndrNum);
+      expect(offender.offenderNumber).toBe(mockOffender.offenderNumber);
       expect(offender.firstName).toBe(mockOffender.firstName);
       expect(offender.lastName).toBe(mockOffender.lastName);
       expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(
@@ -134,7 +134,7 @@ describe('OffenderDetail', () => {
     );
 
     component.currentOffender.subscribe((offender) => {
-      expect(offender.ofndrNum).toBe(mockOffender.ofndrNum);
+      expect(offender.offenderNumber).toBe(mockOffender.offenderNumber);
       expect(
         mockContactData.getOtherOffendersOffenderById
       ).toHaveBeenCalledWith(12345);

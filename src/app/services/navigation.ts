@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 export class Navigation {
   router: Router = inject(Router);
   constructor() {}
-  goToContactForm(ofndrNum: number) {
-    this.router.navigate(['/contact-form', ofndrNum]);
+  goToContactForm(offenderNumber: number) {
+    this.router.navigate(['/contact-form', offenderNumber]);
   }
 }

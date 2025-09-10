@@ -77,7 +77,7 @@ export const addToContactQueue = (
   contactData: ContactData,
   method: string
 ) => {
-    if (method === 'POST') {
+  if (method === 'POST') {
     contactData.addPostContactToQueue(contact);
   } else if (method === 'PUT') {
     contactData.addUpdateContactToQueue(contact);
@@ -97,8 +97,8 @@ export const addOffendersToOtherOffenders = (
   } else {
     baseOffenders.forEach(async (offender) => {
       return fetch(
-        'http://localhost:3000/getOffenderToOtherOffenders?ofndrNum=' +
-          offender.ofndrNum,
+        'http://localhost:3000/getOffenderToOtherOffenders?offenderNumber=' +
+          offender.offenderNumber,
         {
           method: 'GET',
           headers: {
@@ -108,7 +108,7 @@ export const addOffendersToOtherOffenders = (
       )
         .then((response) => response.json())
         .then((data) => {
-            contactData.addOffenderToOtherOffenders(data);
+          contactData.addOffenderToOtherOffenders(data);
           return data;
         })
         .catch((error) => {
@@ -150,21 +150,21 @@ export const processContactQueue = async (contactData: ContactData) => {
         },
         body: queuedContact.body ? JSON.stringify(queuedContact.body) : null,
       })
-      .then((response) => {
-        if(!response.ok){
+        .then((response) => {
+          if (!response.ok) {
+            return null;
+          }
+          return response.json();
+        })
+        .then((data: Contact) => {
+          if (data) {
+            data.contactSyncedWithDatabase = true;
+            successful = data.contactSyncedWithDatabase;
+            contactData.contacts.add(data);
+            return data;
+          }
           return null;
-        }
-        return response.json();
-      })
-      .then((data: Contact) => {
-        if (data) {
-          data.contactSyncedWithDatabase = true;
-          successful = data.contactSyncedWithDatabase;
-          contactData.contacts.add(data);
-          return data;
-        }
-        return null;
-      });
+        });
       if (typeof queuedContact.id === 'number' && successful) {
         await contactData.contactsQueue.delete(queuedContact.id);
       }

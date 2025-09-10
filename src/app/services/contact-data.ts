@@ -30,7 +30,6 @@ export class ContactData extends Dexie implements OnInit {
   }
   networkService: NetworkService = inject(NetworkService);
   private path = environment.apiUrl;
-  private userPath = environment.userApiUrl;
 
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
@@ -49,17 +48,17 @@ export class ContactData extends Dexie implements OnInit {
     super('contactDatabase');
     this.version(4).stores({
       contacts:
-        'contactId, ofndrNum, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       agents:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated',
       officers:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
-      allOffenders: 'ofndrNum, firstName, lastName, birthDate',
+      allOffenders: 'offenderNumber, firstName, lastName, birthDate',
       myCaseload:
-        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
+        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
       otherOffenders:
-        'ofndrNum, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
+        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
       locationList: 'id, text',
       contactTypeList: 'id, text',
     });
@@ -70,7 +69,6 @@ export class ContactData extends Dexie implements OnInit {
     this.myCaseload = this.table('myCaseload');
     this.otherOffenders = this.table('otherOffenders');
   }
-
 
   isOnlineNow(): boolean {
     let online = false;
@@ -107,42 +105,13 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   getUser(): Observable<Agent> {
-    return this.http.get<Agent>(this.userPath + '/user');
-  }
-
-  async fetchUser() {
-    let url = this.userPath + '/user';
-    console.log('User URL: ' + url);
-    const user = await this.fetchData<Agent>(url);
-    console.log('Stringyfy User Data from contact data: ' + JSON.stringify(user.data));
-    if (user.data) {
-      return user.data;
-    }
-    throw new Error('User data is null');
+    return this.http.get<Agent>(this.path + '/user');
   }
 
   async fetchAgentToImpersonate(agentId: string) {
-    let url = this.userPath + '/agentEmail=' + agentId;
+    let url = this.path + '/agentEmail=' + agentId;
     const agent = await this.fetchData<Agent>(url);
     return agent.data;
-  }
-
-  async fetchMyCaseload(agentId: string) {
-    let url = this.path + '/agentId=' + agentId;
-    const myCaseload = await this.fetchData<Offender[]>(url);
-    return myCaseload.data;
-  }
-
-  async fetchContactTypes() {
-    let url = this.path + '/contactTypes';
-    const contactTypes = await this.fetchData<Select2Model[]>(url);
-    return contactTypes.data;
-  }
-
-  async fetchLocations() {
-    let url = this.path + '/locations';
-    const locations = await this.fetchData<Select2Model[]>(url);
-    return locations.data;
   }
 
   async addContact(contact: Contact) {
@@ -256,7 +225,7 @@ export class ContactData extends Dexie implements OnInit {
   }
   async getAllContactsByOffenderNumberDesc(id: number) {
     return await this.contacts
-      .where('ofndrNum')
+      .where('offenderNumber')
       .equals(id)
       .and((contact) => contact.formCompleted === true)
       .reverse()
@@ -286,7 +255,7 @@ export class ContactData extends Dexie implements OnInit {
   }
   async getUncompletedContactByOffenderNumber(id: number) {
     let contactList = await this.contacts
-      .where('ofndrNum')
+      .where('offenderNumber')
       .equals(id)
       .and((x) => x.formCompleted === false)
       .toArray();
@@ -320,9 +289,15 @@ export class ContactData extends Dexie implements OnInit {
       this.agents.add(user);
     });
   }
+  async getOfficers() {
+    return this.http.get<Agent[]>(this.path + '/officers');
+  }
+
   async populateOfficers() {
     await this.officers.clear();
-    await this.officers.bulkAdd(this.dao.officerList);
+    // (await this.getOfficers()).subscribe((officers) => {
+    //   this.officers.bulkAdd(officers);
+    // });
   }
   async getOfficerList(): Promise<Agent[]> {
     return await this.officers.toArray();
@@ -336,22 +311,37 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   async populateMyCaseload() {
-    await this.myCaseload.clear();
-    await this.myCaseload.bulkAdd(this.dao.myCaseload);
+    // await this.myCaseload.clear();
+    (await this.getMyCaseload()).subscribe((myCaseload) => {
+      console.log('My Caseload line 317:', myCaseload);
+      try {
+        this.myCaseload.bulkAdd(myCaseload);
+      } catch (error) {
+        console.error('Error bulk adding myCaseload:', error);
+      }
+    });
   }
-  async getMyCaseload(): Promise<Offender[]> {
-    return await this.myCaseload.toArray();
+
+  getMyCaseload() {
+    return this.http.get<Offender[]>(
+      this.path + '/agent-caseload/' + this.applicationUserName
+    );
   }
   async populateOtherOffenders() {
     await this.otherOffenders.clear();
-    await this.otherOffenders.bulkAdd(this.dao.otherOffenders);
+    // await this.otherOffenders.bulkAdd(this.dao.otherOffenders);
   }
   async getOtherOffenders(): Promise<Offender[]> {
     return await this.otherOffenders.toArray();
   }
   async populateAllOffenders() {
     await this.allOffenders.clear();
-    await this.allOffenders.bulkAdd(this.dao.allOtherOffenders);
+    // (await this.getAllOffendersFromAPI()).subscribe((offenders) => {
+    //   this.allOffenders.bulkAdd(offenders);
+    // });
+  }
+  async getAllOffendersFromAPI() {
+    return this.http.get<OffenderBase[]>(this.path + '/allApnpOffenders');
   }
   async getAllOffenders() {
     return await this.allOffenders.toArray();
@@ -368,11 +358,26 @@ export class ContactData extends Dexie implements OnInit {
   async populateLocations() {
     await this.locationList.clear();
     await this.locationList.bulkAdd(this.dao.locationList);
+    // (await this.getLocantions()).subscribe((locations) => {
+    //   this.locationList.bulkAdd(locations);
+    // });
   }
+  async getLocantions() {
+    return this.http.get<Select2Model[]>(this.path + '/locations');
+  }
+
   async populateContactTypes() {
     await this.contactTypeList.clear();
     await this.contactTypeList.bulkAdd(this.dao.contactTypeList);
+    // (await this.getContactTypes()).subscribe((contactTypes) => {
+    //   this.contactTypeList.bulkAdd(contactTypes);
+    // });
   }
+
+  async getContactTypes() {
+    return this.http.get<Select2Model[]>(this.path + '/contactTypes');
+  }
+
   async getListOfLocations() {
     return await this.locationList.toArray();
   }
@@ -416,28 +421,31 @@ export class ContactData extends Dexie implements OnInit {
     await this.otherOffenders.add(newOffender);
   }
   async removeOffenderFromOtherOffenders(offender: OffenderBase) {
-    await this.otherOffenders.delete(offender.ofndrNum);
+    await this.otherOffenders.delete(offender.offenderNumber);
   }
 
   //generic GET call method for getting everything we need from the APIs
   async fetchData<T>(url: string): Promise<ApiResponse<T>> {
-  try {
-    const response = await fetch(url);
+    try {
+      const response = await fetch(url);
 
-    if (!response.ok) {
-      // Handle HTTP errors (e.g., 404, 500)
-      const errorText = await response.text();
-      return { data: null, error: `HTTP Error: ${response.status} - ${errorText}` };
-    }
+      if (!response.ok) {
+        // Handle HTTP errors (e.g., 404, 500)
+        const errorText = await response.text();
+        return {
+          data: null,
+          error: `HTTP Error: ${response.status} - ${errorText}`,
+        };
+      }
 
-    const data: T = await response.json();
-    return { data, error: null };
-  } catch (error) {
-    // Handle network errors or other exceptions
-    if (error instanceof Error) {
-      return { data: null, error: error.message };
+      const data: T = await response.json();
+      return { data, error: null };
+    } catch (error) {
+      // Handle network errors or other exceptions
+      if (error instanceof Error) {
+        return { data: null, error: error.message };
+      }
+      return { data: null, error: 'An unknown error occurred' };
     }
-    return { data: null, error: 'An unknown error occurred' };
   }
-}
 }

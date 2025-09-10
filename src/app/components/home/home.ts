@@ -49,7 +49,6 @@ export class Home implements OnInit {
     this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
       if (agent) {
         observer.next(agent);
-        console.log('Agent from home line 41:', agent);
       } else {
         observer.next({} as Agent);
       }

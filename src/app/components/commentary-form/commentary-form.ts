@@ -58,7 +58,7 @@ export class CommentaryForm implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   navigationService: Navigation = inject(Navigation);
   contactData: ContactData = inject(ContactData);
-  ofndrNum: number = 0;
+  offenderNumber: number = 0;
   contactId: number = 0;
   errorClass: string = '';
 
@@ -148,15 +148,15 @@ export class CommentaryForm implements OnInit {
       });
     }
     window.location.href =
-      '/ut-udc-apnp-field_contact/offender-detail/' + this.ofndrNum;
+      '/ut-udc-apnp-field_contact/offender-detail/' + this.offenderNumber;
   }
 
   async ngOnInit() {
     // debugger
-    this.ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
+    this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
     this.contactId = Number(this.route.snapshot.params['contactId']);
     this.offender = await this.contactData.getCaseloadOffenderById(
-      this.ofndrNum
+      this.offenderNumber
     );
     if (this.contactId > 0) {
       const contact = await this.contactData.getContactById(this.contactId);
@@ -164,7 +164,7 @@ export class CommentaryForm implements OnInit {
     } else {
       const contact =
         await this.contactData.getUncompletedContactByOffenderNumber(
-          this.ofndrNum
+          this.offenderNumber
         );
       this.currentContact = contact ? of(contact) : this.currentContact;
     }

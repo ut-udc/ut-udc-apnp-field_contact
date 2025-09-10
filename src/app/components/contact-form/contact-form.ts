@@ -74,12 +74,12 @@ export class ContactForm implements OnInit {
 
   selectedDateTime: Date = new Date();
   primaryInterviewer: string = '';
-  ofndrNum: number = 0;
+  offenderNumber: number = 0;
   contactId: number = 0;
 
   currentContact: Contact = {
     contactId: 0,
-    ofndrNum: 0,
+    offenderNumber: 0,
     agentId: '',
     secondaryAgentId: '',
     contactDate: new Date(),
@@ -147,7 +147,7 @@ export class ContactForm implements OnInit {
       this.currentContact.firstPageCompleted = true;
       this.currentContact = {
         contactId: this.currentContact.contactId,
-        ofndrNum: Number(this.route.snapshot.params['ofndrNum']),
+        offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
@@ -172,7 +172,7 @@ export class ContactForm implements OnInit {
       this.currentContact.contactId = this.currentContact.contactId;
       this.currentContact = {
         contactId: this.currentContact.contactId,
-        ofndrNum: Number(this.route.snapshot.params['ofndrNum']),
+        offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
         agentId: this.contactForm.value.primaryInterviewer ?? '',
         secondaryAgentId: this.contactForm.value.secondaryInterviewer ?? '',
         contactDate: this.contactForm.value.contactDate ?? new Date(),
@@ -249,23 +249,23 @@ export class ContactForm implements OnInit {
     this.contactCount = await this.contactData.getContactCount();
 
     console.log('Contact id line 180:', this.currentContact.contactId);
-    const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
+    const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
     this.offender = await this.contactData.getCaseloadOffenderById(offenderNum);
     if (!this.offender) {
       this.offender = await this.contactData.getOtherOffendersOffenderById(
         offenderNum
       );
     }
-    this.ofndrNum = Number(this.route.snapshot.params['ofndrNum']);
-    this.currentContact.ofndrNum = this.ofndrNum;
+    this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
+    this.currentContact.offenderNumber = this.offenderNumber;
     this.contactId = Number(this.route.snapshot.params['contactId']);
     if (this.contactId || this.contactId > 0) {
       const contact = await this.contactData.getContactById(this.contactId);
       this.currentContact = contact ?? this.currentContact;
-    } else if (this.ofndrNum > 0) {
+    } else if (this.offenderNumber > 0) {
       this.contact =
         await this.contactData.getUncompletedContactByOffenderNumber(
-          this.ofndrNum
+          this.offenderNumber
         );
       this.currentContact = this.contact ?? this.currentContact;
     }

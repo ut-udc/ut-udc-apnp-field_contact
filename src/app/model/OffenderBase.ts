@@ -1,5 +1,5 @@
 export interface OffenderBase {
-  ofndrNum: number;
+  offenderNumber: number;
   firstName: string;
   lastName: string;
   birthDate: Date;

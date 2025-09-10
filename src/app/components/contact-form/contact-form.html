@@ -1,5 +1,8 @@
 <div class="surface">
-  <app-detail-header [title]="'Supervision Contact'" [backLink]="'/offender-detail/' + offender?.ofndrNum"></app-detail-header>
+  <app-detail-header
+    [title]="'Supervision Contact'"
+    [backLink]="'/offender-detail/' + offender?.offenderNumber"
+  ></app-detail-header>
 
   <div class="body_large">
     Supervision Contact entry for
@@ -128,7 +131,7 @@
         <div class="button-row">
           <button
             matButton="outlined"
-            [routerLink]="['/offender-detail', offender?.ofndrNum]"
+            [routerLink]="['/offender-detail', offender?.offenderNumber]"
           >
             Cancel
           </button>
@@ -136,7 +139,7 @@
             matButton="filled"
             type="submit"
             (click)="onSubmit()"
-            [routerLink]="['/commentary-form', currentContact.ofndrNum, currentContact.contactId]"
+            [routerLink]="['/commentary-form', currentContact.offenderNumber, currentContact.contactId]"
             [disabled]="!contactForm.valid"
           >
             Next

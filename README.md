@@ -73,7 +73,7 @@ Navigate to `http://localhost:4200/` to access the application.
 - Current agent information
 - Caseload summary statistics
 
-#### 2. ContactForm Component (`/contact-form/:ofndrNum/:contactId?`)
+#### 2. ContactForm Component (`/contact-form/:offenderNumber/:contactId?`)
 
 **Purpose:** Multi-step form for creating and editing supervision contacts
 
@@ -91,7 +91,7 @@ Navigate to `http://localhost:4200/` to access the application.
 Route Parameters → Load Offender Data → Initialize Form → User Input → Save/Update Contact
 ```
 
-#### 3. OffenderDetail Component (`/offender-detail/:ofndrNum`)
+#### 3. OffenderDetail Component (`/offender-detail/:offenderNumber`)
 
 **Purpose:** Comprehensive offender profile and contact history
 
@@ -179,7 +179,7 @@ getListOfLocations(): Promise<Select2Model[]>
 ```typescript
 interface Contact {
   contactId: number;
-  ofndrNum: number;
+  offenderNumber: number;
   agentId: string;
   secondaryAgentId: string;
   contactDate: Date;
@@ -194,7 +194,7 @@ interface Contact {
 }
 
 interface Offender {
-  ofndrNum: number;
+  offenderNumber: number;
   firstName: string;
   lastName: string;
   birthDate: Date;
@@ -236,8 +236,8 @@ sequenceDiagram
     participant CD as ContactData
     participant DB as IndexedDB
 
-    U->>CF: Navigate to /contact-form/:ofndrNum
-    CF->>CD: getCaseloadOffenderById(ofndrNum)
+    U->>CF: Navigate to /contact-form/:offenderNumber
+    CF->>CD: getCaseloadOffenderById(offenderNumber)
     CD->>DB: Query offender data
     DB-->>CD: Return offender
     CD-->>CF: Offender data
@@ -268,7 +268,7 @@ sequenceDiagram
     MC->>MC: Render offender cards
 
     loop For each offender
-        MC->>CD: getLastContactDate(ofndrNum)
+        MC->>CD: getLastContactDate(offenderNumber)
         CD->>DB: Query latest contact
         DB-->>CD: Return contact date
         CD-->>MC: Last contact info
@@ -284,15 +284,15 @@ sequenceDiagram
     participant CD as ContactData
     participant DB as IndexedDB
 
-    U->>OD: Navigate to /offender-detail/:ofndrNum
+    U->>OD: Navigate to /offender-detail/:offenderNumber
 
     par Load Offender Data
-        OD->>CD: getCaseloadOffenderById(ofndrNum)
+        OD->>CD: getCaseloadOffenderById(offenderNumber)
         CD->>DB: Query offender profile
         DB-->>CD: Return offender data
         CD-->>OD: Offender profile
     and Load Contact History
-        OD->>CD: getAllContactsByOffenderNumberDesc(ofndrNum)
+        OD->>CD: getAllContactsByOffenderNumberDesc(offenderNumber)
         CD->>DB: Query contact history
         DB-->>CD: Return contact array
         CD-->>OD: Contact history
@@ -312,7 +312,7 @@ sequenceDiagram
    this.router.navigate(["/contact-form", offenderNum]);
 
    // Parameter extraction
-   const ofndrNum = Number(this.route.snapshot.params["ofndrNum"]);
+   const offenderNumber = Number(this.route.snapshot.params["offenderNumber"]);
    ```
 
 2. **Service-Based Data Sharing**

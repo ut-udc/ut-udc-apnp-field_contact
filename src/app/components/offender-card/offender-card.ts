@@ -22,7 +22,7 @@ import { Navigation } from '../../services/navigation';
 })
 export class OffenderCard implements OnInit {
   @Input() offender: Offender = {
-    ofndrNum: 0,
+    offenderNumber: 0,
     firstName: '',
     lastName: '',
     birthDate: new Date(),
@@ -38,14 +38,12 @@ export class OffenderCard implements OnInit {
     nextScheduledContactDate: new Date(),
   };
   navigation: Navigation = inject(Navigation);
-  
-  constructor() {
 
-  }
+  constructor() {}
   ngOnInit(): void {}
 
-  onSwipeRight(ofndrNum: number) {
-    this.navigation.goToContactForm(ofndrNum);
+  onSwipeRight(offenderNumber: number) {
+    this.navigation.goToContactForm(offenderNumber);
   }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {

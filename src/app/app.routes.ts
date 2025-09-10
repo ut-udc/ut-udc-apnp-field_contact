@@ -14,22 +14,22 @@ export const routes: Routes = [
     title: 'Supervision Contact Home',
   },
   {
-    path: 'offender-detail/:ofndrNum',
+    path: 'offender-detail/:offenderNumber',
     component: OffenderDetail,
     title: 'Offender Detail',
   },
   {
-    path: 'contact-form/:ofndrNum',
+    path: 'contact-form/:offenderNumber',
     component: ContactForm,
     title: 'Contact Form',
   },
   {
-    path: 'contact-form/:ofndrNum/:contactId',
+    path: 'contact-form/:offenderNumber/:contactId',
     component: ContactForm,
     title: 'Contact Form',
   },
   {
-    path: 'commentary-form/:ofndrNum/:contactId',
+    path: 'commentary-form/:offenderNumber/:contactId',
     component: CommentaryForm,
     title: 'Commentary Form',
   },

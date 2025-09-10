@@ -32,17 +32,10 @@ export class App implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.contactData.getUser().subscribe(user => {
-      console.log('User from app line 36:', user);
-      this.user = user;
-    });
     this.networkSubscription = this.networkService.onlineStatus$.subscribe(
       (status) => {
         this.isOnline = status;
       }
-    );
-    let offender = await this.contactData.fetchData(
-      'http://localhost:8080/field_contact_bff/api/offenders/70000'
     );
 
 
@@ -61,6 +54,7 @@ export class App implements OnInit, OnDestroy {
         this.contactData.populateAllOffenders();
         this.contactData.populateLocations();
         this.contactData.populateContactTypes();
+        console.log('Number of agents in agents table: ' + this.contactData.agents.count());
         //TO-DO find a better way of doing this
         window.location.reload();
       }

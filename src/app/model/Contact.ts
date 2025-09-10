@@ -1,6 +1,6 @@
 export interface Contact {
   contactId: number;
-  ofndrNum: number;
+  offenderNumber: number;
   agentId: string;
   secondaryAgentId: string;
   contactDate: Date;

@@ -1,5 +1,8 @@
 <div class="surface">
-  <app-detail-header [title]="'Add Commentary'" [backLink]="'/contact-form/' + (currentContact | async)?.ofndrNum + '/' + (currentContact | async)?.contactId"></app-detail-header>
+  <app-detail-header
+    [title]="'Add Commentary'"
+    [backLink]="'/contact-form/' + (currentContact | async)?.offenderNumber + '/' + (currentContact | async)?.contactId"
+  ></app-detail-header>
   <div class="surface-container-low-outlined">
     <div class="contact-info-container">
       <span class="label_medium">Offender</span>
@@ -102,7 +105,7 @@
       <div class="button-row">
         <button
           matButton="outlined"
-          routerLink="/offender-detail/{{(currentContact | async)?.ofndrNum}}"
+          routerLink="/offender-detail/{{(currentContact | async)?.offenderNumber}}"
         >
           Cancel
         </button>

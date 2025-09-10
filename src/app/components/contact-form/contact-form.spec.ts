@@ -19,7 +19,7 @@ describe('ContactForm', () => {
   let mockNavigation: jasmine.SpyObj<Navigation>;
 
   const mockOffender: Offender = {
-    ofndrNum: 12345,
+    offenderNumber: 12345,
     firstName: 'Jane',
     lastName: 'Smith',
     birthDate: new Date('1990-01-01'),
@@ -30,12 +30,12 @@ describe('ContactForm', () => {
     zip: '12345',
     phone: '555-0123',
     lastSuccessfulContactDate: new Date('2024-01-01'),
-    contactArray: []
+    contactArray: [],
   };
 
   const mockContact: Contact = {
     contactId: 1,
-    ofndrNum: 12345,
+    offenderNumber: 12345,
     agentId: 'agent1',
     secondaryAgentId: 'agent2',
     contactDate: new Date('2024-01-01'),
@@ -46,26 +46,30 @@ describe('ContactForm', () => {
     commentary: 'Test contact',
     formCompleted: false,
     firstPageCompleted: false,
-    wasContactSuccessful: false
+    wasContactSuccessful: false,
   };
 
   beforeEach(async () => {
-    const contactDataSpy = jasmine.createSpyObj('ContactData', [
-      'getCaseloadOffenderById',
-      'getOtherOffendersOffenderById',
-      'getContactById',
-      'getUncompletedContactByOffenderNumber',
-      'addContact',
-      'updateContact',
-      'getContactCount',
-      'getAgentList',
-      'getOfficerList',
-      'getInterviewerOptions',
-      'getListOfContactTypes',
-      'getListOfLocations'
-    ], {
-      applicationUserName: 'agent1'
-    });
+    const contactDataSpy = jasmine.createSpyObj(
+      'ContactData',
+      [
+        'getCaseloadOffenderById',
+        'getOtherOffendersOffenderById',
+        'getContactById',
+        'getUncompletedContactByOffenderNumber',
+        'addContact',
+        'updateContact',
+        'getContactCount',
+        'getAgentList',
+        'getOfficerList',
+        'getInterviewerOptions',
+        'getListOfContactTypes',
+        'getListOfLocations',
+      ],
+      {
+        applicationUserName: 'agent1',
+      }
+    );
 
     const navigationSpy = jasmine.createSpyObj('Navigation', ['navigate']);
 
@@ -75,7 +79,7 @@ describe('ContactForm', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         NoopAnimationsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
       ],
       providers: [
         { provide: ContactData, useValue: contactDataSpy },
@@ -84,33 +88,43 @@ describe('ContactForm', () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              params: { ofndrNum: '12345', contactId: '1' }
-            }
-          }
-        }
-      ]
+              params: { offenderNumber: '12345', contactId: '1' },
+            },
+          },
+        },
+      ],
     }).compileComponents();
 
-    mockContactData = TestBed.inject(ContactData) as jasmine.SpyObj<ContactData>;
+    mockContactData = TestBed.inject(
+      ContactData
+    ) as jasmine.SpyObj<ContactData>;
     mockNavigation = TestBed.inject(Navigation) as jasmine.SpyObj<Navigation>;
 
     // Setup default mock returns
-    mockContactData.getCaseloadOffenderById.and.returnValue(Promise.resolve(mockOffender));
-    mockContactData.getOtherOffendersOffenderById.and.returnValue(Promise.resolve(undefined));
-    mockContactData.getContactById.and.returnValue(Promise.resolve(mockContact));
-    mockContactData.getUncompletedContactByOffenderNumber.and.returnValue(Promise.resolve(undefined));
+    mockContactData.getCaseloadOffenderById.and.returnValue(
+      Promise.resolve(mockOffender)
+    );
+    mockContactData.getOtherOffendersOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
+    mockContactData.getContactById.and.returnValue(
+      Promise.resolve(mockContact)
+    );
+    mockContactData.getUncompletedContactByOffenderNumber.and.returnValue(
+      Promise.resolve(undefined)
+    );
     mockContactData.getContactCount.and.returnValue(Promise.resolve(5));
     mockContactData.getAgentList.and.returnValue(Promise.resolve([]));
     mockContactData.getOfficerList.and.returnValue(Promise.resolve([]));
-    mockContactData.getInterviewerOptions.and.returnValue(Promise.resolve([
-      { id: 'agent1', text: 'John Doe' }
-    ]));
-    mockContactData.getListOfContactTypes.and.returnValue(Promise.resolve([
-      { id: 1, text: 'Office Visit' }
-    ]));
-    mockContactData.getListOfLocations.and.returnValue(Promise.resolve([
-      { id: 1, text: 'Main Office' }
-    ]));
+    mockContactData.getInterviewerOptions.and.returnValue(
+      Promise.resolve([{ id: 'agent1', text: 'John Doe' }])
+    );
+    mockContactData.getListOfContactTypes.and.returnValue(
+      Promise.resolve([{ id: 1, text: 'Office Visit' }])
+    );
+    mockContactData.getListOfLocations.and.returnValue(
+      Promise.resolve([{ id: 1, text: 'Main Office' }])
+    );
 
     fixture = TestBed.createComponent(ContactForm);
     component = fixture.componentInstance;
@@ -122,22 +136,22 @@ describe('ContactForm', () => {
 
   it('should initialize form with route parameters', async () => {
     await component.ngOnInit();
-    
-    expect(component.ofndrNum).toBe(12345);
+
+    expect(component.offenderNumber).toBe(12345);
     expect(component.contactId).toBe(1);
     expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(12345);
   });
 
   it('should load offender data on initialization', async () => {
     await component.ngOnInit();
-    
+
     expect(component.offender).toEqual(mockOffender);
     expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(12345);
   });
 
   it('should load existing contact when contactId is provided', async () => {
     await component.ngOnInit();
-    
+
     expect(component.currentContact.contactId).toBe(mockContact.contactId);
     expect(mockContactData.getContactById).toHaveBeenCalledWith(1);
   });
@@ -156,7 +170,7 @@ describe('ContactForm', () => {
       primaryInterviewer: 'agent1',
       contactDate: new Date(),
       contactType: '1',
-      location: '1'
+      location: '1',
     });
 
     await component.onSubmit();
@@ -166,12 +180,16 @@ describe('ContactForm', () => {
   });
 
   it('should update existing contact on submit when contactId > 0', async () => {
-    component.currentContact = { ...mockContact, contactId: 1, formCompleted: false };
+    component.currentContact = {
+      ...mockContact,
+      contactId: 1,
+      formCompleted: false,
+    };
     component.contactForm.patchValue({
       primaryInterviewer: 'agent1',
       contactDate: new Date(),
       contactType: '1',
-      location: '1'
+      location: '1',
     });
 
     await component.onSubmit();
@@ -190,22 +208,22 @@ describe('ContactForm', () => {
       }
     };
 
-    component.primaryOfficers.subscribe(officers => {
+    component.primaryOfficers.subscribe((officers) => {
       expect(officers.length).toBeGreaterThan(0);
       checkCompletion();
     });
 
-    component.contactTypeList.subscribe(types => {
+    component.contactTypeList.subscribe((types) => {
       expect(types.length).toBeGreaterThan(0);
       checkCompletion();
     });
 
-    component.locationList.subscribe(locations => {
+    component.locationList.subscribe((locations) => {
       expect(locations.length).toBeGreaterThan(0);
       checkCompletion();
     });
 
-    component.agentList.subscribe(agents => {
+    component.agentList.subscribe((agents) => {
       expect(Array.isArray(agents)).toBe(true);
       checkCompletion();
     });
@@ -213,27 +231,33 @@ describe('ContactForm', () => {
 
   it('should handle form validation', () => {
     const form = component.contactForm;
-    
+
     expect(form.valid).toBe(false);
-    
+
     form.patchValue({
       contactDate: new Date(),
       primaryInterviewer: 'agent1',
       contactType: '1',
-      location: '1'
+      location: '1',
     });
-    
+
     expect(form.get('contactDate')?.value).toBeTruthy();
     expect(form.get('primaryInterviewer')?.value).toBe('agent1');
   });
 
   it('should fallback to other offenders if not in caseload', async () => {
-    mockContactData.getCaseloadOffenderById.and.returnValue(Promise.resolve(undefined));
-    mockContactData.getOtherOffendersOffenderById.and.returnValue(Promise.resolve(mockOffender));
+    mockContactData.getCaseloadOffenderById.and.returnValue(
+      Promise.resolve(undefined)
+    );
+    mockContactData.getOtherOffendersOffenderById.and.returnValue(
+      Promise.resolve(mockOffender)
+    );
 
     await component.ngOnInit();
 
-    expect(mockContactData.getOtherOffendersOffenderById).toHaveBeenCalledWith(12345);
+    expect(mockContactData.getOtherOffendersOffenderById).toHaveBeenCalledWith(
+      12345
+    );
     expect(component.offender).toEqual(mockOffender);
   });
 });

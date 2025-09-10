@@ -13,7 +13,7 @@ import { Contact } from '../../model/Contact';
 import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from '../contact-listing-card/contact-listing-card';
 import { Observable, from, of } from 'rxjs';
-import { DetailHeader } from "../detail-header/detail-header";
+import { DetailHeader } from '../detail-header/detail-header';
 
 @Component({
   selector: 'app-offender-detail',
@@ -27,8 +27,8 @@ import { DetailHeader } from "../detail-header/detail-header";
     DatePipe,
     ContactListingCard,
     CommonModule,
-    DetailHeader
-],
+    DetailHeader,
+  ],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
 })
@@ -36,14 +36,16 @@ export class OffenderDetail implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   currentOffender = new Observable<Offender>((observer) => {
     this.contactData
-      .getCaseloadOffenderById(Number(this.route.snapshot.params['ofndrNum']))
+      .getCaseloadOffenderById(
+        Number(this.route.snapshot.params['offenderNumber'])
+      )
       .then((offender) => {
         if (offender) {
           observer.next(offender);
         } else {
           this.contactData
             .getOtherOffendersOffenderById(
-              Number(this.route.snapshot.params['ofndrNum'])
+              Number(this.route.snapshot.params['offenderNumber'])
             )
             .then((offender) => {
               if (offender) {
@@ -59,7 +61,7 @@ export class OffenderDetail implements OnInit {
   contactList = new Observable<Contact[]>((observer) => {
     this.contactData
       .getAllContactsByOffenderNumberDesc(
-        Number(this.route.snapshot.params['ofndrNum'])
+        Number(this.route.snapshot.params['offenderNumber'])
       )
       .then((contacts) => {
         observer.next(contacts);
@@ -68,7 +70,7 @@ export class OffenderDetail implements OnInit {
   contactData: ContactData = inject(ContactData);
 
   constructor() {
-    const offenderNum = Number(this.route.snapshot.params['ofndrNum']);
+    const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
 
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);

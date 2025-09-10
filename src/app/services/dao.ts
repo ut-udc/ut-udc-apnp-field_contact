@@ -26,7 +26,7 @@ export class Dao {
 
   public otherOffenders: Offender[] = [
     {
-      ofndrNum: 21,
+      offenderNumber: 21,
       firstName: 'Yogli',
       lastName: 'Beary',
       birthDate: new Date('1980-01-01'),
@@ -46,7 +46,7 @@ export class Dao {
   //self explanatory
   public myCaseload: Offender[] = [
     {
-      ofndrNum: 1,
+      offenderNumber: 1,
       firstName: 'Yogi',
       lastName: 'Bear',
       birthDate: new Date('1980-01-01'),
@@ -62,7 +62,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 2,
+      offenderNumber: 2,
       firstName: 'Papa',
       lastName: 'Smurf',
       birthDate: new Date('1975-02-02'),
@@ -78,7 +78,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 3,
+      offenderNumber: 3,
       firstName: 'Sneezy',
       lastName: 'Dwarf',
       birthDate: new Date('1985-03-03'),
@@ -94,7 +94,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 4,
+      offenderNumber: 4,
       firstName: 'Sleepy',
       lastName: 'Dwarf',
       birthDate: new Date('1986-04-04'),
@@ -110,7 +110,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 5,
+      offenderNumber: 5,
       firstName: 'Smurfette',
       lastName: 'Smurf',
       birthDate: new Date('1992-05-05'),
@@ -126,7 +126,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 6,
+      offenderNumber: 6,
       firstName: 'Dopey',
       lastName: 'Dwarf',
       birthDate: new Date('1987-06-06'),
@@ -142,7 +142,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 7,
+      offenderNumber: 7,
       firstName: 'Grumpy',
       lastName: 'Dwarf',
       birthDate: new Date('1988-07-07'),
@@ -158,7 +158,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 8,
+      offenderNumber: 8,
       firstName: 'Bashful',
       lastName: 'Dwarf',
       birthDate: new Date('1989-08-08'),
@@ -174,7 +174,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 9,
+      offenderNumber: 9,
       firstName: 'Happy',
       lastName: 'Dwarf',
       birthDate: new Date('1991-09-09'),
@@ -190,7 +190,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 10,
+      offenderNumber: 10,
       firstName: 'Snow',
       lastName: 'White',
       birthDate: new Date('1990-01-01'),
@@ -210,70 +210,70 @@ export class Dao {
   //basic offender info for all other offenders in AP&P program
   public allOtherOffenders: OffenderBase[] = [
     {
-      ofndrNum: 11,
+      offenderNumber: 11,
       firstName: 'Yogi',
       lastName: 'Bear',
       birthDate: new Date('1980-01-01'),
       agentId: 'kchunt',
     },
     {
-      ofndrNum: 12,
+      offenderNumber: 12,
       firstName: 'Papa',
       lastName: 'Smurf',
       birthDate: new Date('1975-02-02'),
       agentId: 'mromney',
     },
     {
-      ofndrNum: 13,
+      offenderNumber: 13,
       firstName: 'Sneezy',
       lastName: 'Dwarf',
       birthDate: new Date('1985-03-03'),
       agentId: 'kchunt',
     },
     {
-      ofndrNum: 14,
+      offenderNumber: 14,
       firstName: 'Sleepy',
       lastName: 'Dwarf',
       birthDate: new Date('1986-04-04'),
       agentId: 'mromney',
     },
     {
-      ofndrNum: 15,
+      offenderNumber: 15,
       firstName: 'Smurfette',
       lastName: 'Smurf',
       birthDate: new Date('1992-05-05'),
       agentId: 'kchunt',
     },
     {
-      ofndrNum: 16,
+      offenderNumber: 16,
       firstName: 'Dopey',
       lastName: 'Dwarf',
       birthDate: new Date('1987-06-06'),
       agentId: 'tjones',
     },
     {
-      ofndrNum: 17,
+      offenderNumber: 17,
       firstName: 'Grumpy',
       lastName: 'Dwarf',
       birthDate: new Date('1988-07-07'),
       agentId: 'tjones',
     },
     {
-      ofndrNum: 18,
+      offenderNumber: 18,
       firstName: 'Bashful',
       lastName: 'Dwarf',
       birthDate: new Date('1989-08-08'),
       agentId: 'tjones',
     },
     {
-      ofndrNum: 19,
+      offenderNumber: 19,
       firstName: 'Happy',
       lastName: 'Dwarf',
       birthDate: new Date('1991-09-09'),
       agentId: 'mromney',
     },
     {
-      ofndrNum: 20,
+      offenderNumber: 20,
       firstName: 'Snow',
       lastName: 'White',
       birthDate: new Date('1990-01-01'),
@@ -283,7 +283,7 @@ export class Dao {
 
   public allOtherOffendersWithContactInfo: Offender[] = [
     {
-      ofndrNum: 11,
+      offenderNumber: 11,
       firstName: 'Yogi',
       lastName: 'Bear',
       agentId: 'jshardlo',
@@ -299,7 +299,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 12,
+      offenderNumber: 12,
       firstName: 'Papa',
       lastName: 'Smurf',
       agentId: 'jshardlo',
@@ -315,7 +315,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 13,
+      offenderNumber: 13,
       firstName: 'Sneezy',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -331,7 +331,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 14,
+      offenderNumber: 14,
       firstName: 'Sleepy',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -347,7 +347,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 15,
+      offenderNumber: 15,
       firstName: 'Smurfette',
       lastName: 'Smurf',
       agentId: 'jshardlo',
@@ -363,7 +363,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 16,
+      offenderNumber: 16,
       firstName: 'Dopey',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -379,7 +379,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 17,
+      offenderNumber: 17,
       firstName: 'Grumpy',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -395,7 +395,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 18,
+      offenderNumber: 18,
       firstName: 'Bashful',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -411,7 +411,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 19,
+      offenderNumber: 19,
       firstName: 'Happy',
       lastName: 'Dwarf',
       agentId: 'jshardlo',
@@ -427,7 +427,7 @@ export class Dao {
       nextScheduledContactDate: new Date(),
     },
     {
-      ofndrNum: 20,
+      offenderNumber: 20,
       firstName: 'Snow',
       lastName: 'White',
       agentId: 'jshardlo',

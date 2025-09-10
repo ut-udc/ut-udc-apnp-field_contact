@@ -52,8 +52,11 @@ export class MyCaseload implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
   }
-  async loadMyCaseload(): Promise<void> {
-    this.myCaseload.next(await this.contactData.getMyCaseload());
+  loadMyCaseload(): void {
+    this.contactData.getMyCaseload().subscribe((offenders) => {
+      console.log('My Caseload line 57:', offenders);
+      this.myCaseload.next(offenders);
+    });
   }
   ngOnInit(): void {}
 
@@ -76,7 +79,7 @@ export class MyCaseload implements OnInit {
       this.myCaseload.subscribe((offenders) => {
         this.caseload = offenders.filter((offender) => {
           const fullName =
-            `${offender.firstName} ${offender.lastName} ${offender.ofndrNum} ${offender.birthDate} ${offender.address} ${offender.city} ${offender.state} ${offender.zip} ${offender.phone}`.toLowerCase();
+            `${offender.firstName} ${offender.lastName} ${offender.offenderNumber} ${offender.birthDate} ${offender.address} ${offender.city} ${offender.state} ${offender.zip} ${offender.phone}`.toLowerCase();
           return fullName.includes(searchTerm.toLowerCase());
         });
       });

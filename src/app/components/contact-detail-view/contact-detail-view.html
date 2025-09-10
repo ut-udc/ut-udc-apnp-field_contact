@@ -1,7 +1,7 @@
 <div class="surface">
   <span class="detail-header">
     <a
-      [routerLink]="'/offender-detail/' + ((currentContact | async)?.ofndrNum || '')"
+      [routerLink]="'/offender-detail/' + ((currentContact | async)?.offenderNumber || '')"
       style="text-decoration: none; color: inherit; cursor: pointer"
       aria-label="Back to Offender Detail"
     >
@@ -38,7 +38,9 @@
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Contact Type</span>
-      <span class="body_large">{{(currentContact | async)?.contactTypeDesc}}</span>
+      <span class="body_large"
+        >{{(currentContact | async)?.contactTypeDesc}}</span
+      >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Location</span>
@@ -49,14 +51,13 @@
     <div class="contact-info-container">
       <span class="label_medium">Contact Result</span>
       <span class="body_large"
-        >{{(currentContact | async)?.wasContactSuccessful ? 'Made Contact' : 'Attempted Contact'}}</span
+        >{{(currentContact | async)?.wasContactSuccessful ? 'Made Contact' :
+        'Attempted Contact'}}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Commentary</span>
-      <span class="body_medium"
-        >{{(currentContact | async)?.commentary}}</span
-      >
+      <span class="body_medium">{{(currentContact | async)?.commentary}}</span>
     </div>
   </div>
 </div>
