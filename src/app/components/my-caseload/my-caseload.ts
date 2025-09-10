@@ -53,7 +53,7 @@ export class MyCaseload implements OnInit {
     );
   }
   loadMyCaseload(): void {
-    this.contactData.getMyCaseload().subscribe((offenders) => {
+    this.contactData.getMyCaseload().then((offenders) => {
       console.log('My Caseload line 57:', offenders);
       this.myCaseload.next(offenders);
     });

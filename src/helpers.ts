@@ -7,7 +7,7 @@ import { Contact } from './app/model/Contact';
 export const fetchMyCaseload = async (contactData?: ContactData) => {
   if (!navigator.onLine) {
     const myCaseload = contactData
-      ? (await contactData.getMyCaseload()) || []
+      ? (await contactData.getMyCaseloadFromAPI()) || []
       : [];
     return Promise.resolve(myCaseload);
   }

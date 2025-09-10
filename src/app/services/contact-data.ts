@@ -312,7 +312,7 @@ export class ContactData extends Dexie implements OnInit {
 
   async populateMyCaseload() {
     // await this.myCaseload.clear();
-    (await this.getMyCaseload()).subscribe((myCaseload) => {
+    (await this.getMyCaseloadFromAPI()).subscribe((myCaseload) => {
       console.log('My Caseload line 317:', myCaseload);
       try {
         this.myCaseload.bulkAdd(myCaseload);
@@ -322,10 +322,13 @@ export class ContactData extends Dexie implements OnInit {
     });
   }
 
-  getMyCaseload() {
+  getMyCaseloadFromAPI() {
     return this.http.get<Offender[]>(
       this.path + '/agent-caseload/' + this.applicationUserName
     );
+  }
+  async getMyCaseload(): Promise<Offender[]> {
+    return await this.myCaseload.toArray();
   }
   async populateOtherOffenders() {
     await this.otherOffenders.clear();
