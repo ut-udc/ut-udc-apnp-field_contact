@@ -34,5 +34,7 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <app-my-caseload> </app-my-caseload>
-  <app-other-offenders-list></app-other-offenders-list>
+  @if(((this.contactData.otherOffenders.count() | async) || 0) > 0) {
+    <app-other-offenders-list></app-other-offenders-list>
+  }
 </div>
