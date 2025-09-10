@@ -41,7 +41,7 @@ export class ContactData extends Dexie implements OnInit {
   public otherOffenders!: Table<Offender, number>;
   public locationList!: Table<Select2Model, number>;
   public contactTypeList!: Table<Select2Model, number>;
-  public applicationUserName: string = 'jshardlo';
+  public applicationUserName: string = '';
   private networkSubscription!: Subscription;
 
   constructor(private http: HttpClient) {
@@ -262,7 +262,7 @@ export class ContactData extends Dexie implements OnInit {
     return contactList[0];
   }
   async getAgent() {
-    return await this.agents.get(this.dao.agent.agentId);
+    return await this.agents.get(this.applicationUserName);
   }
   async getAgentById(id: string): Promise<Agent> {
     const agent = await this.agents.get(id);
@@ -283,9 +283,18 @@ export class ContactData extends Dexie implements OnInit {
     return options;
   }
   async populateAgent() {
-    await this.agents.clear();
+    // await this.agents.clear();
     this.getUser().subscribe((user) => {
       console.log('User from app line 319:', user);
+      if (user) {
+        this.applicationUserName = user.agentId;
+        this.populateOfficers();
+        this.populateMyCaseload();
+        this.populateOtherOffenders();
+        this.populateAllOffenders();
+        this.populateLocations();
+        this.populateContactTypes();
+      }
       this.agents.add(user);
     });
   }

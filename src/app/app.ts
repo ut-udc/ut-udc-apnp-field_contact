@@ -27,7 +27,7 @@ export class App implements OnInit, OnDestroy {
   constructor(private networkService: NetworkService) {}
 
   async checkPopulationWithDexie(): Promise<boolean> {
-    const count = await this.contactData.agents.count();
+    var count = await this.contactData.agents.count();
     return count > 0;
   }
 
@@ -38,25 +38,20 @@ export class App implements OnInit, OnDestroy {
       }
     );
 
-
+    this.user = await this.contactData.getUser().toPromise() || null;
+    if (this.user !== null) {
+      this.contactData.populateAgent();
+    }
 
     await this.checkPopulationWithDexie().then((populated) => {
       if (!populated) {
-        if (this.user !== null) {
-          this.contactData.applicationUserName = this.user.userId;
-        }
         this.contactData.open();
         console.log('Populating Contact Database');
         this.contactData.populateAgent();
-        this.contactData.populateOfficers();
-        this.contactData.populateMyCaseload();
-        this.contactData.populateOtherOffenders();
-        this.contactData.populateAllOffenders();
-        this.contactData.populateLocations();
-        this.contactData.populateContactTypes();
+        
         console.log('Number of agents in agents table: ' + this.contactData.agents.count());
         //TO-DO find a better way of doing this
-        window.location.reload();
+        // window.location.reload();
       }
     });
 
