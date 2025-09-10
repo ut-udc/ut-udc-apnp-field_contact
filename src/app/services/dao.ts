@@ -27,8 +27,10 @@ export class Dao {
   public otherOffenders: Offender[] = [
     {
       offenderNumber: 21,
-      firstName: 'Yogli',
-      lastName: 'Beary',
+      defaultOffenderName: {
+        firstName: 'Yogli',
+        lastName: 'Beary',
+      },
       birthDate: new Date('1980-01-01'),
       agentId: 'mromney',
       image: '',
@@ -47,8 +49,10 @@ export class Dao {
   public myCaseload: Offender[] = [
     {
       offenderNumber: 1,
-      firstName: 'Yogi',
-      lastName: 'Bear',
+      defaultOffenderName: {
+        firstName: 'Yogi',
+        lastName: 'Bear',
+      },
       birthDate: new Date('1980-01-01'),
       agentId: 'jshardlo',
       image: '',
@@ -63,8 +67,10 @@ export class Dao {
     },
     {
       offenderNumber: 2,
-      firstName: 'Papa',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Papa',
+        lastName: 'Smurf',
+      },
       birthDate: new Date('1975-02-02'),
       agentId: 'jshardlo',
       image: '',
@@ -79,8 +85,10 @@ export class Dao {
     },
     {
       offenderNumber: 3,
-      firstName: 'Sneezy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sneezy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1985-03-03'),
       agentId: 'jshardlo',
       image: '',
@@ -95,8 +103,10 @@ export class Dao {
     },
     {
       offenderNumber: 4,
-      firstName: 'Sleepy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sleepy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1986-04-04'),
       agentId: 'jshardlo',
       image: '',
@@ -111,8 +121,10 @@ export class Dao {
     },
     {
       offenderNumber: 5,
-      firstName: 'Smurfette',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Smurfette',
+        lastName: 'Smurf',
+      },
       birthDate: new Date('1992-05-05'),
       agentId: 'jshardlo',
       image: '',
@@ -127,8 +139,10 @@ export class Dao {
     },
     {
       offenderNumber: 6,
-      firstName: 'Dopey',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Dopey',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1987-06-06'),
       agentId: 'jshardlo',
       image: '',
@@ -143,8 +157,10 @@ export class Dao {
     },
     {
       offenderNumber: 7,
-      firstName: 'Grumpy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Grumpy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1988-07-07'),
       agentId: 'jshardlo',
       image: '',
@@ -159,8 +175,10 @@ export class Dao {
     },
     {
       offenderNumber: 8,
-      firstName: 'Bashful',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Bashful',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1989-08-08'),
       agentId: 'jshardlo',
       image: '',
@@ -175,8 +193,10 @@ export class Dao {
     },
     {
       offenderNumber: 9,
-      firstName: 'Happy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Happy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1991-09-09'),
       agentId: 'jshardlo',
       image: '',
@@ -191,8 +211,10 @@ export class Dao {
     },
     {
       offenderNumber: 10,
-      firstName: 'Snow',
-      lastName: 'White',
+      defaultOffenderName: {
+        firstName: 'Snow',
+        lastName: 'White',
+      },
       birthDate: new Date('1990-01-01'),
       agentId: 'jshardlo',
       image: '',
@@ -211,71 +233,91 @@ export class Dao {
   public allOtherOffenders: OffenderBase[] = [
     {
       offenderNumber: 11,
-      firstName: 'Yogi',
-      lastName: 'Bear',
+      defaultOffenderName: {
+        firstName: 'Yogi',
+        lastName: 'Bear',
+      },
       birthDate: new Date('1980-01-01'),
       agentId: 'kchunt',
     },
     {
       offenderNumber: 12,
-      firstName: 'Papa',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Papa',
+        lastName: 'Smurf',
+      },
       birthDate: new Date('1975-02-02'),
       agentId: 'mromney',
     },
     {
       offenderNumber: 13,
-      firstName: 'Sneezy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sneezy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1985-03-03'),
       agentId: 'kchunt',
     },
     {
       offenderNumber: 14,
-      firstName: 'Sleepy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sleepy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1986-04-04'),
       agentId: 'mromney',
     },
     {
       offenderNumber: 15,
-      firstName: 'Smurfette',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Smurfette',
+        lastName: 'Smurf',
+      },
       birthDate: new Date('1992-05-05'),
       agentId: 'kchunt',
     },
     {
       offenderNumber: 16,
-      firstName: 'Dopey',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Dopey',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1987-06-06'),
       agentId: 'tjones',
     },
     {
       offenderNumber: 17,
-      firstName: 'Grumpy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Grumpy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1988-07-07'),
       agentId: 'tjones',
     },
     {
       offenderNumber: 18,
-      firstName: 'Bashful',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Bashful',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1989-08-08'),
       agentId: 'tjones',
     },
     {
       offenderNumber: 19,
-      firstName: 'Happy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Happy',
+        lastName: 'Dwarf',
+      },
       birthDate: new Date('1991-09-09'),
       agentId: 'mromney',
     },
     {
       offenderNumber: 20,
-      firstName: 'Snow',
-      lastName: 'White',
+      defaultOffenderName: {
+        firstName: 'Snow',
+        lastName: 'White',
+      },
       birthDate: new Date('1990-01-01'),
       agentId: 'mromney',
     },
@@ -284,8 +326,10 @@ export class Dao {
   public allOtherOffendersWithContactInfo: Offender[] = [
     {
       offenderNumber: 11,
-      firstName: 'Yogi',
-      lastName: 'Bear',
+      defaultOffenderName: {
+        firstName: 'Yogi',
+        lastName: 'Bear',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '123 Main St.',
@@ -300,8 +344,10 @@ export class Dao {
     },
     {
       offenderNumber: 12,
-      firstName: 'Papa',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Papa',
+        lastName: 'Smurf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '234 Main St.',
@@ -316,8 +362,10 @@ export class Dao {
     },
     {
       offenderNumber: 13,
-      firstName: 'Sneezy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sneezy',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '345 Center St.',
@@ -332,8 +380,10 @@ export class Dao {
     },
     {
       offenderNumber: 14,
-      firstName: 'Sleepy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Sleepy',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '1234 West Temple',
@@ -348,8 +398,10 @@ export class Dao {
     },
     {
       offenderNumber: 15,
-      firstName: 'Smurfette',
-      lastName: 'Smurf',
+      defaultOffenderName: {
+        firstName: 'Smurfette',
+        lastName: 'Smurf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '9212 700 E.',
@@ -364,8 +416,10 @@ export class Dao {
     },
     {
       offenderNumber: 16,
-      firstName: 'Dopey',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Dopey',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '67 American Ave.',
@@ -380,8 +434,10 @@ export class Dao {
     },
     {
       offenderNumber: 17,
-      firstName: 'Grumpy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Grumpy',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '12324 Minuteman Dr.',
@@ -396,8 +452,10 @@ export class Dao {
     },
     {
       offenderNumber: 18,
-      firstName: 'Bashful',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Bashful',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '8523 Redwood Rd.',
@@ -412,8 +470,10 @@ export class Dao {
     },
     {
       offenderNumber: 19,
-      firstName: 'Happy',
-      lastName: 'Dwarf',
+      defaultOffenderName: {
+        firstName: 'Happy',
+        lastName: 'Dwarf',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '735 500W',
@@ -428,8 +488,10 @@ export class Dao {
     },
     {
       offenderNumber: 20,
-      firstName: 'Snow',
-      lastName: 'White',
+      defaultOffenderName: {
+        firstName: 'Snow',
+        lastName: 'White',
+      },
       agentId: 'jshardlo',
       image: '',
       address: '345 State St.',
@@ -461,7 +523,7 @@ export class Dao {
       ofndrNumList: ([] = []),
     },
     {
-      userId: '1',
+      userId: '2',
       agentId: 'jshardlo',
       firstName: 'Jeff',
       lastName: 'Shardlow',
@@ -476,7 +538,7 @@ export class Dao {
       ofndrNumList: ([] = []),
     },
     {
-      userId: '1',
+      userId: '3',
       agentId: 'mromney',
       firstName: 'Matt',
       lastName: 'Romney',
@@ -491,7 +553,7 @@ export class Dao {
       ofndrNumList: ([] = []),
     },
     {
-      userId: '1',
+      userId: '4',
       agentId: 'tjones',
       firstName: 'Tess',
       lastName: 'Jones',
@@ -506,7 +568,7 @@ export class Dao {
       ofndrNumList: ([] = []),
     },
     {
-      userId: '1',
+      userId: '5',
       agentId: 'jules',
       firstName: 'Jules',
       lastName: 'Hill',
@@ -521,7 +583,7 @@ export class Dao {
       ofndrNumList: ([] = []),
     },
     {
-      userId: '1',
+      userId: '6',
       agentId: 'hicks',
       firstName: 'John',
       lastName: 'Hicks',

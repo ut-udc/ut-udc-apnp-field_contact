@@ -1,7 +1,8 @@
+import { DefaultOffenderName } from './DefaultOffenderName';
+
 export interface OffenderBase {
   offenderNumber: number;
-  firstName: string;
-  lastName: string;
+  defaultOffenderName: DefaultOffenderName;
   birthDate: Date;
   agentId: string;
 }

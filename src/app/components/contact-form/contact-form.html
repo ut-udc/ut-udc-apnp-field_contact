@@ -6,7 +6,7 @@
 
   <div class="body_large">
     Supervision Contact entry for
-    <strong>{{offender?.firstName}} {{offender?.lastName}}</strong>.
+    <strong>{{offender?.defaultOffenderName?.firstName}} {{offender?.defaultOffenderName?.lastName}}</strong>.
   </div>
 
   <form [formGroup]="contactForm" (submit)="onSubmit()">

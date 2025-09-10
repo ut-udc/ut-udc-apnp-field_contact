@@ -78,7 +78,7 @@ export class OtherOffendersList implements OnInit {
       this.otherOffenders.subscribe((offenders) => {
         this.caseload = offenders.filter((offender) => {
           const fullName =
-            `${offender.firstName} ${offender.lastName}`.toLowerCase();
+            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName}`.toLowerCase();
           return fullName.includes(searchTerm.toLowerCase());
         });
       });

@@ -15,7 +15,7 @@
       <div style="flex: 2">
         <div class="label_medium">{{offender?.offenderNumber}}</div>
         <div class="title_xlarge">
-          {{offender?.lastName}}, {{offender?.firstName}}
+          {{offender?.defaultOffenderName?.lastName}}, {{offender?.defaultOffenderName?.firstName}}
         </div>
         <div class="label_medium">
           Last Successful Contact: {{offender?.lastSuccessfulContactDate | date:

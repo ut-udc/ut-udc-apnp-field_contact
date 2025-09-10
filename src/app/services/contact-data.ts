@@ -307,6 +307,7 @@ export class ContactData extends Dexie implements OnInit {
     // (await this.getOfficers()).subscribe((officers) => {
     //   this.officers.bulkAdd(officers);
     // });
+    await this.officers.bulkAdd(this.dao.officerList);
   }
   async getOfficerList(): Promise<Agent[]> {
     return await this.officers.toArray();
@@ -369,10 +370,10 @@ export class ContactData extends Dexie implements OnInit {
   }
   async populateLocations() {
     await this.locationList.clear();
-    await this.locationList.bulkAdd(this.dao.locationList);
-    // (await this.getLocantions()).subscribe((locations) => {
-    //   this.locationList.bulkAdd(locations);
-    // });
+    // await this.locationList.bulkAdd(this.dao.locationList);
+    (await this.getLocantions()).subscribe((locations) => {
+      this.locationList.bulkAdd(locations);
+    });
   }
   async getLocantions() {
     return this.http.get<Select2Model[]>(this.path + '/locations');

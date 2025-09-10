@@ -23,8 +23,10 @@ import { Navigation } from '../../services/navigation';
 export class OffenderCard implements OnInit {
   @Input() offender: Offender = {
     offenderNumber: 0,
-    firstName: '',
-    lastName: '',
+    defaultOffenderName: {
+      firstName: '',
+      lastName: '',
+    },
     birthDate: new Date(),
     agentId: '',
     image: '',

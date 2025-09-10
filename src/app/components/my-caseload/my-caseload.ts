@@ -64,7 +64,7 @@ export class MyCaseload implements OnInit {
   filterCaseload(searchTerm: string): void {
     this.myCaseload.subscribe((offenders) => {
       this.caseload = offenders.filter((offender) =>
-        offender.lastName.toLowerCase().includes(searchTerm.toLowerCase())
+        offender.defaultOffenderName.lastName.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });
   }
@@ -79,7 +79,7 @@ export class MyCaseload implements OnInit {
       this.myCaseload.subscribe((offenders) => {
         this.caseload = offenders.filter((offender) => {
           const fullName =
-            `${offender.firstName} ${offender.lastName} ${offender.offenderNumber} ${offender.birthDate} ${offender.address} ${offender.city} ${offender.state} ${offender.zip} ${offender.phone}`.toLowerCase();
+            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ${offender.address} ${offender.city} ${offender.state} ${offender.zip} ${offender.phone}`.toLowerCase();
           return fullName.includes(searchTerm.toLowerCase());
         });
       });
