@@ -401,18 +401,14 @@ export class ContactData extends Dexie implements OnInit {
     return await this.locationList.get(Number(id));
   }
   async getLocationDescById(id: string) {
-    console.log('Location line 259:', id);
     const location = await this.locationList.get(Number(id));
-    console.log('Location line 261:', location);
     return location?.text || '';
   }
   async getContactTypeById(id: string) {
     return await this.contactTypeList.get(Number(id));
   }
   async getContactTypeDescById(id: string) {
-    console.log('Contact Type line 267:', id);
     const contactType = await this.contactTypeList.get(Number(id));
-    console.log('Contact Type line 269:', contactType);
     return contactType?.text || '';
   }
   deleteDatabase(): void {
