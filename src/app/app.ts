@@ -2,7 +2,6 @@ import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { ContactData } from './services/contact-data';
 import { HttpClient } from '@angular/common/http';
-import { Home } from './components/home/home';
 import { CommonModule } from '@angular/common';
 import { processContactQueue } from '../helpers';
 import { Observable, Subscription } from 'rxjs';
@@ -12,7 +11,7 @@ import { Agent } from './model/Agent';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, Home, CommonModule],
+  imports: [RouterOutlet, RouterModule, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -51,7 +50,6 @@ export class App implements OnInit, OnDestroy {
         
         console.log('Number of agents in agents table: ' + this.contactData.agents.count());
         //TO-DO find a better way of doing this
-        // window.location.reload();
       }
     });
 

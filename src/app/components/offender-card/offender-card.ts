@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { MatRippleModule } from '@angular/material/core';
 import { Offender } from '../../model/Offender';
 import { Navigation } from '../../services/navigation';
+import { LegalStatus } from '../../model/LegalStatus';
 
 @Component({
   selector: 'app-offender-card',
@@ -42,6 +43,7 @@ export class OffenderCard implements OnInit {
     lastSuccessfulContactDate: new Date(),
     contactArray: [],
     nextScheduledContactDate: new Date(),
+    legalStatus: {} as LegalStatus,
   };
   navigation: Navigation = inject(Navigation);
 

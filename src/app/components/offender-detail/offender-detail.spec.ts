@@ -8,6 +8,7 @@ import { OffenderDetail } from './offender-detail';
 import { ContactData } from '../../services/contact-data';
 import { Contact } from '../../model/Contact';
 import { Offender } from '../../model/Offender';
+import { LegalStatus } from '../../model/LegalStatus';
 
 describe('OffenderDetail', () => {
   let component: OffenderDetail;
@@ -16,18 +17,26 @@ describe('OffenderDetail', () => {
 
   const mockOffender: Offender = {
     offenderNumber: 12345,
-    firstName: 'Jane',
-    lastName: 'Smith',
     birthDate: new Date('1990-01-01'),
+    defaultOffenderName: {
+      firstName: 'Jane',
+      lastName: 'Smith',
+    },
     agentId: 'jshardlo',
     image: 'offender1.jpg',
-    address: '456 Oak St',
-    city: 'Anytown',
-    state: 'ST',
-    zip: '12345',
+    offenderAddress: {
+      offenderNumber: 12345,
+      lineOne: '456 Oak St',
+      lineTwo: '',
+      city: 'Anytown',
+      state: 'ST',
+      zipCode: '12345',
+    },
     phone: '555-0123',
     lastSuccessfulContactDate: new Date('2024-01-01'),
+    nextScheduledContactDate: new Date('2024-02-01'),
     contactArray: [],
+    legalStatus: {} as LegalStatus,
   };
 
   const mockContacts: Contact[] = [
@@ -37,14 +46,16 @@ describe('OffenderDetail', () => {
       agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-01'),
-      contactType: '1',
+      contactTypeId: 1,
       contactTypeDesc: 'Office Visit',
-      location: '1',
+      locationId: 1,
       locationDesc: 'Main Office',
       commentary: 'First contact',
       formCompleted: true,
       firstPageCompleted: true,
-      wasContactSuccessful: true,
+      wasContactSuccessful: 1,
+      contactSyncedWithDatabase: true,
+      userAgent: 'test-user-agent',
     },
     {
       contactId: 2,
@@ -52,14 +63,16 @@ describe('OffenderDetail', () => {
       agentId: 'jshardlo',
       secondaryAgentId: '',
       contactDate: new Date('2024-01-02'),
-      contactType: '2',
+      contactTypeId: 2,
       contactTypeDesc: 'Phone Call',
-      location: '2',
+      locationId: 2,
       locationDesc: 'Remote',
       commentary: 'Second contact',
       formCompleted: true,
       firstPageCompleted: true,
-      wasContactSuccessful: true,
+      wasContactSuccessful: 1,
+      contactSyncedWithDatabase: true,
+      userAgent: 'test-user-agent',
     },
   ];
 
@@ -116,8 +129,8 @@ describe('OffenderDetail', () => {
   it('should load current offender from caseload', (done) => {
     component.currentOffender.subscribe((offender) => {
       expect(offender.offenderNumber).toBe(mockOffender.offenderNumber);
-      expect(offender.firstName).toBe(mockOffender.firstName);
-      expect(offender.lastName).toBe(mockOffender.lastName);
+      expect(offender.defaultOffenderName.firstName).toBe(mockOffender.defaultOffenderName.firstName);
+      expect(offender.defaultOffenderName.lastName).toBe(mockOffender.defaultOffenderName.lastName);
       expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(
         12345
       );

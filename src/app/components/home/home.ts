@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnInit,
@@ -15,11 +14,9 @@ import { MyCaseload } from '../my-caseload/my-caseload';
 import { Navigation } from '../../services/navigation';
 import { Agent } from '../../model/Agent';
 import { ContactData } from '../../services/contact-data';
-import { Offender } from '../../model/Offender';
 import { Dao } from '../../services/dao';
 import { Observable, from, of, Subscription } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { RouterLink, ActivatedRoute } from '@angular/router';
 import { NetworkService } from '../../services/network';
 
 @Component({
@@ -36,7 +33,6 @@ import { NetworkService } from '../../services/network';
     MyCaseload,
     AsyncPipe,
     CommonModule,
-    RouterLink,
   ],
 })
 export class Home implements OnInit {
@@ -45,8 +41,9 @@ export class Home implements OnInit {
   dao: Dao = inject(Dao);
   isOnline: boolean = true;
 
+  //this is the place where we can change the agentfor impersonation
   currentAgent = new Observable<Agent>((observer) => {
-    this.contactData.getAgentById(this.dao.agent.agentId).then((agent) => {
+    this.contactData.getAgentById(this.contactData.applicationUserName).then((agent) => {
       if (agent) {
         observer.next(agent);
       } else {

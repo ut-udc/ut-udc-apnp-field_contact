@@ -4,11 +4,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { ContactListingMonth } from '../contact-listing-month/contact-listing-month';
 import { MatRippleModule } from '@angular/material/core';
 import { DatePipe, NgIf, CommonModule, AsyncPipe } from '@angular/common';
 import { Offender } from '../../model/Offender';
-import { Navigation } from '../../services/navigation';
 import { Contact } from '../../model/Contact';
 import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from '../contact-listing-card/contact-listing-card';
@@ -22,7 +20,6 @@ import { DetailHeader } from '../detail-header/detail-header';
     MatIconModule,
     MatToolbarModule,
     RouterLink,
-    ContactListingMonth,
     MatRippleModule,
     DatePipe,
     ContactListingCard,

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { inject as angularInject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-contact-detail-view',
-  imports: [CommonModule, MatIconModule, RouterLink, NgIf],
+  imports: [CommonModule, MatIconModule, RouterLink],
   templateUrl: './contact-detail-view.html',
   styleUrl: './contact-detail-view.scss',
 })

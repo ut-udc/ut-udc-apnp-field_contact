@@ -4,9 +4,9 @@ export interface Contact {
   agentId: string;
   secondaryAgentId: string;
   contactDate: Date;
-  contactTypeCd: string; //contact type code
+  contactTypeId: number; //contact type id
   contactTypeDesc: string;
-  locationCd: string; //location code
+  locationId: number; //location id
   locationDesc: string; //PWA internal use only
   commentary: string; //contact commentary
   formCompleted: boolean; //PWA internal use only

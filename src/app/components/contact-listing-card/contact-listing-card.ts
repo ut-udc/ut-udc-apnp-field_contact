@@ -5,6 +5,7 @@ import { Contact } from '../../model/Contact';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ContactData } from '../../services/contact-data';
 import { RouterLink } from '@angular/router';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-contact-listing-card',
@@ -43,5 +44,16 @@ export class ContactListingCard implements OnInit {
   }
   ngOnInit(): void {
     console.log('Contact: ', this.contact);
+  }
+
+  truncateChar(text: string): string {
+    let charlimit = 80;
+    if (!text || text.length <= charlimit) {
+      return text;
+    }
+
+    let without_html = text.replace(/<(?:.|\n)*?>/gm, '');
+    let shortened = without_html.substring(0, charlimit) + '...';
+    return shortened;
   }
 }

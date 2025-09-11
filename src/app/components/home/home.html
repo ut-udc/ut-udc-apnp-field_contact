@@ -17,7 +17,7 @@
         aria-hidden="false"
         aria-label="Notifications Icon"
       ></mat-icon>
-      <div class="primary-container" [routerLink]="['/agent-profile']">
+      <div class="primary-container">
         <span class="initials">
           <div *ngIf="currentAgent | async; let agent">
             {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }}

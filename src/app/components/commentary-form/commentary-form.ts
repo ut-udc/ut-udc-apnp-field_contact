@@ -8,7 +8,6 @@ import {
   AsyncPipe,
   CommonModule,
   DatePipe,
-  NgClass,
   NgIf,
 } from '@angular/common';
 import { Offender } from '../../model/Offender';
@@ -43,7 +42,6 @@ import { DetailHeader } from '../detail-header/detail-header';
     MatInputModule,
     ReactiveFormsModule,
     DatePipe,
-    NgClass,
     AsyncPipe,
     NgIf,
     CommonModule,
@@ -106,7 +104,7 @@ export class CommentaryForm implements OnInit {
   contactTypeName = new Observable<string>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getContactTypeDescById(contact.contactTypeCd)
+        .getContactTypeDescById(contact.contactTypeId)
         .then((type) => {
           observer.next(type);
         });
@@ -115,7 +113,7 @@ export class CommentaryForm implements OnInit {
   locationName = new Observable<string>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getLocationDescById(contact.locationCd)
+        .getLocationDescById(contact.locationId)
         .then((location) => {
           observer.next(location);
         });
@@ -147,8 +145,7 @@ export class CommentaryForm implements OnInit {
         this.contactData.updateContact(contact);
       });
     }
-    window.location.href =
-      'offender-detail/' + this.offenderNumber;
+    window.location.href = 'offender-detail/' + this.offenderNumber;
   }
 
   async ngOnInit() {

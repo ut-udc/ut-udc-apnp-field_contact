@@ -15,6 +15,8 @@ import { Select2Model } from '../model/Select2Model';
 import { Select2String } from '../model/Select2String';
 import { QueuedContact } from '../model/QueuedContact';
 import { ApiResponse } from '../model/ApiResponse';
+import { Photo } from '../model/Photo';
+import { LegalStatus } from '../model/LegalStatus';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +35,7 @@ export class ContactData extends Dexie implements OnInit {
 
   dao: Dao = inject(Dao);
   public contacts!: Table<Contact, number>;
+  public existingContacts!: Table<Contact, number>;
   public contactsQueue!: Table<QueuedContact, number>;
   public agents!: Table<Agent, string>;
   public officers!: Table<Agent, string>;
@@ -42,12 +45,15 @@ export class ContactData extends Dexie implements OnInit {
   public locationList!: Table<Select2Model, number>;
   public contactTypeList!: Table<Select2Model, number>;
   public applicationUserName: string = '';
+  public photos!: Table<Photo, number>;
   private networkSubscription!: Subscription;
 
   constructor(private http: HttpClient) {
     super('contactDatabase');
-    this.version(4).stores({
+    this.version(5).stores({
       contacts:
+        'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+      existingContacts:
         'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       agents:
@@ -56,18 +62,21 @@ export class ContactData extends Dexie implements OnInit {
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
       allOffenders: 'offenderNumber, firstName, lastName, birthDate',
       myCaseload:
-        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
+        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
       otherOffenders:
-        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate',
+        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
       locationList: 'id, text',
       contactTypeList: 'id, text',
+      photos: 'offenderNumber, photo',
     });
     this.contacts = this.table('contacts');
+    this.existingContacts = this.table('existingContacts');
     this.contactsQueue = this.table('contactsQueue');
     this.agents = this.table('agents');
     this.allOffenders = this.table('allOffenders');
     this.myCaseload = this.table('myCaseload');
     this.otherOffenders = this.table('otherOffenders');
+    this.photos = this.table('photos');
   }
 
   isOnlineNow(): boolean {
@@ -101,7 +110,7 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   async getAgentToImpersonate() {
-    return await this.agents.get(this.dao.agent.agentId);
+    return await this.agents.get(this.applicationUserName);
   }
 
   getUser(): Observable<Agent> {
@@ -208,11 +217,11 @@ export class ContactData extends Dexie implements OnInit {
       throw new Error(`Contact with id ${id} not found`);
     }
     const contactTypeText = await this.getContactTypeDescById(
-      contact.contactTypeCd
+      contact.contactTypeId
     );
     console.log('Contact Type line 155:', contactTypeText);
     contact.contactTypeDesc = contactTypeText || 'N/A';
-    const locationText = await this.getLocationDescById(contact.locationCd);
+    const locationText = await this.getLocationDescById(contact.locationId);
     console.log('Location line 157:', locationText);
     contact.locationDesc = locationText || 'N/A';
     return contact;
@@ -294,6 +303,8 @@ export class ContactData extends Dexie implements OnInit {
         this.populateAllOffenders();
         this.populateLocations();
         this.populateContactTypes();
+        this.populateExistingContacts();
+        this.populatePhotos();
       }
       this.agents.add(user);
     });
@@ -325,6 +336,7 @@ export class ContactData extends Dexie implements OnInit {
     (await this.getMyCaseloadFromAPI()).subscribe((myCaseload) => {
       console.log('My Caseload line 317:', myCaseload);
       try {
+        // myCaseload.sort((a, b) => b.defaultOffenderName.lastName.localeCompare(a.defaultOffenderName.lastName));
         this.myCaseload.bulkAdd(myCaseload);
       } catch (error) {
         console.error('Error bulk adding myCaseload:', error);
@@ -371,11 +383,11 @@ export class ContactData extends Dexie implements OnInit {
   async populateLocations() {
     await this.locationList.clear();
     // await this.locationList.bulkAdd(this.dao.locationList);
-    (await this.getLocantions()).subscribe((locations) => {
+    (await this.getLocations()).subscribe((locations) => {
       this.locationList.bulkAdd(locations);
     });
   }
-  async getLocantions() {
+  async getLocations() {
     return this.http.get<Select2Model[]>(this.path + '/locations');
   }
 
@@ -391,6 +403,28 @@ export class ContactData extends Dexie implements OnInit {
     return this.http.get<Select2Model[]>(this.path + '/contact-types');
   }
 
+  async populateExistingContacts() {
+    await this.existingContacts.clear();
+    (await this.getAllContactsFromAPI()).subscribe((contacts) => {
+      this.existingContacts.bulkAdd(contacts);
+    });
+  }
+
+  async getAllContactsFromAPI() {
+    return this.http.get<Contact[]>(this.path + '/contacts');
+  }
+
+  async populatePhotos() {
+    await this.photos.clear();
+    (await this.getPhotos()).subscribe((photos) => {
+      this.photos.bulkAdd(photos);
+    });
+  }
+
+  async getPhotos() {
+    return this.http.get<Photo[]>(this.path + '/photos');
+  }
+
   async getListOfLocations() {
     return await this.locationList.toArray();
   }
@@ -400,14 +434,14 @@ export class ContactData extends Dexie implements OnInit {
   async getLocationById(id: string) {
     return await this.locationList.get(Number(id));
   }
-  async getLocationDescById(id: string) {
+  async getLocationDescById(id: number) {
     const location = await this.locationList.get(Number(id));
     return location?.text || '';
   }
-  async getContactTypeById(id: string) {
+  async getContactTypeById(id: number) {
     return await this.contactTypeList.get(Number(id));
   }
-  async getContactTypeDescById(id: string) {
+  async getContactTypeDescById(id: number) {
     const contactType = await this.contactTypeList.get(Number(id));
     return contactType?.text || '';
   }
@@ -430,6 +464,7 @@ export class ContactData extends Dexie implements OnInit {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       nextScheduledContactDate: new Date(),
+      legalStatus: {} as LegalStatus,
     };
     await this.otherOffenders.add(newOffender);
   }
