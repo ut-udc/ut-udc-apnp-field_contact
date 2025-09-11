@@ -17,6 +17,7 @@ import { QueuedContact } from '../model/QueuedContact';
 import { ApiResponse } from '../model/ApiResponse';
 import { Photo } from '../model/Photo';
 import { LegalStatus } from '../model/LegalStatus';
+import { LatestSuccessfulContact } from '../model/LatestSuccessfulContact';
 
 @Injectable({
   providedIn: 'root',
@@ -292,7 +293,7 @@ export class ContactData extends Dexie implements OnInit {
     return options;
   }
   async populateAgent() {
-    // await this.agents.clear();
+    await this.agents.clear();
     this.getUser().subscribe((user) => {
       console.log('User from app line 319:', user);
       if (user) {
@@ -304,7 +305,6 @@ export class ContactData extends Dexie implements OnInit {
         this.populateLocations();
         this.populateContactTypes();
         this.populateExistingContacts();
-        this.populatePhotos();
       }
       this.agents.add(user);
     });
@@ -332,12 +332,20 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   async populateMyCaseload() {
-    // await this.myCaseload.clear();
+    await this.myCaseload.clear();
     (await this.getMyCaseloadFromAPI()).subscribe((myCaseload) => {
       console.log('My Caseload line 317:', myCaseload);
       try {
-        // myCaseload.sort((a, b) => b.defaultOffenderName.lastName.localeCompare(a.defaultOffenderName.lastName));
+        myCaseload.sort((a, b) =>
+          b.defaultOffenderName.lastName.localeCompare(
+            a.defaultOffenderName.lastName
+          )
+        );
         this.myCaseload.bulkAdd(myCaseload);
+        for (const offender of myCaseload) {
+          this.populatePhotos(offender.offenderNumber);
+          this.populateLatestSuccessfulContacts(offender.offenderNumber);
+        }
       } catch (error) {
         console.error('Error bulk adding myCaseload:', error);
       }
@@ -382,7 +390,6 @@ export class ContactData extends Dexie implements OnInit {
   }
   async populateLocations() {
     await this.locationList.clear();
-    // await this.locationList.bulkAdd(this.dao.locationList);
     (await this.getLocations()).subscribe((locations) => {
       this.locationList.bulkAdd(locations);
     });
@@ -393,7 +400,6 @@ export class ContactData extends Dexie implements OnInit {
 
   async populateContactTypes() {
     await this.contactTypeList.clear();
-    // await this.contactTypeList.bulkAdd(this.dao.contactTypeList);
     (await this.getContactTypes()).subscribe((contactTypes) => {
       this.contactTypeList.bulkAdd(contactTypes);
     });
@@ -414,15 +420,37 @@ export class ContactData extends Dexie implements OnInit {
     return this.http.get<Contact[]>(this.path + '/contacts');
   }
 
-  async populatePhotos() {
-    await this.photos.clear();
-    (await this.getPhotos()).subscribe((photos) => {
-      this.photos.bulkAdd(photos);
+  async populateLatestSuccessfulContacts(offenderNumber: number) {
+    (await this.getLatestOffenderContact(offenderNumber)).subscribe((contact) => {
+      console.log('Latest Contact line 425:', contact);
+      this.myCaseload.update(offenderNumber, {
+        lastSuccessfulContact: contact,
+      });
     });
   }
 
-  async getPhotos() {
-    return this.http.get<Photo[]>(this.path + '/photos');
+  async getLatestOffenderContact(offenderNumber: number) {
+    return this.http.get<LatestSuccessfulContact>(
+      this.path + '/latest-successful-contact/' + offenderNumber
+    );
+  }
+
+  async populatePhotos(offenderNumber: number) {
+    await this.photos.clear();
+    (await this.getPhoto(offenderNumber)).subscribe((photo) => {
+      let photo1: Photo = {
+        offenderNumber: offenderNumber,
+        image: photo,
+      };
+      this.photos.add(photo1);
+    });
+  }
+
+  async getPhoto(offenderNumber: number) {
+    return this.http.get(
+      this.path + '/offender-photo/' + offenderNumber,
+      { responseType: 'blob' }
+    );
   }
 
   async getListOfLocations() {
@@ -451,7 +479,7 @@ export class ContactData extends Dexie implements OnInit {
   async addOffenderToOtherOffenders(offender: OffenderBase | null) {
     const newOffender: Offender = {
       ...(offender == null ? ({} as OffenderBase) : offender),
-      image: '',
+      image: new Blob(),
       offenderAddress: {
         offenderNumber: offender?.offenderNumber ?? 0,
         lineOne: '',
@@ -465,6 +493,7 @@ export class ContactData extends Dexie implements OnInit {
       contactArray: [],
       nextScheduledContactDate: new Date(),
       legalStatus: '',
+      lastSuccessfulContact: {} as LatestSuccessfulContact,
     };
     await this.otherOffenders.add(newOffender);
   }

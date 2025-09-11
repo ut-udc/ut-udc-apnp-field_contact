@@ -9,18 +9,25 @@
   [matRippleColor]="color"
   [routerLink]="['/offender-detail', offender.offenderNumber]"
 >
-  <div>
-    <img />
-  </div>
+  <ng-container>
+    <img
+      [src]="getOffenderPhotoDataURL(offender.offenderNumber) | async"
+      [alt]="offender.defaultOffenderName.firstName + ' ' + offender.defaultOffenderName.lastName"
+    />
+  </ng-container>
   <div>
     <div class="label_medium">{{offender.offenderNumber}}</div>
     <div class="title_medium">
-      {{offender.defaultOffenderName.lastName}}, {{offender.defaultOffenderName.firstName}}
+      {{offender.defaultOffenderName.lastName}},
+      {{offender.defaultOffenderName.firstName}}
     </div>
     @if(offender.offenderAddress) {
     <div class="body_small">
-      {{offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne : ''}}<br />{{offender.offenderAddress.city ? offender.offenderAddress.city : ''}}, {{offender.offenderAddress.state ? offender.offenderAddress.state : ''}}
-      {{offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : ''}}
+      {{offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne :
+      ''}}<br />{{offender.offenderAddress.city ? offender.offenderAddress.city
+      : ''}}, {{offender.offenderAddress.state ? offender.offenderAddress.state
+      : ''}} {{offender.offenderAddress.zipCode ?
+      offender.offenderAddress.zipCode : ''}}
     </div>
     }
   </div>

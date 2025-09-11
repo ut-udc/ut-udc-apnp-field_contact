@@ -10,7 +10,13 @@
   <div class="detail-card">
     <div style="display: flex">
       <div style="flex: 1">
-        <img />
+        <ng-container>
+    <img
+      *ngIf="getImageFromPhotos(offender.offenderNumber) | async as photoBlob"
+      [src]="photoBlob | blobToDataURL"
+      [alt]="offender.defaultOffenderName.firstName + ' ' + offender.defaultOffenderName.lastName"
+    />
+  </ng-container>
       </div>
       <div style="flex: 2">
         <div class="label_medium">{{offender?.offenderNumber}}</div>

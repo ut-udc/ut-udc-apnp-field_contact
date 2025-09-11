@@ -245,7 +245,6 @@ export class ContactForm implements OnInit {
   contactLocationControl = new FormControl('', Validators.required);
 
   async ngOnInit() {
-    // debugger;
     this.contactCount = await this.contactData.getContactCount();
 
     console.log('Contact id line 180:', this.currentContact.contactId);

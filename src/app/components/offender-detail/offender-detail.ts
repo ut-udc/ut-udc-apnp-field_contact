@@ -12,6 +12,7 @@ import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from '../contact-listing-card/contact-listing-card';
 import { Observable, from, of } from 'rxjs';
 import { DetailHeader } from '../detail-header/detail-header';
+import { BlobToDataUrlPipe } from '../../pipes/blob-to-data-url-pipe';
 
 @Component({
   selector: 'app-offender-detail',
@@ -25,6 +26,7 @@ import { DetailHeader } from '../detail-header/detail-header';
     ContactListingCard,
     CommonModule,
     DetailHeader,
+    BlobToDataUrlPipe,
   ],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
@@ -65,6 +67,12 @@ export class OffenderDetail implements OnInit {
       });
   });
   contactData: ContactData = inject(ContactData);
+
+  async getImageFromPhotos(offenderNumber: number) {
+    return await this.contactData.photos.get(offenderNumber).then((photo) => {
+      return photo?.image;
+    });
+  }
 
   constructor() {
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);

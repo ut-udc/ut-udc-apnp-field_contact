@@ -149,7 +149,6 @@ export class CommentaryForm implements OnInit {
   }
 
   async ngOnInit() {
-    // debugger
     this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
     this.contactId = Number(this.route.snapshot.params['contactId']);
     this.offender = await this.contactData.getCaseloadOffenderById(
