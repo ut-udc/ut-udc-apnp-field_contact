@@ -464,7 +464,7 @@ export class ContactData extends Dexie implements OnInit {
       lastSuccessfulContactDate: new Date(),
       contactArray: [],
       nextScheduledContactDate: new Date(),
-      legalStatus: {} as LegalStatus,
+      legalStatus: '',
     };
     await this.otherOffenders.add(newOffender);
   }

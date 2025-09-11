@@ -43,7 +43,7 @@ export class OffenderCard implements OnInit {
     lastSuccessfulContactDate: new Date(),
     contactArray: [],
     nextScheduledContactDate: new Date(),
-    legalStatus: {} as LegalStatus,
+    legalStatus: '',
   };
   navigation: Navigation = inject(Navigation);
 

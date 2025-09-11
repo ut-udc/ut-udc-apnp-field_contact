@@ -68,6 +68,7 @@ export class MyCaseload implements OnInit {
       );
     });
   }
+  addressString: string = '';
   filterCaseloadByOffenderInformation(searchTerm: string): void {
     console.log('searchTerm: ' + searchTerm);
     if (!searchTerm) {
@@ -78,9 +79,18 @@ export class MyCaseload implements OnInit {
       console.log('this.caseload111: ');
       this.myCaseload.subscribe((offenders) => {
         this.caseload = offenders.filter((offender) => {
+
+          if (offender.offenderAddress) {
+            var lineOne = offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne : '';
+            var lineTwo = offender.offenderAddress.lineTwo ? offender.offenderAddress.lineTwo : '';
+            var city = offender.offenderAddress.city ? offender.offenderAddress.city : '';
+            var state = offender.offenderAddress.state ? offender.offenderAddress.state : '';
+            var zipCode = offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : '';
+            this.addressString = `${lineOne} ${lineTwo} ${city} ${state} ${zipCode}`.toLowerCase();
+          }
           const fullName =
-            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ${offender.offenderAddress.lineOne} ${offender.offenderAddress.city} ${offender.offenderAddress.state} ${offender.offenderAddress.zipCode} ${offender.phone}`.toLowerCase();
-          return fullName.includes(searchTerm.toLowerCase());
+            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ${this.addressString} ${offender.phone}`.toLowerCase();
+            return fullName.includes(searchTerm.toLowerCase());
         });
       });
       this.myCaseload.next(this.caseload);

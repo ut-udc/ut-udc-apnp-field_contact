@@ -10,5 +10,5 @@ export interface Offender extends OffenderBase {
   lastSuccessfulContactDate: Date;
   contactArray: Contact[];
   nextScheduledContactDate: Date;
-  legalStatus: LegalStatus;
+  legalStatus: string;
 }
