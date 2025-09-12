@@ -291,9 +291,10 @@ export class ContactData extends Dexie implements OnInit {
     }
     return agent;
   }
-  getPrimaryUser() {
-    return this.agents.where('primaryUser').equals(1).first();
-  }
+  async getPrimaryUser(): Promise<Agent> {
+    return await this.agents.where('primaryUser').equals(1).first() || {} as Agent;
+  };
+  
   async getAgentList() {
     return await this.agents.toArray();
   }

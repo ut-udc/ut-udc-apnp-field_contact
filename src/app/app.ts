@@ -16,7 +16,6 @@ import { Agent } from './model/Agent';
   styleUrl: './app.scss',
 })
 export class App implements OnInit, OnDestroy {
-  user: Agent | null = null;
   contactData: ContactData = inject(ContactData);
   http: HttpClient = inject(HttpClient);
   private networkSubscription!: Subscription;
@@ -37,18 +36,15 @@ export class App implements OnInit, OnDestroy {
       }
     );
 
-    this.user = await this.contactData.getUser().toPromise() || null;
-    if (this.user == null) {
-      this.contactData.populateAgent();
-    }
-
     await this.checkPopulationWithDexie().then((populated) => {
       if (!populated) {
         this.contactData.open();
         console.log('Populating Contact Database');
         this.contactData.populateAgent();
-        
-        console.log('Number of agents in agents table: ' + this.contactData.agents.count());
+
+        console.log(
+          'Number of agents in agents table: ' + this.contactData.agents.count()
+        );
         //TO-DO find a better way of doing this
       }
     });

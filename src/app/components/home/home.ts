@@ -40,6 +40,17 @@ export class Home implements OnInit {
   contactData: ContactData = inject(ContactData);
   dao: Dao = inject(Dao);
   isOnline: boolean = true;
+  user = new Observable<Agent>((observer) => {
+    this.contactData.getPrimaryUser().then(async (user) => {
+      if (user) {
+        observer.next(user);
+        this.contactData.applicationUserName = user.agentId;
+        console.log('User from app line 24:', user);
+      } else {
+        await this.contactData.populateAgent();
+      }
+    });
+  });
 
   //this is the place where we can change the agentfor impersonation
   // currentAgent = new Observable<Agent>((observer) => {
@@ -53,7 +64,7 @@ export class Home implements OnInit {
   //   });
   // });
   currentAgent = new Observable<Agent>((observer) => {
-    this.contactData.getPrimaryUser().then((agent) => {
+    this.user.subscribe((agent) => {
       if (agent) {
         observer.next(agent);
         console.log('Current Agent line 49:', agent);
