@@ -42,10 +42,21 @@ export class Home implements OnInit {
   isOnline: boolean = true;
 
   //this is the place where we can change the agentfor impersonation
+  // currentAgent = new Observable<Agent>((observer) => {
+  //   this.contactData.getAgentById(this.contactData.applicationUserName).then((agent) => {
+  //     if (agent) {
+  //       observer.next(agent);
+  //       console.log('Current Agent line 49:', agent);
+  //     } else {
+  //       observer.next({} as Agent);
+  //     }
+  //   });
+  // });
   currentAgent = new Observable<Agent>((observer) => {
-    this.contactData.getAgentById(this.contactData.applicationUserName).then((agent) => {
+    this.contactData.getPrimaryUser().then((agent) => {
       if (agent) {
         observer.next(agent);
+        console.log('Current Agent line 49:', agent);
       } else {
         observer.next({} as Agent);
       }

@@ -14,7 +14,7 @@
       <span class="label_medium">Date</span>
       <span class="body_large"
         >{{(currentContact | async)?.contactDate | date: 'MM/dd/yyyy'}} |
-        {{(currentContact | async)?.contactDate | date: 'HH:mm'}}</span
+        {{(currentContact | async)?.contactTime | date: 'HH:mm'}}</span
       >
     </div>
     <div class="contact-info-container">
@@ -80,7 +80,7 @@
           matInput
           formControlName="commentary"
           placeholder="Include details related to the R&R efforts of the visit."
-          [ngModel]="(currentContact | async)?.commentary || ''"
+          [ngModel]="(currentContact | async)?.summary || ''"
           required
         ></textarea>
       </mat-form-field>

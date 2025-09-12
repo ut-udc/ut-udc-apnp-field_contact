@@ -36,19 +36,21 @@ export class ContactDetailView {
   });
   primaryAgent = new Observable<Agent>((observer) => {
     this.currentContact.subscribe((contact) => {
-      this.contactData.getOfficerById(contact.agentId).then((agent) => {
-        if (agent) {
-          observer.next(agent);
-        } else {
-          observer.next({} as Agent);
-        }
-      });
+      this.contactData
+        .getOfficerById(contact.primaryInterviewer)
+        .then((agent) => {
+          if (agent) {
+            observer.next(agent);
+          } else {
+            observer.next({} as Agent);
+          }
+        });
     });
   });
   secondaryAgent = new Observable<Agent>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getOfficerById(contact.secondaryAgentId)
+        .getOfficerById(contact.secondaryInterviewer)
         .then((agent) => {
           if (agent) {
             observer.next(agent);

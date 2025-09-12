@@ -13,14 +13,14 @@ describe('ContactData', () => {
   const mockContact: Contact = {
     contactId: 1,
     offenderNumber: 12345,
-    agentId: 'agent1',
-    secondaryAgentId: 'agent2',
-    contactDate: new Date('2024-01-01'),
+    primaryInterviewer: 'agent1',
+    secondaryInterviewer: 'agent2',
+    contactDateTime: new Date('2024-01-01'),
     contactType: '1',
     contactTypeDesc: 'Office Visit',
     location: '1',
     locationDesc: 'Main Office',
-    commentary: 'Test contact',
+    summary: 'Test contact',
     formCompleted: true,
     firstPageCompleted: true,
     wasContactSuccessful: true,
@@ -107,7 +107,7 @@ describe('ContactData', () => {
       await service.updateContact(updatedContact);
 
       const contact = await service.getContactById(mockContact.contactId);
-      expect(contact.commentary).toBe('Updated commentary');
+      expect(contact.summary).toBe('Updated commentary');
     });
 
     it('should get contact by id', async () => {

@@ -38,7 +38,7 @@ export class App implements OnInit, OnDestroy {
     );
 
     this.user = await this.contactData.getUser().toPromise() || null;
-    if (this.user !== null) {
+    if (this.user == null) {
       this.contactData.populateAgent();
     }
 

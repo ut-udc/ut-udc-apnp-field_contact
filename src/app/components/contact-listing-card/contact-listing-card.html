@@ -5,8 +5,8 @@
         style="cursor: pointer;"></mat-icon>
     </div>
     <div style="flex: 1;">
-        <span class="label_medium">{{contact.contactDate | date: 'longDate'}} | {{contact.contactDate | date: 'HH:mm'}}</span>
+        <span class="label_medium">{{contact.contactDate | date: 'longDate'}} | {{contact.contactTime | date: 'HH:mm'}}</span>
         <div class="body_large">{{(this.contactData.getContactTypeById(contact.contactTypeId) | async)?.text}}</div>
-        <div class="body_medium">{{truncateChar(contact.commentary)}}</div>
+        <div class="body_medium">{{truncateChar(contact.summary)}}</div>
     </div>
 </a>

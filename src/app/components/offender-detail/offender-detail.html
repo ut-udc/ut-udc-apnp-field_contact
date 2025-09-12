@@ -13,7 +13,7 @@
         <ng-container>
     <img
       *ngIf="getImageFromPhotos(offender.offenderNumber) | async as photoBlob"
-      [src]="photoBlob | blobToDataURL"
+      [src]="photoBlob"
       [alt]="offender.defaultOffenderName.firstName + ' ' + offender.defaultOffenderName.lastName"
     />
   </ng-container>
@@ -24,8 +24,10 @@
           {{offender?.defaultOffenderName?.lastName}}, {{offender?.defaultOffenderName?.firstName}}
         </div>
         <div class="label_medium">
-          Last Successful Contact: {{offender?.lastSuccessfulContactDate | date:
-          'MM/dd/yyyy'}}
+          Last Successful Contact: 
+          @if(offender?.lastSuccessfulContact) {
+          {{offender?.lastSuccessfulContact?.contactDate ? (offender?.lastSuccessfulContact?.contactDate | date: 'MM/dd/yyyy') : 'N/A'}}
+        }
         </div>
       </div>
     </div>
@@ -85,6 +87,13 @@
 
   <!-- **********iterate************ -->
   <ng-container *ngIf="contactList | async as contacts; else loading">
+    <app-contact-listing-card
+      *ngFor="let contact of contacts"
+      [contact]="contact"
+    >
+    </app-contact-listing-card>
+  </ng-container>
+  <ng-container *ngIf="existingContactList | async as contacts; else loading">
     <app-contact-listing-card
       *ngFor="let contact of contacts"
       [contact]="contact"

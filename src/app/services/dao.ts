@@ -39,6 +39,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
     {
       userId: '1',
@@ -54,6 +55,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: true,
     },
     {
       userId: '2',
@@ -69,6 +71,7 @@ export class Dao {
       zip: '',
       supervisorId: 'kchunt',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
     {
       userId: '3',
@@ -84,6 +87,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
     {
       userId: '4',
@@ -99,6 +103,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
     {
       userId: '5',
@@ -114,6 +119,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
     {
       userId: '6',
@@ -129,6 +135,7 @@ export class Dao {
       zip: '',
       supervisorId: 'jshardlo',
       ofndrNumList: ([] = []),
+      primaryUser: false,
     },
   ];
 

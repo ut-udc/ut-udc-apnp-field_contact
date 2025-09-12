@@ -45,7 +45,7 @@ export class ContactData extends Dexie implements OnInit {
   public otherOffenders!: Table<Offender, number>;
   public locationList!: Table<Select2Model, number>;
   public contactTypeList!: Table<Select2Model, number>;
-  public applicationUserName: string = '';
+  public applicationUserName: string = 'abadger';
   public photos!: Table<Photo, number>;
   private networkSubscription!: Subscription;
 
@@ -58,7 +58,7 @@ export class ContactData extends Dexie implements OnInit {
         'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       agents:
-        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated',
+        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated, primaryUser',
       officers:
         'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
       allOffenders: 'offenderNumber, firstName, lastName, birthDate',
@@ -233,14 +233,23 @@ export class ContactData extends Dexie implements OnInit {
   getAllContacts() {
     return this.contacts.toArray();
   }
-  async getAllContactsByOffenderNumberDesc(id: number) {
+  async getAllContactsByOffenderNumberDesc(offenderNumber: number) {
     return await this.contacts
       .where('offenderNumber')
-      .equals(id)
+      .equals(offenderNumber)
       .and((contact) => contact.formCompleted === true)
       .reverse()
       .toArray();
   }
+
+  async getExistingContacts(offenderNumber: number) {
+    return await this.existingContacts
+      .where('offenderNumber')
+      .equals(offenderNumber)
+      .reverse()
+      .toArray();
+  }
+
   async getAllQueuedContacts() {
     return await this.contactsQueue.toArray();
   }
@@ -275,11 +284,15 @@ export class ContactData extends Dexie implements OnInit {
     return await this.agents.get(this.applicationUserName);
   }
   async getAgentById(id: string): Promise<Agent> {
+    console.log('Agent ID line 287:', id);
     const agent = await this.agents.get(id);
     if (!agent) {
       return {} as Agent;
     }
     return agent;
+  }
+  getPrimaryUser() {
+    return this.agents.where('primaryUser').equals(1).first();
   }
   async getAgentList() {
     return await this.agents.toArray();
@@ -293,9 +306,8 @@ export class ContactData extends Dexie implements OnInit {
     return options;
   }
   async populateAgent() {
-    await this.agents.clear();
+    // await this.agents.clear();
     this.getUser().subscribe((user) => {
-      console.log('User from app line 319:', user);
       if (user) {
         this.applicationUserName = user.agentId;
         this.populateOfficers();
@@ -304,9 +316,10 @@ export class ContactData extends Dexie implements OnInit {
         this.populateAllOffenders();
         this.populateLocations();
         this.populateContactTypes();
-        this.populateExistingContacts();
+        user.primaryUser = true;
+        this.agents.add(user);
+        console.log('User from app line 321:', user);
       }
-      this.agents.add(user);
     });
   }
   async getOfficers() {
@@ -345,6 +358,7 @@ export class ContactData extends Dexie implements OnInit {
         for (const offender of myCaseload) {
           this.populatePhotos(offender.offenderNumber);
           this.populateLatestSuccessfulContacts(offender.offenderNumber);
+          this.populateExistingContacts(offender.offenderNumber);
         }
       } catch (error) {
         console.error('Error bulk adding myCaseload:', error);
@@ -409,24 +423,27 @@ export class ContactData extends Dexie implements OnInit {
     return this.http.get<Select2Model[]>(this.path + '/contact-types');
   }
 
-  async populateExistingContacts() {
+  async populateExistingContacts(offenderNumber: number) {
     await this.existingContacts.clear();
-    (await this.getAllContactsFromAPI()).subscribe((contacts) => {
+    (await this.getAllContactsFromAPI(offenderNumber)).subscribe((contacts) => {
       this.existingContacts.bulkAdd(contacts);
     });
   }
 
-  async getAllContactsFromAPI() {
-    return this.http.get<Contact[]>(this.path + '/contacts');
+  async getAllContactsFromAPI(offenderNumber: number) {
+    return this.http.get<Contact[]>(
+      this.path + '/existing-contacts/' + offenderNumber
+    );
   }
 
   async populateLatestSuccessfulContacts(offenderNumber: number) {
-    (await this.getLatestOffenderContact(offenderNumber)).subscribe((contact) => {
-      console.log('Latest Contact line 425:', contact);
-      this.myCaseload.update(offenderNumber, {
-        lastSuccessfulContact: contact,
-      });
-    });
+    (await this.getLatestOffenderContact(offenderNumber)).subscribe(
+      (contact) => {
+        this.myCaseload.update(offenderNumber, {
+          lastSuccessfulContact: contact,
+        });
+      }
+    );
   }
 
   async getLatestOffenderContact(offenderNumber: number) {
@@ -447,10 +464,9 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   async getPhoto(offenderNumber: number) {
-    return this.http.get(
-      this.path + '/offender-photo/' + offenderNumber,
-      { responseType: 'blob' }
-    );
+    return this.http.get(this.path + '/offender-photo/' + offenderNumber, {
+      responseType: 'blob',
+    });
   }
 
   async getListOfLocations() {

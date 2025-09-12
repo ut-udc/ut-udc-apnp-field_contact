@@ -4,12 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import {
-  AsyncPipe,
-  CommonModule,
-  DatePipe,
-  NgIf,
-} from '@angular/common';
+import { AsyncPipe, CommonModule, DatePipe, NgIf } from '@angular/common';
 import { Offender } from '../../model/Offender';
 import { ActivatedRoute } from '@angular/router';
 import { Navigation } from '../../services/navigation';
@@ -79,19 +74,21 @@ export class CommentaryForm implements OnInit {
   });
   primaryAgent = new Observable<Agent>((observer) => {
     this.currentContact.subscribe((contact) => {
-      this.contactData.getOfficerById(contact.agentId).then((agent) => {
-        if (agent) {
-          observer.next(agent);
-        } else {
-          observer.next({} as Agent);
-        }
-      });
+      this.contactData
+        .getOfficerById(contact.primaryInterviewer)
+        .then((agent) => {
+          if (agent) {
+            observer.next(agent);
+          } else {
+            observer.next({} as Agent);
+          }
+        });
     });
   });
   secondaryAgent = new Observable<Agent>((observer) => {
     this.currentContact.subscribe((contact) => {
       this.contactData
-        .getOfficerById(contact.secondaryAgentId)
+        .getOfficerById(contact.secondaryInterviewer)
         .then((agent) => {
           if (agent) {
             observer.next(agent);
@@ -132,7 +129,7 @@ export class CommentaryForm implements OnInit {
     if (!navigator.onLine) {
       this.currentContact.subscribe((contact) => {
         contact.formCompleted = true;
-        contact.commentary = this.commentaryForm.value.commentary ?? '';
+        contact.summary = this.commentaryForm.value.commentary ?? '';
         this.contactData.addPostContactToQueue(contact);
         this.contactData.removeContactFromContacts(contact.contactId);
       });
@@ -140,7 +137,7 @@ export class CommentaryForm implements OnInit {
     } else {
       this.currentContact.subscribe((contact) => {
         contact.formCompleted = true;
-        contact.commentary = this.commentaryForm.value.commentary ?? '';
+        contact.summary = this.commentaryForm.value.commentary ?? '';
         this.contactData.syncContactWithDatabase(contact);
         this.contactData.updateContact(contact);
       });
@@ -171,7 +168,7 @@ export class CommentaryForm implements OnInit {
       contact = this.currentContact as Contact;
     }
     this.commentaryForm.patchValue({
-      commentary: contact?.commentary ?? '',
+      commentary: contact?.summary ?? '',
     });
     const agent = await this.contactData.getAgentById(
       this.contactData.applicationUserName

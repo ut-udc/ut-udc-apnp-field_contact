@@ -21,7 +21,7 @@
       <span class="label_medium">Date</span>
       <span class="body_large"
         >{{(currentContact | async)?.contactDate | date: 'MM/dd/yyyy'}} |
-        {{(currentContact | async)?.contactDate | date: 'HH:mm'}}</span
+        {{(currentContact | async)?.contactTime | date: 'HH:mm'}}</span
       >
     </div>
     <div class="contact-info-container">
@@ -57,7 +57,7 @@
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Commentary</span>
-      <span class="body_medium">{{(currentContact | async)?.commentary}}</span>
+      <span class="body_medium">{{(currentContact | async)?.summary}}</span>
     </div>
   </div>
 </div>

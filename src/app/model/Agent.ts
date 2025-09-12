@@ -12,4 +12,5 @@ export interface Agent {
   zip: string;
   supervisorId: string;
   ofndrNumList: number[];
+  primaryUser: boolean;
 }

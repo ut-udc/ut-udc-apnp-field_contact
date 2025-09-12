@@ -43,14 +43,14 @@ describe('OffenderDetail', () => {
     {
       contactId: 1,
       offenderNumber: 12345,
-      agentId: 'jshardlo',
-      secondaryAgentId: '',
-      contactDate: new Date('2024-01-01'),
-      contactTypeId: 1,
+      primaryInterviewer: 'jshardlo',
+      secondaryInterviewer: '',
+      contactDateTime: new Date('2024-01-01'),
+      contactTypeCode: 1,
       contactTypeDesc: 'Office Visit',
       locationId: 1,
       locationDesc: 'Main Office',
-      commentary: 'First contact',
+      summary: 'First contact',
       formCompleted: true,
       firstPageCompleted: true,
       wasContactSuccessful: 1,
@@ -60,14 +60,14 @@ describe('OffenderDetail', () => {
     {
       contactId: 2,
       offenderNumber: 12345,
-      agentId: 'jshardlo',
-      secondaryAgentId: '',
-      contactDate: new Date('2024-01-02'),
-      contactTypeId: 2,
+      primaryInterviewer: 'jshardlo',
+      secondaryInterviewer: '',
+      contactDateTime: new Date('2024-01-02'),
+      contactTypeCode: 2,
       contactTypeDesc: 'Phone Call',
       locationId: 2,
       locationDesc: 'Remote',
-      commentary: 'Second contact',
+      summary: 'Second contact',
       formCompleted: true,
       firstPageCompleted: true,
       wasContactSuccessful: 1,
@@ -129,8 +129,12 @@ describe('OffenderDetail', () => {
   it('should load current offender from caseload', (done) => {
     component.currentOffender.subscribe((offender) => {
       expect(offender.offenderNumber).toBe(mockOffender.offenderNumber);
-      expect(offender.defaultOffenderName.firstName).toBe(mockOffender.defaultOffenderName.firstName);
-      expect(offender.defaultOffenderName.lastName).toBe(mockOffender.defaultOffenderName.lastName);
+      expect(offender.defaultOffenderName.firstName).toBe(
+        mockOffender.defaultOffenderName.firstName
+      );
+      expect(offender.defaultOffenderName.lastName).toBe(
+        mockOffender.defaultOffenderName.lastName
+      );
       expect(mockContactData.getCaseloadOffenderById).toHaveBeenCalledWith(
         12345
       );

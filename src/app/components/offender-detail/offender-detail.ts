@@ -12,7 +12,6 @@ import { ContactData } from '../../services/contact-data';
 import { ContactListingCard } from '../contact-listing-card/contact-listing-card';
 import { Observable, from, of } from 'rxjs';
 import { DetailHeader } from '../detail-header/detail-header';
-import { BlobToDataUrlPipe } from '../../pipes/blob-to-data-url-pipe';
 
 @Component({
   selector: 'app-offender-detail',
@@ -26,7 +25,6 @@ import { BlobToDataUrlPipe } from '../../pipes/blob-to-data-url-pipe';
     ContactListingCard,
     CommonModule,
     DetailHeader,
-    BlobToDataUrlPipe,
   ],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
@@ -66,6 +64,13 @@ export class OffenderDetail implements OnInit {
         observer.next(contacts);
       });
   });
+  existingContactList = new Observable<Contact[]>((observer) => {
+    this.contactData
+      .getExistingContacts(Number(this.route.snapshot.params['offenderNumber']))
+      .then((eContacts) => {
+        observer.next(eContacts);
+      });
+  });
   contactData: ContactData = inject(ContactData);
 
   async getImageFromPhotos(offenderNumber: number) {
@@ -101,7 +106,15 @@ export class OffenderDetail implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/note.svg')
     );
   }
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    await this.loadAllExistingContacts(await this.currentOffender.toPromise().then((offender) => {
+      return offender?.offenderNumber || 0
+    }));
+  }
+
+  async loadAllExistingContacts(offenderNumber: number) {
+    await this.contactData.getExistingContacts(offenderNumber);
+  }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
     throw new Error('Method not implemented.');
