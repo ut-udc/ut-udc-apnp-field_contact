@@ -105,7 +105,7 @@ export class ContactData extends Dexie implements OnInit {
   }
 
   getUser(): Observable<Agent> {
-    return this.http.get<Agent>(this.path + '/user');
+    return this.http.get<Agent>(this.path + '/user?impersonateId=jshardlo');
   }
 
   async fetchAgentToImpersonate(agentId: string) {
