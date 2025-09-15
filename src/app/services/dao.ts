@@ -9,20 +9,15 @@ import { LegalStatus } from '../model/LegalStatus';
   providedIn: 'root',
 })
 export class Dao {
-
-  public otherOffenders: Offender[] = [
-  ];
+  public otherOffenders: Offender[] = [];
 
   //self explanatory
-  public myCaseload: Offender[] = [
-  ];
+  public myCaseload: Offender[] = [];
 
   //basic offender info for all other offenders in AP&P program
-  public allOtherOffenders: OffenderBase[] = [
-  ];
+  public allOtherOffenders: OffenderBase[] = [];
 
-  public allOtherOffendersWithContactInfo: Offender[] = [
-  ];
+  public allOtherOffendersWithContactInfo: Offender[] = [];
 
   public officerList: Agent[] = [
     {
@@ -30,7 +25,7 @@ export class Dao {
       agentId: 'kchunt',
       firstName: 'Kurt',
       lastName: 'Hunt',
-      fullName: 'Kurt Hunt',
+      name: 'Kurt Hunt',
       agentEmail: 'kchunt@utah.gov',
       image: '',
       address: '',
@@ -46,7 +41,7 @@ export class Dao {
       agentId: 'abadger',
       firstName: 'Austin',
       lastName: 'Badger',
-      fullName: 'Austin Badger',
+      name: 'Austin Badger',
       agentEmail: 'abadger@utah.gov',
       image: '',
       address: '',
@@ -62,7 +57,7 @@ export class Dao {
       agentId: 'jshardlo',
       firstName: 'Jeff',
       lastName: 'Shardlow',
-      fullName: 'Jeff Shardlow',
+      name: 'Jeff Shardlow',
       agentEmail: 'jshardlo@utah.gov',
       image: '',
       address: '',
@@ -78,7 +73,7 @@ export class Dao {
       agentId: 'mromney',
       firstName: 'Matt',
       lastName: 'Romney',
-      fullName: 'Matt Romney',
+      name: 'Matt Romney',
       agentEmail: 'mromney@utah.gov',
       image: '',
       address: '',
@@ -94,7 +89,7 @@ export class Dao {
       agentId: 'tjones',
       firstName: 'Tess',
       lastName: 'Jones',
-      fullName: 'Tess Jones',
+      name: 'Tess Jones',
       agentEmail: 'tjones@utah.gov',
       image: '',
       address: '',
@@ -110,7 +105,7 @@ export class Dao {
       agentId: 'jules',
       firstName: 'Jules',
       lastName: 'Hill',
-      fullName: 'Jules Hill',
+      name: 'Jules Hill',
       agentEmail: 'jules@utah.gov',
       image: '',
       address: '',
@@ -126,7 +121,7 @@ export class Dao {
       agentId: 'hicks',
       firstName: 'John',
       lastName: 'Hicks',
-      fullName: 'John Hicks',
+      name: 'John Hicks',
       agentEmail: 'hicks@utah.gov',
       image: '',
       address: '',
@@ -138,7 +133,6 @@ export class Dao {
       primaryUser: false,
     },
   ];
-
 
   constructor() {}
 }

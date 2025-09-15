@@ -51,24 +51,24 @@ export class ContactData extends Dexie implements OnInit {
 
   constructor(private http: HttpClient) {
     super('contactDatabase');
-    this.version(5).stores({
+    this.version(6).stores({
       contacts:
-        'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       existingContacts:
-        'contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       agents:
-        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated, primaryUser',
+        '&userId, agentId, firstName, lastName, fullName, emailAddress, image, address, city, state, zip, supervisorId, loggedInAgent, agentImpersonated, primaryUser',
       officers:
-        'agentId, firstName, lastName, fullName, email, image, address, city, state, zip, supervisorId',
-      allOffenders: 'offenderNumber, firstName, lastName, birthDate',
+        '&userId, agentId, firstName, lastName, name, emailAddress, image, phone, supervisorId',
+      allOffenders: '&offenderNumber, firstName, lastName, birthDate',
       myCaseload:
-        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
+        '&offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
       otherOffenders:
-        'offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
-      locationList: 'id, text',
-      contactTypeList: 'id, text',
-      photos: 'offenderNumber, photo',
+        '&offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
+      locationList: '&id, text',
+      contactTypeList: '&id, text',
+      photos: '&offenderNumber, photo',
     });
     this.contacts = this.table('contacts');
     this.existingContacts = this.table('existingContacts');
@@ -292,9 +292,12 @@ export class ContactData extends Dexie implements OnInit {
     return agent;
   }
   async getPrimaryUser(): Promise<Agent> {
-    return await this.agents.where('primaryUser').equals(1).first() || {} as Agent;
-  };
-  
+    return (
+      (await this.agents.where('primaryUser').equals(1).first()) ||
+      ({} as Agent)
+    );
+  }
+
   async getAgentList() {
     return await this.agents.toArray();
   }
@@ -302,7 +305,7 @@ export class ContactData extends Dexie implements OnInit {
     const options: Select2String[] = [];
     const agentList = await this.getOfficerList();
     agentList.forEach((agent) => {
-      options.push({ id: agent.agentId, text: agent.fullName });
+      options.push({ id: agent.userId, text: agent.name });
     });
     return options;
   }
@@ -310,7 +313,7 @@ export class ContactData extends Dexie implements OnInit {
     // await this.agents.clear();
     this.getUser().subscribe((user) => {
       if (user) {
-        this.applicationUserName = user.agentId;
+        this.applicationUserName = user.userId;
         this.populateOfficers();
         this.populateMyCaseload();
         this.populateOtherOffenders();
@@ -324,15 +327,17 @@ export class ContactData extends Dexie implements OnInit {
     });
   }
   async getOfficers() {
-    return this.http.get<Agent[]>(this.path + '/officers');
+    let path = this.path + '/agents-with-offenders';
+    console.log('Path line 330:', path);
+    return this.http.get<Agent[]>(this.path + '/agents-with-offenders');
   }
 
   async populateOfficers() {
     await this.officers.clear();
-    // (await this.getOfficers()).subscribe((officers) => {
-    //   this.officers.bulkAdd(officers);
-    // });
-    await this.officers.bulkAdd(this.dao.officerList);
+    (await this.getOfficers()).subscribe((officers) => {
+      console.log('Officers line 337:', officers);
+      this.officers.bulkAdd(officers);
+    });
   }
   async getOfficerList(): Promise<Agent[]> {
     return await this.officers.toArray();

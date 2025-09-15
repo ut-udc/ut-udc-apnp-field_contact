@@ -21,7 +21,7 @@ describe('Home', () => {
     agentId: 'agent1',
     firstName: 'John',
     lastName: 'Doe',
-    fullName: 'John Doe',
+    name: 'John Doe',
     email: 'john.doe@example.com',
     image: 'agent1.jpg',
     address: '123 Main St',
@@ -29,18 +29,20 @@ describe('Home', () => {
     state: 'ST',
     zip: '12345',
     supervisorId: 'supervisor1',
-    ofndrNumList: [12345, 67890]
+    ofndrNumList: [12345, 67890],
   };
 
   beforeEach(async () => {
-    const contactDataSpy = jasmine.createSpyObj('ContactData', [
-      'getAgentById'
-    ], {
-      applicationUserName: 'agent1'
-    });
+    const contactDataSpy = jasmine.createSpyObj(
+      'ContactData',
+      ['getAgentById'],
+      {
+        applicationUserName: 'agent1',
+      }
+    );
     const navigationSpy = jasmine.createSpyObj('Navigation', ['navigate']);
     const daoSpy = jasmine.createSpyObj('Dao', [], {
-      agent: mockAgent
+      agent: mockAgent,
     });
 
     await TestBed.configureTestingModule({
@@ -48,17 +50,18 @@ describe('Home', () => {
         Home,
         RouterTestingModule,
         HttpClientTestingModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
       ],
       providers: [
         { provide: ContactData, useValue: contactDataSpy },
         { provide: Navigation, useValue: navigationSpy },
-        { provide: Dao, useValue: daoSpy }
-      ]
-    })
-    .compileComponents();
+        { provide: Dao, useValue: daoSpy },
+      ],
+    }).compileComponents();
 
-    mockContactData = TestBed.inject(ContactData) as jasmine.SpyObj<ContactData>;
+    mockContactData = TestBed.inject(
+      ContactData
+    ) as jasmine.SpyObj<ContactData>;
     mockNavigation = TestBed.inject(Navigation) as jasmine.SpyObj<Navigation>;
     mockDao = TestBed.inject(Dao) as jasmine.SpyObj<Dao>;
 
@@ -79,9 +82,9 @@ describe('Home', () => {
   });
 
   it('should load current agent on initialization', (done) => {
-    component.currentAgent.subscribe(agent => {
+    component.currentAgent.subscribe((agent) => {
       expect(agent.agentId).toBe(mockAgent.agentId);
-      expect(agent.fullName).toBe(mockAgent.fullName);
+      expect(agent.name).toBe(mockAgent.name);
       done();
     });
   });
@@ -93,7 +96,7 @@ describe('Home', () => {
 
   it('should emit time updates', (done) => {
     let emissionCount = 0;
-    component.time.subscribe(time => {
+    component.time.subscribe((time) => {
       expect(typeof time).toBe('string');
       emissionCount++;
       if (emissionCount >= 2) {

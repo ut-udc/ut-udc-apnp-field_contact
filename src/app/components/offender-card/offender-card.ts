@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit, Output } from '@angular/core';
-import { CommonModule, AsyncPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
@@ -18,7 +18,6 @@ import { LatestSuccessfulContact } from '../../model/LatestSuccessfulContact';
     MatCardModule,
     RouterLink,
     MatRippleModule,
-    AsyncPipe,
   ],
   templateUrl: './offender-card.html',
   styleUrl: './offender-card.scss',

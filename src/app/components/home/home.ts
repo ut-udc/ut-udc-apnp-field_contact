@@ -44,7 +44,7 @@ export class Home implements OnInit {
     this.contactData.getPrimaryUser().then(async (user) => {
       if (user) {
         observer.next(user);
-        this.contactData.applicationUserName = user.agentId;
+        this.contactData.applicationUserName = user.userId;
         console.log('User from app line 24:', user);
       } else {
         await this.contactData.populateAgent();
@@ -79,12 +79,12 @@ export class Home implements OnInit {
     console.log('Time from home line 41:', this.time);
   });
 
-  constructor(private networkService: NetworkService) {
+  constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
 
     this.currentAgent.subscribe((agent) => {
-      this.contactData.applicationUserName = agent.agentId;
+      this.contactData.applicationUserName = agent.userId;
     });
     iconRegistry.addSvgIcon(
       'bell',

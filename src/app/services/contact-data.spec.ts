@@ -30,7 +30,7 @@ describe('ContactData', () => {
     agentId: 'agent1',
     firstName: 'John',
     lastName: 'Doe',
-    fullName: 'John Doe',
+    name: 'John Doe',
     email: 'john.doe@example.com',
     image: 'agent1.jpg',
     address: '123 Main St',
@@ -148,7 +148,7 @@ describe('ContactData', () => {
       const agent = await service.getAgent();
 
       expect(agent?.agentId).toBe(mockAgent.agentId);
-      expect(agent?.fullName).toBe(mockAgent.fullName);
+      expect(agent?.name).toBe(mockAgent.name);
     });
 
     it('should get agent by id', async () => {
@@ -164,7 +164,7 @@ describe('ContactData', () => {
 
       expect(options.length).toBeGreaterThan(0);
       expect(options[0].id).toBe(mockAgent.agentId);
-      expect(options[0].text).toBe(mockAgent.fullName);
+      expect(options[0].text).toBe(mockAgent.name);
     });
   });
 

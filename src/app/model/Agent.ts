@@ -3,7 +3,7 @@ export interface Agent {
   agentId: string;
   firstName: string;
   lastName: string;
-  fullName: string;
+  name: string;
   agentEmail: string;
   image: string;
   address: string;

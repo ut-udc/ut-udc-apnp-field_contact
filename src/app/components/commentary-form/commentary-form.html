@@ -20,13 +20,13 @@
     <div class="contact-info-container">
       <span class="label_medium">Primary Interviewer</span>
       <span class="body_large"
-        >{{(primaryAgent | async)?.fullName || 'Refresh Data'}}</span
+        >{{(primaryAgent | async)?.name || 'Refresh Data'}}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Secondary Interviewer</span>
       <span class="body_large">
-        {{(secondaryAgent | async)?.fullName || 'N/A'}}
+        {{(secondaryAgent | async)?.name || 'N/A'}}
       </span>
     </div>
     <div class="contact-info-container">

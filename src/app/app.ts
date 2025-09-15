@@ -22,7 +22,7 @@ export class App implements OnInit, OnDestroy {
   protected title = 'ut-udc-apnp-field_contact';
   isOnline: boolean = true;
 
-  constructor(private networkService: NetworkService) {}
+  constructor() {}
 
   async checkPopulationWithDexie(): Promise<boolean> {
     var count = await this.contactData.agents.count();
@@ -30,11 +30,6 @@ export class App implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this.networkSubscription = this.networkService.onlineStatus$.subscribe(
-      (status) => {
-        this.isOnline = status;
-      }
-    );
 
     await this.checkPopulationWithDexie().then((populated) => {
       if (!populated) {
@@ -45,7 +40,6 @@ export class App implements OnInit, OnDestroy {
         console.log(
           'Number of agents in agents table: ' + this.contactData.agents.count()
         );
-        //TO-DO find a better way of doing this
       }
     });
 
