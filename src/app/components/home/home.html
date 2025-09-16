@@ -20,8 +20,7 @@
       <div class="primary-container">
         <span class="initials">
           <div *ngIf="currentAgent | async; let agent">
-            <!-- {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }} -->
-             {{agent.agentId || 'N/A'}}
+            {{agent.firstName.charAt(0) + agent.lastName.charAt(0) }}
           </div>
         </span>
       </div>
