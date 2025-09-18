@@ -30,6 +30,11 @@
                 "input": "src/assets/icons",
                 "output": "assets/icons",
                 "glob": "**/*"
+              },
+              {
+                "input": "src/assets/images",
+                "output": "assets/images",
+                "glob": "**/*"
               }
             ],
             "styles": [

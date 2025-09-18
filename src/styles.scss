@@ -6,10 +6,10 @@
 // custom components at https://material.angular.dev/guide/theming
 // Custom Theming for Angular Material
 // For more information: https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
 @use "./app/css/light.scss";
 @use "./app/app.scss";
 @use "./scss/scss_theme-colors";
-@use '@angular/material' as mat;
 
 html {
   @include mat.theme((
