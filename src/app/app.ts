@@ -1,12 +1,16 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, inject} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {LoadDataService} from './services/load-data-service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
+  // template: '<app-home></app-home>',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('field-contact');
+  loadDataService:LoadDataService = inject(LoadDataService);
+  protected readonly title =this.loadDataService.appTitle();
+
 }

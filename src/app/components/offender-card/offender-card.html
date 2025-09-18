@@ -1,0 +1,31 @@
+<div
+  class="offender-card ripple-container"
+  style="display: flex; cursor: pointer"
+  matRipple
+  [matRippleCentered]="centered"
+  [matRippleDisabled]="disabled"
+  [matRippleUnbounded]="unbounded"
+  [matRippleRadius]="radius"
+  [matRippleColor]="color"
+  [routerLink]="['/offender-detail', offender.offenderNumber]"
+>
+  <ng-container>
+    <img  src="/field_contact_bff/api/offender-photo/{{offender.offenderNumber}}"/>
+  </ng-container>
+  <div>
+    <div class="label_medium">{{offender.offenderNumber}}</div>
+    <div class="title_medium">
+      {{offender.defaultOffenderName.lastName}},
+      {{offender.defaultOffenderName.firstName}}
+    </div>
+    @if(offender.offenderAddress) {
+    <div class="body_small">
+      {{offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne :
+      ''}}<br />{{offender.offenderAddress.city ? offender.offenderAddress.city
+      : ''}}, {{offender.offenderAddress.state ? offender.offenderAddress.state
+      : ''}} {{offender.offenderAddress.zipCode ?
+      offender.offenderAddress.zipCode : ''}}
+    </div>
+    }
+  </div>
+</div>

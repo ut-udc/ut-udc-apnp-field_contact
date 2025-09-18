@@ -1,0 +1,44 @@
+<div class="surface">
+  <div class="surface-container-low">
+    <div class="surface-container">
+      <h2 class="flex-item headline_small">My Caseload</h2>
+      <mat-divider style="color: lightgray"></mat-divider>
+      <div
+        class="on-surface-variant"
+        style="display: flex; align-items: center"
+      >
+        <span class="source-sans"
+          >{{ (myCaseload())?.length || 0 }} offenders</span
+        >
+        <span class="header-spacer"></span>
+        <form [formGroup]="searchForm" (keyup)="filterCaseloadByOffenderInformation(searchForm.value.searchTerm)">
+          <mat-form-field class="contact_form_input_field">
+            <mat-label>Search by offender information</mat-label>
+            <input matInput type="text"
+            formControlName="searchTerm" />
+            <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
+          </mat-form-field>
+        </form>
+        <span class="header-spacer"></span>
+        <mat-icon
+          class="header-icon"
+          svgIcon="filter"
+          aria-hidden="false"
+          aria-label="Filter Icon"
+        ></mat-icon>
+      </div>
+      <div>
+        @if (myCaseload()) {
+          @for (offender of myCaseload(); track offender.offenderNumber) {
+            <app-offender-card [offender]="offender"></app-offender-card>
+          }
+        } @else {
+        <ng-template #loading>
+          <div>Loading...</div>
+        </ng-template>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

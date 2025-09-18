@@ -1,0 +1,50 @@
+
+<div class="surface">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span class="header-spacer">
+        <div>
+        </div>
+      </span>
+      <mat-icon
+        class="header-icon"
+        svgIcon="search"
+        aria-hidden="false"
+        aria-label="Search Icon"
+      ></mat-icon>
+      <mat-icon
+        class="header-icon"
+        svgIcon="bell"
+        aria-hidden="false"
+        aria-label="Notifications Icon"
+      ></mat-icon>
+      <div class="primary-container">
+        <span class="initials">
+          <div>
+            @if(this.userService.user()) {
+              @let user = this.userService.user();
+              {{user?.firstName?.charAt(0)}}{{user?.lastName?.charAt(0)}}
+            }
+          </div>
+        </span>
+      </div>
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <h2
+        class="flex-item headline_small"
+      >
+        Supervision Contacts
+      </h2>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <app-my-caseload></app-my-caseload>
+</div>
+@if(this.agentService.allAgents()) {
+  @let agents = this.agentService.allAgents();
+  @for (agent of agents; track agent.userId) {
+    <p>{{agent.userId}} | {{agent.primaryUser}}</p>
+
+  }
+}
+
+

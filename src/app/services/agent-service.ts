@@ -1,0 +1,50 @@
+import {effect, inject, Injectable, Signal} from '@angular/core';
+import {User} from '../models/user';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {from} from 'rxjs';
+import {liveQuery} from 'dexie';
+import {Db} from './db';
+import {Agent} from '../models/agent';
+import {UserService} from './user-service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AgentService {
+  db:Db = inject(Db);
+  userService: UserService = inject(UserService);
+
+  primaryAgent: Signal <Agent | undefined>  = toSignal(from(
+    liveQuery( ()=> this.db.agents
+      .where('primaryUser')
+      .equals(1)
+      .first()))
+  );
+  allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
+    liveQuery(async ()=> this.db.agents.toArray()))
+  );
+
+  constructor() {
+
+    effect(async () => {
+      if(this.allAgents()){
+      this.allAgents()?.filter(a => a.userId == this.userService.user()?.userId)
+        .forEach(a => {
+          a.primaryUser = 1;
+          this.db.agents.put(a);
+        });
+      }
+    })
+
+    effect(async () => {
+      console.log(`The currentUser: ${this.primaryAgent()?.userId}`);
+      if (this.primaryAgent()){
+        console.log("inside if");
+        let response = await fetch('/field_contact_bff/api/agent-caseload/' + this.primaryAgent()?.userId);
+        let offenders = await response.json();
+        await this.db.caseload.bulkAdd(offenders);
+      }
+    });
+  }
+
+}
