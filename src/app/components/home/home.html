@@ -39,12 +39,12 @@
   </mat-toolbar>
   <app-my-caseload></app-my-caseload>
 </div>
-@if(this.agentService.allAgents()) {
-  @let agents = this.agentService.allAgents();
-  @for (agent of agents; track agent.userId) {
-    <p>{{agent.userId}} | {{agent.primaryUser}}</p>
+<!--@if(this.agentService.allAgents()) {-->
+<!--  @let agents = this.agentService.allAgents();-->
+<!--  @for (agent of agents; track agent.userId) {-->
+<!--    <p>{{agent.userId}} | {{agent.primaryUser}}</p>-->
 
-  }
-}
+<!--  }-->
+<!--}-->
 
 
