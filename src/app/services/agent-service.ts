@@ -11,34 +11,34 @@ import {UserService} from './user-service';
   providedIn: 'root'
 })
 export class AgentService {
-  db:Db = inject(Db);
+  db: Db = inject(Db);
   userService: UserService = inject(UserService);
 
-  primaryAgent: Signal <Agent | undefined>  = toSignal(from(
-    liveQuery( ()=> this.db.agents
+  primaryAgent: Signal<Agent | undefined> = toSignal(from(
+    liveQuery(() => this.db.agents
       .where('primaryUser')
       .equals(1)
       .first()))
   );
   allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
-    liveQuery(async ()=> this.db.agents.toArray()))
+    liveQuery(async () => this.db.agents.toArray()))
   );
 
   constructor() {
 
     effect(async () => {
-      if(this.allAgents()){
-      this.allAgents()?.filter(a => a.userId == this.userService.user()?.userId)
-        .forEach(a => {
-          a.primaryUser = 1;
-          this.db.agents.put(a);
-        });
+      if (this.allAgents()) {
+        this.allAgents()?.filter(a => a.userId == this.userService.user()?.userId)
+          .forEach(a => {
+            a.primaryUser = 1;
+            this.db.agents.put(a);
+          });
       }
     })
 
     effect(async () => {
       console.log(`The currentUser: ${this.primaryAgent()?.userId}`);
-      if (this.primaryAgent()){
+      if (this.primaryAgent()) {
         console.log("inside if");
         let response = await fetch('/field_contact_bff/api/agent-caseload/' + this.primaryAgent()?.userId);
         let offenders = await response.json();

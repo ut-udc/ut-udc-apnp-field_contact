@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import {Home} from './components/home/home';
+import {OffenderDetail} from './components/offender-detail/offender-detail';
 
 export const routes: Routes = [
   {
@@ -7,11 +8,11 @@ export const routes: Routes = [
     component: Home,
     title: 'Supervision Contact Home',
   },
-  // {
-  //   path: 'offender-detail/:offenderNumber',
-  //   component: OffenderDetail,
-  //   title: 'Offender Detail',
-  // },
+  {
+    path: 'offender-detail/:offenderNumber',
+    component: OffenderDetail,
+    title: 'Offender Detail',
+  },
   // {
   //   path: 'contact-form/:offenderNumber',
   //   component: ContactForm,

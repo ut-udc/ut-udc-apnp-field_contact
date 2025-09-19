@@ -40,9 +40,6 @@ export class MyCaseload implements OnInit {
   myCaseload: Signal<Array<Offender> | undefined> = toSignal(from(
   liveQuery(async ()=> this.db.caseload.toArray()))
 );
-  caseload: Offender[] = [];
-
-  //*****************************************************************************************************//
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
