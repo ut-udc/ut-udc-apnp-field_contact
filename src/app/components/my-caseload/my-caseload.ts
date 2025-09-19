@@ -14,6 +14,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
 import {from} from 'rxjs';
+import {AgentService} from '../../services/agent-service';
 
 @Component({
   selector: 'app-my-caseload',
@@ -33,13 +34,10 @@ import {from} from 'rxjs';
 })
 export class MyCaseload implements OnInit {
   db:Db = inject(Db);
+  agentService:AgentService = inject(AgentService);
   searchForm: FormGroup = new FormGroup({
     searchTerm: new FormControl<string | null>(null),
   });
-
-  myCaseload: Signal<Array<Offender> | undefined> = toSignal(from(
-  liveQuery(async ()=> this.db.caseload.toArray()))
-);
 
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
@@ -60,10 +58,10 @@ export class MyCaseload implements OnInit {
   filterCaseloadByOffenderInformation(searchTerm: string): void {
     console.log('searchTerm: ' + searchTerm);
     if (!searchTerm) {
-      this.myCaseload();
+      this.agentService.myCaseload();
       return;
     } else {
-      this.myCaseload()?.filter((offender:Offender) => {
+      this.agentService.myCaseload()?.filter((offender:Offender) => {
 
           if (offender.offenderAddress) {
             var lineOne = offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne : '';

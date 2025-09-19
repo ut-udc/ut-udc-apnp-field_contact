@@ -8,7 +8,7 @@
         style="display: flex; align-items: center"
       >
         <span class="source-sans"
-          >{{ (myCaseload())?.length || 0 }} offenders</span
+          >{{ (this.agentService.myCaseload())?.length || 0 }} offenders</span
         >
         <span class="header-spacer"></span>
         <form [formGroup]="searchForm" (keyup)="filterCaseloadByOffenderInformation(searchForm.value.searchTerm)">
@@ -28,8 +28,8 @@
         ></mat-icon>
       </div>
       <div>
-        @if (myCaseload()) {
-          @for (offender of myCaseload(); track offender.offenderNumber) {
+        @if (agentService.myCaseload()) {
+          @for (offender of agentService.myCaseload(); track offender.offenderNumber) {
             <app-offender-card [offender]="offender"></app-offender-card>
           }
         } @else {
