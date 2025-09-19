@@ -85,20 +85,6 @@
                 }
               ]
             }
-          },"production-no-opt": {
-            "optimization": false,
-            "outputHashing": "none",
-            "sourceMap": true,
-            "namedChunks": true,
-            "aot": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "fileReplacements": [
-              {
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.production-no-opt.ts"
-              }
-            ]
           }
         },
         "defaultConfiguration": "production"
