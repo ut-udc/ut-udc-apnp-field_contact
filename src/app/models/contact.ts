@@ -5,6 +5,7 @@ export interface Contact {
   secondaryInterviewer: string;
   contactDate: Date;
   contactTime: Date;
+  contactTimeString: string;
   contactTypeId: number; //contact type id
   contactTypeDesc: string;
   locationId: number; //location id

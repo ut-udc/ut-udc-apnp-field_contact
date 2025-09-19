@@ -59,4 +59,13 @@ export class ContactListingCard implements OnInit {
     let shortened = without_html.substring(0, charlimit) + '...';
     return shortened;
   }
+  truncateTimeString(text: string): string {
+    let charlimit = 5;
+    if (!text || text.length <= charlimit) {
+      return text;
+    }
+    let without_html = text.replace(/<(?:.|\n)*?>/gm, '');
+    let shortened = without_html.substring(0, charlimit) + '...';
+    return shortened;
+  }
 }

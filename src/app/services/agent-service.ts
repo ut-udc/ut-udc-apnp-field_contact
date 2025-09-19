@@ -57,7 +57,6 @@ export class AgentService {
       if (this.myCaseload()) {
         this.myCaseload()?.map(offender => offender.offenderNumber)
           .forEach( offender =>{
-              console.log('Offender Number: '+offender);
               this.loadExistingContacts(offender)
             }
           );
@@ -66,9 +65,11 @@ export class AgentService {
   }
 
   loadExistingContacts(offenderNumber: number) {
-    console.log('Offender Number loadExistingContacts: '+offenderNumber);
     let existingContactPromise: Promise<Array<Contact>> = this.loadDataService.fetchData(this.loadDataService.baseUrl + '/existing-contacts/' + offenderNumber);
     existingContactPromise.then(existingContacts => {
+      for (let i = 0; i < existingContacts.length; i++) {
+        existingContacts[i].contactTimeString = existingContacts[i].contactTime.toString();
+      }
       this.db.existingContacts.bulkAdd(existingContacts)
     });
   }
