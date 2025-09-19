@@ -46,7 +46,6 @@ export class ContactListingCard implements OnInit {
     );
   }
   ngOnInit(): void {
-    console.log('Contact: ', this.contact);
   }
 
   truncateChar(text: string): string {
@@ -65,7 +64,7 @@ export class ContactListingCard implements OnInit {
       return text;
     }
     let without_html = text.replace(/<(?:.|\n)*?>/gm, '');
-    let shortened = without_html.substring(0, charlimit) + '...';
+    let shortened = without_html.substring(0, charlimit) + '';
     return shortened;
   }
 }

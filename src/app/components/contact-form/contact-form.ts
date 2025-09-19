@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, Signal,} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -21,6 +21,9 @@ import {Offender} from '../../models/offender';
 import {Agent} from '../../models/agent';
 import {Select2Model} from '../../models/select2-model';
 import {Select2String} from '../../models/select2-string';
+import {UserService} from '../../services/user-service';
+import {Db} from '../../services/db';
+import {AgentService} from '../../services/agent-service';
 
 @Component({
   selector: 'app-contact-form',
@@ -50,6 +53,9 @@ import {Select2String} from '../../models/select2-string';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactForm implements OnInit {
+  db:Db = inject(Db);
+  agentService:AgentService = inject(AgentService);
+  userService:UserService = inject(UserService);
   route: ActivatedRoute = inject(ActivatedRoute);
   contactService: ContactService = inject(ContactService);
 
@@ -60,6 +66,14 @@ export class ContactForm implements OnInit {
   primaryInterviewer: string = '';
   offenderNumber: number = 0;
   contactId: number = 0;
+
+  primaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
+    console.log('here')
+    return this.agentService.allAgents()?.map(agent => {
+      console.log('Agent ' +JSON.stringify(agent));
+      return { id: agent.userId, text: agent.firstName + ' ' + agent.lastName };
+    })
+  });
 
   currentContact: Contact = {
     contactId: 0,
@@ -95,13 +109,11 @@ export class ContactForm implements OnInit {
   primaryOfficers = new Observable<Select2String[]>((observer) => {
     this.contactService.getInterviewerOptions().then((list) => {
       observer.next(list);
-      console.log('Primary Officers line 103:', list);
     });
   });
   secondaryOfficers = new Observable<Select2String[]>((observer) => {
     this.contactService.getInterviewerOptions().then((list) => {
       observer.next(list);
-      console.log('Secondary Officers line 103:', list);
     });
   });
 
@@ -113,7 +125,6 @@ export class ContactForm implements OnInit {
   locationList = new Observable<Select2Model[]>((observer) => {
     this.contactService.getListOfLocations().then((list) => {
       observer.next(list);
-      console.log('Location List line 103:', list);
     });
   });
 
@@ -216,11 +227,8 @@ export class ContactForm implements OnInit {
 
     // Initialize with empty array and then update when promise resolves
     this.contactService.getInterviewerOptions().then((options) => {
-      this.primaryInterviewerOptions = options;
-      console.log('Primary Interviewer Options line 158:', options);
-      this.primaryInterviewerOptions.forEach((option) => {
-        console.log('Primary Interviewer Options line 161:', option);
-      });
+      this.primaryInterviewerOptions = options.filter(value => value.text !== null);
+      console.log('Primary InterviewerOptions line 2:', this.primaryInterviewerOptions);
     });
     this.contactService.getInterviewerOptions().then((options) => {
       this.secondaryInterviewerOptions = options;
@@ -257,7 +265,6 @@ export class ContactForm implements OnInit {
       this.currentContact = this.contact ?? this.currentContact;
     }
     if (this.currentContact.contactId > 0) {
-      setTimeout(() => {
         this.contactForm.updateValueAndValidity();
 
         this.contactForm.patchValue({
@@ -269,17 +276,14 @@ export class ContactForm implements OnInit {
           contactType: this.currentContact?.contactTypeId,
           location: this.currentContact?.locationId,
         });
-      }, 100);
     } else {
-      setTimeout(() => {
         this.currentContact.contactId = this.contactCount + 1;
         this.contactForm.patchValue({
           contactId: this.currentContact?.contactId,
-          primaryInterviewer: this.currentContact.primaryInterviewer,
+          primaryInterviewer: this.userService.user()?.userId,
           contactDate: new Date(),
           contactTime: new Date(),
         });
-      }, 100);
     }
 
     this.contactForm = new FormGroup({

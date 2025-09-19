@@ -51,13 +51,17 @@
         <mat-option>
           <input matInput formControlName="primaryInterviewer" />
         </mat-option>
-        <ng-container *ngIf="primaryOfficers | async as options; else loading">
-          <mat-option
-            *ngFor="let option of options; trackBy: trackOption"
-            [value]="option.id"
-          >
-            {{option.text}}
-          </mat-option>
+        <ng-container>
+          @if (primaryInterviewers()) {
+            @for (interviewer of primaryInterviewers(); track interviewer.id) {
+              <mat-option
+
+                [value]="interviewer.id"
+              >
+                {{ interviewer.text }}
+              </mat-option>
+            }
+          }
         </ng-container>
       </mat-select>
     </mat-form-field>
