@@ -1,0 +1,17 @@
+<a class="visit_listing_card" style="display: flex; margin-top: 15px; text-decoration: none; color: inherit;"
+   [routerLink]="['/contact-detail-view', contact.contactId]" routerLinkActive="router-link-active">
+    <div style="flex: 0;">
+        <mat-icon class="header-icon" svgIcon="note" aria-hidden="false" aria-label="Back Icon"
+        style="cursor: pointer;"></mat-icon>
+    </div>
+    <div style="flex: 1;">
+        @if (contact.contactTime == null) {
+        <span class="label_medium">{{contact.contactDate | date: 'longDate'}} | {{contact.contactDate | date: 'HH:mm'}}</span>
+        }
+        @else {
+        <span class="label_medium">{{contact.contactDate | date: 'longDate'}} | {{contact.contactTime | date: 'HH:mm'}}</span>
+        }
+        <div class="body_large">{{(this.getContactTypeById(contact.contactTypeId) | async)?.text}}</div>
+        <div class="body_medium">{{truncateChar(contact.summary)}}</div>
+    </div>
+</a>

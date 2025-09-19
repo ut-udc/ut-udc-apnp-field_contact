@@ -1,19 +1,15 @@
-import {Component, inject, Input, OnInit, Signal} from '@angular/core';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { OffenderCard } from '../offender-card/offender-card';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Offender } from '../../models/offender';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {liveQuery} from 'dexie';
+import {Component, inject, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
+import {MatDividerModule} from '@angular/material/divider';
+import {OffenderCard} from '../offender-card/offender-card';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Offender} from '../../models/offender';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
 import {Db} from '../../services/db';
-import {from} from 'rxjs';
 import {AgentService} from '../../services/agent-service';
 
 @Component({

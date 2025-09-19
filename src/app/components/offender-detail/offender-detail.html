@@ -1,0 +1,108 @@
+<div class="surface">
+  @if (currentOffender()) {
+    <app-detail-header
+      [title]="'Offender Panel'"
+      [backLink]="'/'"
+    ></app-detail-header>
+
+    <div class="detail-card">
+      <div style="display: flex">
+        <div style="flex: 1">
+          <ng-container>
+            <img src="/field_contact_bff/api/offender-photo/{{currentOffender()?.offenderNumber}}"/>
+          </ng-container>
+        </div>
+        <div style="flex: 2">
+          <div class="label_medium">{{ currentOffender()?.offenderNumber }}</div>
+          <div class="title_xlarge">
+            {{ currentOffender()?.defaultOffenderName?.lastName }}, {{ currentOffender()?.defaultOffenderName?.firstName }}
+          </div>
+          <div class="label_medium">
+            Last Successful Contact:
+            @if (currentOffender()?.lastSuccessfulContact) {
+              {{ currentOffender()?.lastSuccessfulContact?.contactDate ? (currentOffender()?.lastSuccessfulContact?.contactDate | date: 'MM/dd/yyyy') : 'N/A' }}
+            }
+          </div>
+        </div>
+      </div>
+      <br/>
+      <button
+        class="add-contact-button"
+        [routerLink]="['/contact-form', currentOffender()?.offenderNumber]"
+        matRipple
+        [matRippleCentered]="centered"
+        [matRippleDisabled]="disabled"
+        [matRippleUnbounded]="unbounded"
+        [matRippleRadius]="radius"
+        [matRippleColor]="color"
+      >
+        <mat-icon svgIcon="add-white"></mat-icon>
+        Supervision Contact Entry
+      </button>
+    </div>
+    <br/>
+    <div class="detail-card">
+      <span class="label_large_prominent">Contact Information</span>
+      <div style="display: flex; margin-top: 15px">
+        <div style="flex: 0">
+          <mat-icon
+            class="header-icon"
+            svgIcon="phone"
+            aria-hidden="false"
+            aria-label="Back Icon"
+            style="cursor: pointer"
+          ></mat-icon>
+        </div>
+        <div style="flex: 1">
+          <div class="label_medium">Primary Phone</div>
+          <div class="body_small">{{ currentOffender()?.phone }}</div>
+        </div>
+      </div>
+      <div style="display: flex; margin-top: 15px">
+        <div style="flex: 0">
+          <mat-icon
+            class="header-icon"
+            svgIcon="location_on"
+            aria-hidden="false"
+            aria-label="Back Icon"
+            style="cursor: pointer"
+          ></mat-icon>
+        </div>
+
+        <div style="flex: 1">
+          <div class="label_medium">Home Address</div>
+          <div class="body_small">
+            {{ currentOffender()?.offenderAddress?.lineOne }}<br/>{{ currentOffender()?.offenderAddress?.city }}
+            , {{ currentOffender()?.offenderAddress?.state }}
+            {{ currentOffender()?.offenderAddress?.zipCode }}
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  <!-- **********iterate************ -->
+  <ng-container>
+    <!--<app-contact-listing-card
+      *ngFor="let contact of contacts"
+      [contact]="contact"
+    >
+    </app-contact-listing-card>-->
+  </ng-container>
+  @if (existingContacts()) {
+    <ng-container>
+      @for (contact of existingContacts(); track contact?.contactId) {
+        <app-contact-listing-card
+          [contact]="contact"
+        >
+        </app-contact-listing-card>
+      }
+    </ng-container>
+  }
+  <ng-template #loading>
+    <div class="surface">Loading...</div>
+  </ng-template>
+  <!-- ********************** -->
+</div>
+<ng-template #loading>
+  <div class="surface">Loading...</div>
+</ng-template>

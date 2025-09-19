@@ -1,13 +1,10 @@
 import {effect, inject, Injectable, Signal} from '@angular/core';
-import {User} from '../models/user';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {from} from 'rxjs';
 import {liveQuery} from 'dexie';
 import {Db} from './db';
 import {Agent} from '../models/agent';
 import {UserService} from './user-service';
-import {MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
 import {Offender} from '../models/offender';
 
 @Injectable({

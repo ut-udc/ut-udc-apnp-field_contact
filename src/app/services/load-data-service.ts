@@ -1,11 +1,8 @@
-import {inject, Injectable, Signal, signal} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {Agent} from '../models/agent';
 import {Db} from './db';
 import {User} from '../models/user';
 import {Select2Model} from '../models/select2-model';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {from} from 'rxjs';
-import {liveQuery} from 'dexie';
 
 @Injectable({
   providedIn: 'root'
