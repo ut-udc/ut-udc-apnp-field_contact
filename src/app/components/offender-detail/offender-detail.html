@@ -82,11 +82,12 @@
   }
   <!-- **********iterate************ -->
   <ng-container>
-    <!--<app-contact-listing-card
-      *ngFor="let contact of contacts"
-      [contact]="contact"
-    >
-    </app-contact-listing-card>-->
+    @for (contact of existingContacts(); track contact.contactId) {
+      <app-contact-listing-card
+        [contact]="contact"
+      >
+      </app-contact-listing-card>
+    }
   </ng-container>
   @if (existingContacts()) {
     <ng-container>

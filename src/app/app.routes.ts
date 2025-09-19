@@ -1,6 +1,7 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {Home} from './components/home/home';
 import {OffenderDetail} from './components/offender-detail/offender-detail';
+import {ContactForm} from './components/contact-form/contact-form';
 
 export const routes: Routes = [
   {
@@ -13,16 +14,16 @@ export const routes: Routes = [
     component: OffenderDetail,
     title: 'Offender Detail',
   },
-  // {
-  //   path: 'contact-form/:offenderNumber',
-  //   component: ContactForm,
-  //   title: 'Contact Form',
-  // },
-  // {
-  //   path: 'contact-form/:offenderNumber/:contactId',
-  //   component: ContactForm,
-  //   title: 'Contact Form',
-  // },
+  {
+    path: 'contact-form/:offenderNumber',
+    component: ContactForm,
+    title: 'Contact Form',
+  },
+  {
+    path: 'contact-form/:offenderNumber/:contactId',
+    component: ContactForm,
+    title: 'Contact Form',
+  },
   // {
   //   path: 'commentary-form/:offenderNumber/:contactId',
   //   component: CommentaryForm,

@@ -6,6 +6,8 @@ import {Db} from './db';
 import {Agent} from '../models/agent';
 import {UserService} from './user-service';
 import {Offender} from '../models/offender';
+import {Contact} from '../models/contact';
+import {LoadDataService} from './load-data-service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ import {Offender} from '../models/offender';
 export class AgentService {
   db: Db = inject(Db);
   userService: UserService = inject(UserService);
+  loadDataService: LoadDataService = inject(LoadDataService);
 
   primaryAgent: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
@@ -48,6 +51,25 @@ export class AgentService {
         let offenders = await response.json();
         await this.db.caseload.bulkAdd(offenders);
       }
+    });
+
+    effect(async () => {
+      if (this.myCaseload()) {
+        this.myCaseload()?.map(offender => offender.offenderNumber)
+          .forEach( offender =>{
+              console.log('Offender Number: '+offender);
+              this.loadExistingContacts(offender)
+            }
+          );
+      }
+    });
+  }
+
+  loadExistingContacts(offenderNumber: number) {
+    console.log('Offender Number loadExistingContacts: '+offenderNumber);
+    let existingContactPromise: Promise<Array<Contact>> = this.loadDataService.fetchData(this.loadDataService.baseUrl + '/existing-contacts/' + offenderNumber);
+    existingContactPromise.then(existingContacts => {
+      this.db.existingContacts.bulkAdd(existingContacts)
     });
   }
 
