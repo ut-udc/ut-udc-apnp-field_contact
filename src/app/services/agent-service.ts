@@ -36,16 +36,17 @@ export class AgentService {
 
     effect(async () => {
       if (this.allAgents()) {
-        this.allAgents()?.filter(a => a.userId == this.userService.user()?.userId)
-          .forEach(a => {
-            a.primaryUser = 1;
-            this.db.agents.put(a);
-          });
+        let agent: Agent | undefined = this.allAgents()!.find(a => a.userId == this.userService.user()?.userId);
+        let update  = { userId: 'abadger', primaryUser: 1 };
+        if (agent) {
+          update.userId = agent.userId;
+        }
+
+        this.db.agents.update(update.userId, update);
       }
     })
 
     effect(async () => {
-      console.log(`The currentUser: ${this.primaryAgent()?.userId}`);
       if (this.primaryAgent()) {
         console.log("inside if");
         let response = await fetch('/field_contact_bff/api/agent-caseload/' + this.primaryAgent()?.userId);

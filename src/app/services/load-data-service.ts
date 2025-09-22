@@ -12,7 +12,7 @@ export class LoadDataService {
   baseUrl: string = '/field_contact_bff/api';
 
   constructor() {
-    let userPromise: Promise<User> = this.fetchData(this.baseUrl + '/user?impersonateId=abadger');
+    let userPromise: Promise<User> = this.fetchData(this.baseUrl + '/user');
 
     let agentListPromise: Promise<Array<Agent>> = this.fetchData(this.baseUrl + '/agents-with-offenders');
     let locationListPromise: Promise<Array<Select2Model>> = this.fetchData(this.baseUrl + '/locations');
