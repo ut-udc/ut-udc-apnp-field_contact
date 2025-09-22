@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {Component, effect, inject, OnInit, Signal} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -33,6 +33,7 @@ import {Db} from '../../services/db';
 export class OffenderDetail implements OnInit {
   db: Db = inject(Db);
   route: ActivatedRoute = inject(ActivatedRoute);
+  path = '/field_contact_bff/api';
 
   currentOffender: Signal<Offender | undefined> = toSignal(from(
     liveQuery(() => this.db.caseload
@@ -45,7 +46,7 @@ export class OffenderDetail implements OnInit {
       .where('offenderNumber')
       .equals(Number(this.route.snapshot.params['offenderNumber'])).reverse()
       .sortBy('contactDate')
-  )));
+    )));
   unsyncedContacts: Signal<Array<Contact> | undefined> = toSignal(from(
     liveQuery(async () => this.db.contacts
       .where('offenderNumber')
@@ -55,6 +56,16 @@ export class OffenderDetail implements OnInit {
 
   constructor() {
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
+
+    effect(async () => {
+      if (this.currentOffender()) {
+        if (!(this.currentOffender()!.lastSuccessfulContact)) {
+          this.db.caseload.update(Number(this.route.snapshot.params['offenderNumber']), {
+            lastSuccessfulContact: await this.getLatestOffenderContact(Number(this.route.snapshot.params['offenderNumber']))
+          },);
+        }
+      }
+    })
 
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
@@ -82,8 +93,14 @@ export class OffenderDetail implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+
+
   }
 
+  async getLatestOffenderContact(offenderNumber: number) {
+    console.log('Fetching latest successful contact for offender number:', (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json());
+    return (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json();
+  }
 
   rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
     throw new Error('Method not implemented.');

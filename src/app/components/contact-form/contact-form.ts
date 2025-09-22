@@ -91,7 +91,7 @@ export class ContactForm implements OnInit {
     primaryInterviewer: '',
     secondaryInterviewer: '',
     contactDate: this.newDate(),
-    contactTime: this.newDate(),
+    contactTime: '',
     contactTimeString: '',
     contactTypeId: 0,
     contactTypeDesc: '',

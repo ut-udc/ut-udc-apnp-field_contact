@@ -48,9 +48,8 @@ export class AgentService {
 
     effect(async () => {
       if (this.primaryAgent()) {
-        console.log("inside if");
         let response = await fetch('/field_contact_bff/api/agent-caseload/' + this.primaryAgent()?.userId);
-        let offenders = await response.json();
+        let offenders:Array<Offender> = await response.json();
         await this.db.caseload.bulkAdd(offenders);
       }
     });

@@ -1,5 +1,5 @@
 <div class="surface">
-  <span class="detail-header">
+    <span class="detail-header">
     <a
       [routerLink]="'/offender-detail/' + currentContact()?.offenderNumber"
       style="text-decoration: none; color: inherit; cursor: pointer"
@@ -16,48 +16,51 @@
     <span class="title_large">Supervision Contact Detail</span>
   </span>
 
-  <div>
-    <div class="contact-info-container">
-      <span class="label_medium">Date</span>
-      <span class="body_large"
-        >{{currentContact()?.contactDate | date: 'MM/dd/yyyy'}} |
-        {{currentContact()?.contactTime | date: 'HH:mm'}}</span
-      >
+    <div>
+      <div class="contact-info-container">
+        <span class="label_medium">Date</span>
+        <span class="body_large"
+        >{{ currentContact()?.contactDate | date: 'MM/dd/yyyy' }} |
+          {{ truncateTimeString(currentContact()!.contactTime) || '' }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Primary Interviewer</span>
+        <span class="body_large"
+        >{{ primaryInterviewer()?.name || currentContact()?.primaryInterviewer }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Secondary Interviewer</span>
+        <span class="body_large"
+        >{{ secondaryInterviewer()?.name || currentContact()?.secondaryInterviewer }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Contact Type</span>
+        <span class="body_large"
+        >{{ currentContact()?.contactTypeDesc }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Location</span>
+        <span class="body_large"
+        >{{ currentContact()?.locationDesc }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Contact Result</span>
+        <span class="body_large"
+        >{{
+            currentContact()?.wasContactSuccessful ? 'Made Contact' :
+              'Attempted Contact'
+          }}</span
+        >
+      </div>
+      <div class="contact-info-container">
+        <span class="label_medium">Commentary</span>
+        <span class="body_medium">{{ currentContact()?.summary }}</span>
+      </div>
     </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Primary Interviewer</span>
-      <span class="body_large"
-        >{{primaryInterviewer()?.name || 'N/A'}}</span
-      >
-    </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Secondary Interviewer</span>
-      <span class="body_large"
-        >{{secondaryInterviewer()?.name || 'N/A'}}</span
-      >
-    </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Contact Type</span>
-      <span class="body_large"
-        >{{currentContact()?.contactTypeDesc}}</span
-      >
-    </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Location</span>
-      <span class="body_large"
-        >{{currentContact()?.locationDesc}}</span
-      >
-    </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Contact Result</span>
-      <span class="body_large"
-        >{{currentContact()?.wasContactSuccessful ? 'Made Contact' :
-        'Attempted Contact'}}</span
-      >
-    </div>
-    <div class="contact-info-container">
-      <span class="label_medium">Commentary</span>
-      <span class="body_medium">{{currentContact()?.summary}}</span>
-    </div>
-  </div>
+
 </div>

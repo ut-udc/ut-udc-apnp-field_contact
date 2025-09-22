@@ -4,7 +4,7 @@ export interface Contact {
   primaryInterviewer: string;
   secondaryInterviewer: string;
   contactDate: Date;
-  contactTime: Date;
+  contactTime: string;
   contactTimeString: string;
   contactTypeId: number; //contact type id
   contactTypeDesc: string;
