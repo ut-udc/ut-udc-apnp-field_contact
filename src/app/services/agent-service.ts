@@ -23,6 +23,7 @@ export class AgentService {
       .equals(1)
       .first()))
   );
+
   allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
     liveQuery(async () => this.db.agents.toArray()))
   );

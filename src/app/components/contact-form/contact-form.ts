@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, computed, inject, OnInit, Signal,} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, Signal,} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {AsyncPipe, CommonModule, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, CommonModule, NgForOf} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
@@ -43,7 +43,6 @@ import {AgentService} from '../../services/agent-service';
     MatDividerModule,
     MatSelectModule,
     NgForOf,
-    NgIf,
     CommonModule,
     DetailHeader,
   ],
@@ -59,6 +58,8 @@ export class ContactForm implements OnInit {
   route: ActivatedRoute = inject(ActivatedRoute);
   contactService: ContactService = inject(ContactService);
 
+  newDate: Signal<Date> = signal(new Date());
+
   offender: Offender | undefined = undefined;
   contact: Contact | undefined = undefined;
 
@@ -68,20 +69,29 @@ export class ContactForm implements OnInit {
   contactId: number = 0;
 
   primaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
-    console.log('here')
     return this.agentService.allAgents()?.map(agent => {
-      console.log('Agent ' +JSON.stringify(agent));
-      return { id: agent.userId, text: agent.firstName + ' ' + agent.lastName };
+      let selectOption:Select2String = { id: agent.userId, text: agent.name };
+      return selectOption;
     })
   });
+  secondaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
+    return this.agentService.allAgents()?.map(agent => {
+      let selectOption:Select2String = { id: agent.userId, text: agent.name };
+      return selectOption;
+    })
+  });
+
+  // locationOptionsSignal: Signal<Array<Select2Model> | undefined> = computed(() => {
+  //   return this.db.locations.toArray();
+  // });
 
   currentContact: Contact = {
     contactId: 0,
     offenderNumber: 0,
     primaryInterviewer: '',
     secondaryInterviewer: '',
-    contactDate: new Date(),
-    contactTime: new Date(),
+    contactDate: this.newDate(),
+    contactTime: this.newDate(),
     contactTimeString: '',
     contactTypeId: 0,
     contactTypeDesc: '',
@@ -163,6 +173,7 @@ export class ContactForm implements OnInit {
       };
 
       this.currentContact.contactId = this.contactCount + 1;
+      console.log('Contact to save: '+this.currentContact);
       this.contactService.addContact(this.currentContact);
     } else if (
       this.currentContact.contactId > 0 &&
@@ -174,8 +185,8 @@ export class ContactForm implements OnInit {
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
         primaryInterviewer: this.contactForm.value.primaryInterviewer ?? '',
         secondaryInterviewer: this.contactForm.value.secondaryInterviewer ?? '',
-        contactDate: this.contactForm.value.contactDate ?? new Date(),
-        contactTime: this.contactForm.value.contactTime ?? new Date(),
+        contactDate: this.contactForm.value.contactDate ?? this.newDate(),
+        contactTime: this.contactForm.value.contactTime ?? this.newDate(),
         contactTimeString: '',
         contactTypeId: this.contactForm.value.contactType ?? '',
         contactTypeDesc: '',
@@ -190,8 +201,7 @@ export class ContactForm implements OnInit {
       };
       this.contactService.updateContact(this.currentContact);
     }
-
-    // console.log(this.contactData.getAllContacts());
+      window.location.href = '/commentary-form', this.currentContact.offenderNumber, this.currentContact.contactId
   }
 
   contactForm: FormGroup = new FormGroup({
@@ -203,6 +213,13 @@ export class ContactForm implements OnInit {
     contactType: new FormControl<string | null>(null),
     location: new FormControl<string | null>(null),
   });
+  contactIdSignal: Signal<number> = signal(0);
+  contactDateSignal: Signal<Date> = signal(new Date());
+  contactTimeSignal: Signal<Date> = signal(new Date());
+  primaryInterviewerSignal: Signal<string> = signal('');
+  secondaryInterviewerSignal: Signal<string> = signal('');
+  contactTypeSignal: Signal<string> = signal('');
+  locationSignal: Signal<string> = signal('');
 
   //This is for the 24-hour clock
   private readonly _adapter =
@@ -280,9 +297,9 @@ export class ContactForm implements OnInit {
         this.currentContact.contactId = this.contactCount + 1;
         this.contactForm.patchValue({
           contactId: this.currentContact?.contactId,
-          primaryInterviewer: this.userService.user()?.userId,
-          contactDate: new Date(),
-          contactTime: new Date(),
+          primaryInterviewer: this.agentService.primaryAgent()?.userId,
+          contactDate: this.newDate(),
+          contactTime: this.newDate(),
         });
     }
 

@@ -15,7 +15,9 @@ export class ContactService {
     const options: Select2String[] = [];
     const agentList = await this.getAgentList();
     agentList.forEach((agent) => {
-      options.push({ id: agent.userId, text: agent.name });
+      if (!agent.name) {
+        options.push({id: agent.userId, text: agent.name});
+      }
     });
     return options;
   }
@@ -35,9 +37,6 @@ export class ContactService {
   async getLocationDescById(id: number) {
     const location = await this.db.locations.get(Number(id));
     return location?.text || '';
-  }
-  async getContactTypeById(id: number) {
-    return this.db.contactTypes.get(Number(id));
   }
   async getContactTypeDescById(id: number) {
     const contactType = await this.db.contactTypes.get(Number(id));

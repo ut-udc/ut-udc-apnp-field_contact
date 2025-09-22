@@ -65,42 +65,27 @@
         </ng-container>
       </mat-select>
     </mat-form-field>
-
     <mat-form-field class="contact_form_input_field">
       <mat-label>Secondary Interviewer</mat-label>
       <mat-select [formControl]="secondaryInterviewerControl">
         <mat-option>
           <input matInput formControlName="secondaryInterviewer" />
         </mat-option>
-        <ng-container
-          *ngIf="secondaryOfficers | async as options; else loading"
-        >
-          <mat-option
-            *ngFor="let option of options; trackBy: trackOption"
-            [value]="option.id"
-          >
-            {{option.text}}
-          </mat-option>
+        <ng-container>
+          @if (secondaryInterviewers()) {
+            @for (interviewer of secondaryInterviewers(); track interviewer.id) {
+              <mat-option
+
+                [value]="interviewer.id"
+              >
+                {{ interviewer.text }}
+              </mat-option>
+            }
+          }
         </ng-container>
       </mat-select>
     </mat-form-field>
 
-    <!-- <mat-form-field class="contact_form_input_field">
-      <mat-label>Secondary Interviewer</mat-label>
-      <mat-select [formControl]="secondaryInterviewerControl">
-        <mat-option>
-          <input matInput formControlName="secondaryInterviewer" />
-        </mat-option>
-        <ng-container *ngIf="secondaryInterviewerOptions | async as options; else loading">
-          <mat-option
-            *ngFor="let option of options; trackBy: trackOption"
-            [value]="option.id"
-          >
-            {{option.text}}
-          </mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field> -->
     <mat-form-field class="contact_form_input_field">
       <mat-label>Contact Type</mat-label>
       <mat-select required [formControl]="contactTypeControl">
@@ -143,7 +128,6 @@
             matButton="filled"
             type="submit"
             (click)="onSubmit()"
-            [routerLink]="['/commentary-form', currentContact.offenderNumber, currentContact.contactId]"
             [disabled]="!contactForm.valid"
           >
             Next
