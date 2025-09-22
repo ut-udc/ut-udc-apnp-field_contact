@@ -129,6 +129,7 @@
             type="submit"
             (click)="onSubmit()"
             [disabled]="!contactForm.valid"
+            [routerLink]="['/commentary-form', offenderNumber, currentContact.contactId]"
           >
             Next
           </button>

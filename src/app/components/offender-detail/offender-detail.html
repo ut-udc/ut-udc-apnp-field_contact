@@ -82,9 +82,9 @@
   }
   <!-- **********iterate************ -->
   <ng-container>
-    @for (contact of existingContacts(); track contact.contactId) {
+    @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
       <app-contact-listing-card
-        [contact]="contact"
+        [contact]="unsyncedContact"
       >
       </app-contact-listing-card>
     }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import Dexie, {Table} from "dexie";
 import {Contact} from '../models/contact';
 import {QueuedContact} from '../models/queued-contact';
@@ -6,7 +6,6 @@ import {Agent} from '../models/agent';
 import {OffenderBase} from '../models/offender-base';
 import {Offender} from '../models/offender';
 import {Select2Model} from '../models/select2-model';
-import {Subscription} from 'rxjs';
 import {ContactSummary} from '../models/contact-summary';
 import {HttpClient} from '@angular/common/http';
 import {User} from '../models/user';
@@ -32,9 +31,9 @@ export class Db extends Dexie {
     super('supervisionContactsDB');
     this.version(1).stores({
       contacts:
-        '&contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       existingContacts:
-        '&contactId, offenderNumber, agentId, secondaryAgentId, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       users:
         '&userId, firstName, lastName, fullName, emailAddress,  supervisorId, loggedInUser',

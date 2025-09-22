@@ -43,7 +43,7 @@ export class OffenderDetail implements OnInit {
   existingContacts: Signal<Array<Contact> | undefined> = toSignal(from(
     liveQuery(async () => this.db.existingContacts
       .where('offenderNumber')
-      .equals(Number(this.route.snapshot.params['offenderNumber']))
+      .equals(Number(this.route.snapshot.params['offenderNumber'])).reverse()
       .sortBy('contactDate')
   )));
   unsyncedContacts: Signal<Array<Contact> | undefined> = toSignal(from(

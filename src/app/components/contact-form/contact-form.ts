@@ -150,6 +150,7 @@ export class ContactForm implements OnInit {
   searchTerm2: string = '';
 
   async onSubmit() {
+    console.log('Submitting...', this.currentContact.offenderNumber, this.currentContact.contactId);
     if (this.currentContact.contactId === 0) {
       this.currentContact.firstPageCompleted = true;
       this.currentContact = {
@@ -201,7 +202,7 @@ export class ContactForm implements OnInit {
       };
       this.contactService.updateContact(this.currentContact);
     }
-      window.location.href = '/commentary-form', this.currentContact.offenderNumber, this.currentContact.contactId
+      // window.location.href = 'commentary-form/', this.currentContact.offenderNumber, this.currentContact.contactId;
   }
 
   contactForm: FormGroup = new FormGroup({
@@ -282,6 +283,7 @@ export class ContactForm implements OnInit {
       this.currentContact = this.contact ?? this.currentContact;
     }
     if (this.currentContact.contactId > 0) {
+      setTimeout(() => {
         this.contactForm.updateValueAndValidity();
 
         this.contactForm.patchValue({
@@ -293,7 +295,9 @@ export class ContactForm implements OnInit {
           contactType: this.currentContact?.contactTypeId,
           location: this.currentContact?.locationId,
         });
+      }, 100);
     } else {
+      setTimeout(() => {
         this.currentContact.contactId = this.contactCount + 1;
         this.contactForm.patchValue({
           contactId: this.currentContact?.contactId,
@@ -301,6 +305,7 @@ export class ContactForm implements OnInit {
           contactDate: this.newDate(),
           contactTime: this.newDate(),
         });
+      }, 100);
     }
 
     this.contactForm = new FormGroup({

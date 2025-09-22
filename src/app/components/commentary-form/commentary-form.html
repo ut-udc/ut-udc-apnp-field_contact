@@ -1,0 +1,120 @@
+<div class="surface">
+  <app-detail-header
+    [title]="'Add Commentary'"
+    [backLink]="'/contact-form/' + currentContact()?.offenderNumber + '/' + currentContact()?.contactId"
+  ></app-detail-header>
+  <div class="surface-container-low-outlined">
+    <div class="contact-info-container">
+      <span class="label_medium">Offender</span>
+      <span class="body_large"
+        >{{offender()?.defaultOffenderName?.firstName}} {{offender()?.defaultOffenderName?.lastName}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Date</span>
+      <span class="body_large"
+        >{{currentContact()?.contactDate | date: 'MM/dd/yyyy'}} |
+        {{currentContact()?.contactTime | date: 'HH:mm'}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Primary Interviewer</span>
+      <span class="body_large"
+        >{{primaryInterviewer()?.name}}</span
+      >
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Secondary Interviewer</span>
+      <span class="body_large">
+        {{secondaryInterviewer()?.name || 'N/A'}}
+      </span>
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Contact Type</span>
+      <span class="body_large">
+          {{ contactType()?.text}}
+      </span>
+    </div>
+    <div class="contact-info-container">
+      <span class="label_medium">Location</span>
+      <span class="body_large">
+          {{ location()?.text}}
+      </span>
+    </div>
+  </div>
+  <div
+    class="type-of-contact-btn-container"
+  ></div>
+  <div class="summary-of-contact-container">
+    <form [formGroup]="commentaryForm" (submit)="onSubmit()">
+      <mat-button-toggle-group
+        formControlName="wasContactSuccessful"
+        required
+        class="{{errorClass}}"
+        name="fontStyle"
+        aria-label="Font Style"
+      >
+        <mat-button-toggle
+          class="successFab"
+          matFab
+          (click)="madeContact()"
+          value="bold"
+          >Made Contact</mat-button-toggle
+        >
+        <mat-button-toggle
+          class="successFab"
+          matFab
+          (click)="attemptedContact()"
+          value="italic"
+          >Attempted Contact</mat-button-toggle
+        >
+      </mat-button-toggle-group>
+      <mat-form-field class="contact_form_input_field">
+        <mat-label>Summary of Contact</mat-label>
+        <textarea
+          matInput
+          formControlName="commentary"
+          placeholder="Include details related to the R&R efforts of the visit."
+          [ngModel]="currentContact()?.summary || ''"
+          required
+        ></textarea>
+      </mat-form-field>
+    </form>
+    <span class="summary-of-contact-container"
+      >Tap the mic next to your keyboard to initiate voice to text</span
+    >
+  </div>
+
+  <div class="on-surface-variant">
+    <span>
+      <button matButton="text" (click)="openBottomSheet()">
+        <mat-icon class="info-field-icon">info_outline</mat-icon> Field Visit
+        Guidelines
+      </button>
+    </span>
+  </div>
+
+  <div class="on-surface-variant">
+    <mat-divider class="divider"></mat-divider>
+    <section>
+      <div class="button-row">
+        <button
+          matButton="outlined"
+          routerLink="/offender-detail/{{(currentContact())?.offenderNumber}}"
+        >
+          Cancel
+        </button>
+
+        <button
+          matButton="filled"
+          type="submit"
+          (click)="onSubmit()"
+          [disabled]="!commentaryForm.valid"
+          routerLink="/offender-detail/{{(currentContact())?.offenderNumber}}"
+        >
+          Save
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
