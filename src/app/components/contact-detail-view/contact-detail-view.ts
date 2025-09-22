@@ -27,7 +27,6 @@ export class ContactDetailView {
       .first()))
   );
 
-
   primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
       .where('userId')

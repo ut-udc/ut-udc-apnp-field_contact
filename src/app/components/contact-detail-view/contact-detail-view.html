@@ -1,7 +1,7 @@
 <div class="surface">
   <span class="detail-header">
     <a
-      [routerLink]="'/offender-detail/' + currentContact()?.offenderNumber || ''"
+      [routerLink]="'/offender-detail/' + currentContact()?.offenderNumber"
       style="text-decoration: none; color: inherit; cursor: pointer"
       aria-label="Back to Offender Detail"
     >
@@ -45,7 +45,7 @@
     <div class="contact-info-container">
       <span class="label_medium">Location</span>
       <span class="body_large"
-        >{{currentContact()?.locationDesc || 'N/A'}}</span
+        >{{currentContact()?.locationDesc}}</span
       >
     </div>
     <div class="contact-info-container">

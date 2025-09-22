@@ -112,12 +112,6 @@ export class CommentaryForm implements OnInit {
       this.contactService.addPostContactToQueue(this.currentContact()!);
       this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
 
-      // ((contact) => {
-      //   contact.formCompleted = true;
-      //   contact.summary = this.commentaryForm.value.commentary ?? '';
-      //   this.contactData.addPostContactToQueue(contact);
-      //   this.contactData.removeContactFromContacts(contact.contactId);
-      // });
       return;
     } else {
       this.currentContact()!.formCompleted = true;

@@ -83,8 +83,10 @@ export class ContactService {
           }
           return response.json();
         })
-        .then((data: Contact) => {
-          this.db.contacts.add(data);
+        .then((data: number) => {
+          this.db.contacts.delete(contact.contactId)
+          contact.contactId = data;
+          this.db.existingContacts.add(contact);
           return data;
         });
     } catch (error) {
