@@ -3,6 +3,7 @@ import {Home} from './components/home/home';
 import {OffenderDetail} from './components/offender-detail/offender-detail';
 import {ContactForm} from './components/contact-form/contact-form';
 import {CommentaryForm} from './components/commentary-form/commentary-form';
+import {ContactDetailView} from './components/contact-detail-view/contact-detail-view';
 
 export const routes: Routes = [
   {
@@ -35,11 +36,11 @@ export const routes: Routes = [
   //   component: AgentProfile,
   //   title: 'Agent Profile',
   // },
-  // {
-  //   path: 'contact-detail-view/:contactId',
-  //   component: ContactDetailView,
-  //   title: 'Contact Detail View',
-  // },
+  {
+    path: 'contact-detail-view/:contactId',
+    component: ContactDetailView,
+    title: 'Contact Detail View',
+  },
   // {
   //   path: 'add-offender-to-other-offenders',
   //   component: AddOffenderToOtherOffenders,
