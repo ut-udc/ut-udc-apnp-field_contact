@@ -11,11 +11,11 @@
           >{{ (this.agentService.myCaseload())?.length || 0 }} offenders</span
         >
         <span class="header-spacer"></span>
-        <form [formGroup]="searchForm" (keyup)="filterCaseloadByOffenderInformation(searchForm.value.searchTerm)">
+        <form [formGroup]="searchForm">
           <mat-form-field class="contact_form_input_field">
             <mat-label>Search by offender information</mat-label>
-            <input matInput type="text"
-            formControlName="searchTerm" />
+            <input matInput type="text" [(ngModel)]="searchTerm" (ngModelChange)="searchTerm()" formControlName="searchTerm"
+             />
             <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
           </mat-form-field>
         </form>
@@ -28,8 +28,8 @@
         ></mat-icon>
       </div>
       <div>
-        @if (agentService.myCaseload()) {
-          @for (offender of agentService.myCaseload(); track offender.offenderNumber) {
+        @if (this.filteredItems() != null) {
+          @for (offender of this.filteredItems(); track offender.offenderNumber) {
             <app-offender-card [offender]="offender"></app-offender-card>
           }
         } @else {

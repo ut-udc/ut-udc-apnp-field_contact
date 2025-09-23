@@ -142,10 +142,10 @@ export class ContactService {
       contact.contactTypeId
     );
     console.log('Contact Type line 155:', contactTypeText);
-    contact.contactTypeDesc = contactTypeText || 'N/A';
+    contact.location = contactTypeText || 'N/A';
     const locationText = await this.getLocationDescById(contact.locationId);
     console.log('Location line 157:', locationText);
-    contact.locationDesc = locationText || 'N/A';
+    contact.location = locationText || 'N/A';
     return contact;
   }
   async getContactCount() {

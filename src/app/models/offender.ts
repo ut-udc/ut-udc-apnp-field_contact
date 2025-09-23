@@ -5,6 +5,7 @@ import {OffenderAddress} from './offender-address';
 
 export interface Offender extends OffenderBase {
   image: Blob;
+  defaultDob: string;
   offenderAddress: OffenderAddress;
   phone: string;
   lastSuccessfulContactDate: Date;

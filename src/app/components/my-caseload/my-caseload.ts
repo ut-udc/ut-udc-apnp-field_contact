@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
@@ -6,7 +6,7 @@ import {OffenderCard} from '../offender-card/offender-card';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {DomSanitizer} from '@angular/platform-browser';
 import {Offender} from '../../models/offender';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {Db} from '../../services/db';
@@ -24,6 +24,7 @@ import {AgentService} from '../../services/agent-service';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    FormsModule,
   ],
   templateUrl: './my-caseload.html',
   styleUrl: './my-caseload.scss',
@@ -51,6 +52,8 @@ export class MyCaseload implements OnInit {
   ngOnInit(): void {}
 
   addressString: string = '';
+  phone: string = '';
+  birthdate: string = '';
   filterCaseloadByOffenderInformation(searchTerm: string): void {
     console.log('searchTerm: ' + searchTerm);
     if (!searchTerm) {
@@ -67,13 +70,48 @@ export class MyCaseload implements OnInit {
             var zipCode = offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : '';
             this.addressString = `${lineOne} ${lineTwo} ${city} ${state} ${zipCode}`.toLowerCase();
           }
+          this.phone = offender.phone ? offender.phone : '';
+
           const fullName =
-            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ${this.addressString} ${offender.phone}`.toLowerCase();
-            return fullName.includes(searchTerm.toLowerCase());
+            `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ? ${offender.birthDate} : '' ${this.addressString} `.toLowerCase();
+          console.log('Search String: '+fullName);
+          return fullName.includes(searchTerm.toLowerCase());
         });
       }
   }
+
+  searchTerm = signal<string>('');
+
+  filteredItems = computed(() => {
+    const searchTerm = this.searchTerm()?.toLowerCase();
+    console.log('searchTerm1: ' + searchTerm);
+    if (!searchTerm) {
+      return this.agentService.myCaseload();
+    } else {
+      return this.agentService.myCaseload()?.filter((offender:Offender) => {
+      console.log('searchTerm2: ' + searchTerm);
+
+        if (offender.offenderAddress) {
+          var lineOne = offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne : '';
+          var lineTwo = offender.offenderAddress.lineTwo ? offender.offenderAddress.lineTwo : '';
+          var city = offender.offenderAddress.city ? offender.offenderAddress.city : '';
+          var state = offender.offenderAddress.state ? offender.offenderAddress.state : '';
+          var zipCode = offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : '';
+          this.addressString = `${lineOne} ${lineTwo} ${city} ${state} ${zipCode}`.toLowerCase();
+        }
+        this.phone = offender.phone ? offender.phone : '';
+        this.birthdate = offender.birthDate?.toString() ? offender.birthDate?.toString() : '';
+
+        const fullName =
+          `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.defaultDob} ${this.phone} ${this.birthdate} ${this.addressString} `.toLowerCase();
+        console.log('Search String: '+fullName);
+        return fullName.includes(searchTerm);
+      });
+    }
+  });
+
   resetSearch(): void {
+    this.searchTerm.set('');
     this.searchForm.reset();
   }
 }

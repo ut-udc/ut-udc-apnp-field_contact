@@ -31,9 +31,9 @@ export class Db extends Dexie {
     super('supervisionContactsDB');
     this.version(1).stores({
       contacts:
-        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
       existingContacts:
-        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, contactTypeDesc, location, locationDesc, commentary, formCompleted, previouslySuccessful',
+        '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       users:
         '&userId, firstName, lastName, fullName, emailAddress,  supervisorId, loggedInUser',

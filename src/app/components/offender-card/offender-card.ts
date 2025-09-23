@@ -1,11 +1,11 @@
-import { Component, inject, Input, OnInit, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatCardModule } from '@angular/material/card';
-import { RouterLink } from '@angular/router';
-import { MatRippleModule } from '@angular/material/core';
-import { Offender } from '../../models/offender';
-import { LatestSuccessfulContact } from '../../models/latest-successful-contact';
+import {Component, Input, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import {RouterLink} from '@angular/router';
+import {MatRippleModule} from '@angular/material/core';
+import {Offender} from '../../models/offender';
+import {LatestSuccessfulContact} from '../../models/latest-successful-contact';
 
 @Component({
   selector: 'app-offender-card',
@@ -23,6 +23,7 @@ import { LatestSuccessfulContact } from '../../models/latest-successful-contact'
 export class OffenderCard implements OnInit {
   @Input() offender: Offender = {
     offenderNumber: 0,
+    defaultDob: '',
     defaultOffenderName: {
       firstName: '',
       lastName: '',

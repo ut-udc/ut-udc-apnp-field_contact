@@ -7,9 +7,9 @@ export interface Contact {
   contactTime: string;
   contactTimeString: string;
   contactTypeId: number; //contact type id
-  contactTypeDesc: string;
+  contactType: string;
   locationId: number; //location id
-  locationDesc: string; //PWA internal use only
+  location: string; //PWA internal use only
   summary: string; //contact commentary
   formCompleted: boolean; //PWA internal use only
   firstPageCompleted: boolean; //PWA internal use only
