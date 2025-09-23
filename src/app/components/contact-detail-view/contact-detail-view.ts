@@ -28,12 +28,12 @@ export class ContactDetailView {
 
   primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentContact()!.primaryInterviewer?.trim())
+      .get(this.currentContact()!.primaryInterviewer)
     )));
 
   secondaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentContact()!.primaryInterviewer?.trim())
+      .get(this.currentContact()!.primaryInterviewer)
     )));
 
   constructor() {
@@ -52,7 +52,7 @@ export class ContactDetailView {
         this.primaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.primaryInterviewer?.trim())
+            .equals(this.currentContact()!.primaryInterviewer)
             .first()
           )));
         console.log('primary ', this.primaryInterviewer());
@@ -63,7 +63,7 @@ export class ContactDetailView {
         this.secondaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.secondaryInterviewer?.trim())
+            .equals(this.currentContact()!.secondaryInterviewer)
             .first()
           )));
         console.log('secondary ', this.secondaryInterviewer());
