@@ -11,7 +11,6 @@ import {from} from 'rxjs';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {Offender} from '../../models/offender';
 import {Contact} from '../../models/contact';
-import {Agent} from '../../models/agent';
 import {MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef,} from '@angular/material/bottom-sheet';
 import {MatListModule} from '@angular/material/list';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -61,20 +60,6 @@ export class CommentaryForm implements OnInit {
     liveQuery(() => this.db.contacts
       .where('contactId')
       .equals(Number(this.route.snapshot.params['contactId']))
-      .first()))
-  );
-
-  primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
-    liveQuery(() => this.db.agents
-      .where('userId')
-      .equals(this.currentContact()!.primaryInterviewer)
-      .first()))
-  );
-
-  secondaryInterviewer: Signal<Agent | undefined> = toSignal(from(
-    liveQuery(() => this.db.agents
-      .where('userId')
-      .equals(this.currentContact()!.primaryInterviewer)
       .first()))
   );
 

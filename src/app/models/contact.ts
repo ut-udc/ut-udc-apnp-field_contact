@@ -1,8 +1,10 @@
+import {AgentName} from './agent-name';
+
 export interface Contact {
   contactId: number;
   offenderNumber: number;
-  primaryInterviewer: string;
-  secondaryInterviewer: string;
+  primaryInterviewer: AgentName;
+  secondaryInterviewer: AgentName;
   contactDate: Date;
   contactTime: string;
   contactTimeString: string;

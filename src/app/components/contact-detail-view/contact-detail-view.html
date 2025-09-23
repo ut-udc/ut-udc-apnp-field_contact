@@ -27,13 +27,13 @@
       <div class="contact-info-container">
         <span class="label_medium">Primary Interviewer</span>
         <span class="body_large"
-        >{{ primaryInterviewer()?.name || currentContact()?.primaryInterviewer }}</span
+        >{{ currentContact()?.primaryInterviewer?.name }}</span
         >
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Secondary Interviewer</span>
         <span class="body_large"
-        >{{ secondaryInterviewer()?.name || currentContact()?.secondaryInterviewer }}</span
+        >{{ currentContact()?.secondaryInterviewer?.name }}</span
         >
       </div>
       <div class="contact-info-container">

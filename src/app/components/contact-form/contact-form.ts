@@ -88,8 +88,14 @@ export class ContactForm implements OnInit {
   currentContact: Contact = {
     contactId: 0,
     offenderNumber: 0,
-    primaryInterviewer: '',
-    secondaryInterviewer: '',
+    primaryInterviewer: {
+      id: "",
+      name: ""
+    },
+    secondaryInterviewer: {
+      id: "",
+      name: ""
+    },
     contactDate: this.newDate(),
     contactTime: '',
     contactTimeString: '',
@@ -156,8 +162,8 @@ export class ContactForm implements OnInit {
       this.currentContact = {
         contactId: this.currentContact.contactId,
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
-        primaryInterviewer: this.contactForm.value.primaryInterviewer ?? '',
-        secondaryInterviewer: this.contactForm.value.secondaryInterviewer ?? '',
+        primaryInterviewer: {id: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
+        secondaryInterviewer: {id: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? new Date(),
         contactTime: this.contactForm.value.contactTime ?? new Date(),
         contactTimeString: '',

@@ -74,9 +74,9 @@ export class AgentService {
           'I have ridden a 500-pound Vincent through traffic on the Ventura Freeway with burning oil on my legs and run the Kawa 750 Triple through Beverly Hills at night with a head full of acid... ' +
           'I have ridden with Sonny Barger and smoked weed in biker bars with Jack Nicholson, Grace Slick, Ron Zigler and my infamous old friend, Ken Kesey, a legendary Cafe Racer.\n' +
           '\n';
-        existingContacts[i].primaryInterviewer = existingContacts[i].primaryInterviewer?.trim();
-        if (existingContacts[i].secondaryInterviewer) {
-          existingContacts[i].secondaryInterviewer = existingContacts[i].secondaryInterviewer?.trim();
+        existingContacts[i].primaryInterviewer.id = existingContacts[i].primaryInterviewer?.id.trim();
+        if (existingContacts[i].secondaryInterviewer.id) {
+          existingContacts[i].secondaryInterviewer.id = existingContacts[i].secondaryInterviewer?.id.trim();
         }
       }
       this.db.existingContacts.bulkAdd(existingContacts)

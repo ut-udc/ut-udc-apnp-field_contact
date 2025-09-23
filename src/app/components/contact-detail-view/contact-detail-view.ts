@@ -52,7 +52,7 @@ export class ContactDetailView {
         this.primaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.primaryInterviewer)
+            .equals(this.currentContact()!.primaryInterviewer.id)
             .first()
           )));
         console.log('primary ', this.primaryInterviewer());
@@ -63,7 +63,7 @@ export class ContactDetailView {
         this.secondaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.secondaryInterviewer)
+            .equals(this.currentContact()!.secondaryInterviewer.id)
             .first()
           )));
         console.log('secondary ', this.secondaryInterviewer());

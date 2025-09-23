@@ -20,13 +20,13 @@
     <div class="contact-info-container">
       <span class="label_medium">Primary Interviewer</span>
       <span class="body_large"
-        >{{primaryInterviewer()?.name}}</span
+        >{{currentContact()?.primaryInterviewer?.name}}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Secondary Interviewer</span>
       <span class="body_large">
-        {{secondaryInterviewer()?.name || 'N/A'}}
+        {{currentContact()?.secondaryInterviewer?.name || 'N/A'}}
       </span>
     </div>
     <div class="contact-info-container">

@@ -15,7 +15,8 @@
         <div style="flex: 2">
           <div class="label_medium">{{ currentOffender()?.offenderNumber }}</div>
           <div class="title_xlarge">
-            {{ currentOffender()?.defaultOffenderName?.lastName }}, {{ currentOffender()?.defaultOffenderName?.firstName }}
+            {{ currentOffender()?.defaultOffenderName?.lastName }}
+            , {{ currentOffender()?.defaultOffenderName?.firstName }}
           </div>
           <div class="label_medium">
             Last Successful Contact:
@@ -81,14 +82,16 @@
     </div>
   }
   <!-- **********iterate************ -->
-  <ng-container>
-    @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
-      <app-contact-listing-card
-        [contact]="unsyncedContact"
-      >
-      </app-contact-listing-card>
-    }
-  </ng-container>
+  @if (unsyncedContacts()) {
+    <ng-container>
+      @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
+        <app-contact-listing-card
+          [contact]="unsyncedContact"
+        >
+        </app-contact-listing-card>
+      }
+    </ng-container>
+  }
   @if (existingContacts()) {
     <ng-container>
       @for (contact of existingContacts(); track contact?.contactId) {
