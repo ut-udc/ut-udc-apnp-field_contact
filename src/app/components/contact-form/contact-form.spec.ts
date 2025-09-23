@@ -5,7 +5,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 
-import {ContactForm} from './contact-form';
+import ContactForm from './contact-form';
 import {ContactData} from '../../services/contact-data';
 import {Navigation} from '../../services/navigation';
 import {Contact} from '../../model/Contact';

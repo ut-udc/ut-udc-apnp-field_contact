@@ -51,7 +51,7 @@ import {AgentService} from '../../services/agent-service';
   styleUrl: './contact-form.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactForm implements OnInit {
+class ContactForm implements OnInit {
   db:Db = inject(Db);
   agentService:AgentService = inject(AgentService);
   userService:UserService = inject(UserService);
@@ -81,19 +81,23 @@ export class ContactForm implements OnInit {
     })
   });
 
-  // locationOptionsSignal: Signal<Array<Select2Model> | undefined> = computed(() => {
-  //   return this.db.locations.toArray();
-  // });
+  locationById: Signal<string> = computed(() => {
+    return this.agentService.allLocations()?.find(loc => loc.id === this.contactForm.value.location)?.text.trim() ?? '';
+  });
+
+  contactTypeById: Signal<string> = computed(() => {
+    return this.agentService.allContactTypes()?.find(typ => typ.id === this.contactForm.value.contactType)?.text.trim() ?? '';
+  });
 
   currentContact: Contact = {
     contactId: 0,
     offenderNumber: 0,
     primaryInterviewer: {
-      id: "",
+      userId: "",
       name: ""
     },
     secondaryInterviewer: {
-      id: "",
+      userId: "",
       name: ""
     },
     contactDate: this.newDate(),
@@ -157,19 +161,24 @@ export class ContactForm implements OnInit {
 
   async onSubmit() {
     console.log('Submitting...', this.currentContact.offenderNumber, this.currentContact.contactId);
+
+    const hours = this.contactForm.value.contactTime.getHours(); // Get the hour (0-23)
+    const minutes = this.contactForm.value.contactTime.getMinutes(); // Get the minute (0-59)
+    const seconds = this.contactForm.value.contactTime.getSeconds();
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     if (this.currentContact.contactId === 0) {
       this.currentContact.firstPageCompleted = true;
       this.currentContact = {
         contactId: this.currentContact.contactId,
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
-        primaryInterviewer: {id: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
-        secondaryInterviewer: {id: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
+        primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
+        secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? new Date(),
         contactTime: this.contactForm.value.contactTime ?? new Date(),
-        contactTimeString: '',
+        contactTimeString: formattedTime,
         contactTypeId: this.contactForm.value.contactType ?? '',
-        contactType: '',
-        location: '',
+        contactType: this.contactTypeById(),
+        location: this.locationById(),
         locationId: this.contactForm.value.location ?? '',
         summary: '',
         formCompleted: false,
@@ -181,7 +190,7 @@ export class ContactForm implements OnInit {
 
       this.currentContact.contactId = this.contactCount + 1;
       console.log('Contact to save: '+this.currentContact);
-      this.contactService.addContact(this.currentContact);
+      this.contactService.addContactToIdb(this.currentContact);
     } else if (
       this.currentContact.contactId > 0 &&
       this.currentContact.formCompleted === false
@@ -190,14 +199,14 @@ export class ContactForm implements OnInit {
       this.currentContact = {
         contactId: this.currentContact.contactId,
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
-        primaryInterviewer: this.contactForm.value.primaryInterviewer ?? '',
-        secondaryInterviewer: this.contactForm.value.secondaryInterviewer ?? '',
+        primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
+        secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? this.newDate(),
         contactTime: this.contactForm.value.contactTime ?? this.newDate(),
-        contactTimeString: '',
+        contactTimeString: formattedTime,
         contactTypeId: this.contactForm.value.contactType ?? '',
-        contactType: '',
-        location: '',
+        contactType: this.contactTypeById(),
+        location: this.locationById(),
         locationId: this.contactForm.value.location ?? '',
         summary: '',
         formCompleted: false,
@@ -252,10 +261,9 @@ export class ContactForm implements OnInit {
     // Initialize with empty array and then update when promise resolves
     this.contactService.getInterviewerOptions().then((options) => {
       this.primaryInterviewerOptions = options.filter(value => value.text !== null);
-      console.log('Primary InterviewerOptions line 2:', this.primaryInterviewerOptions);
     });
     this.contactService.getInterviewerOptions().then((options) => {
-      this.secondaryInterviewerOptions = options;
+      this.secondaryInterviewerOptions = options.filter(value => value.text !== null);
     });
   }
   dateTimeControl = new FormControl('', Validators.required);
@@ -267,7 +275,6 @@ export class ContactForm implements OnInit {
   async ngOnInit() {
     this.contactCount = await this.contactService.getContactCount();
 
-    console.log('Contact id line 180:', this.currentContact.contactId);
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
     this.offender = await this.contactService.getCaseloadOffenderById(offenderNum);
     if (!this.offender) {
@@ -323,13 +330,13 @@ export class ContactForm implements OnInit {
       location: this.contactLocationControl,
     });
 
-    console.log('Contact count', this.contactService.getAllContacts());
 
     const contactCount = await this.contactService.getContactCount();
-    console.log('Contact form', this.contactForm);
     console.log('Contact data', this.currentContact);
   }
   trackOption(index: number, option: any): any {
     return option?.id;
   }
 }
+
+export default ContactForm

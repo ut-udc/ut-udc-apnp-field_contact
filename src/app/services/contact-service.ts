@@ -1,8 +1,14 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, Signal} from '@angular/core';
 import {Select2String} from '../models/select2-string';
 import {Db} from './db';
 import {Contact} from '../models/contact';
 import {QueuedContact} from '../models/queued-contact';
+import {OffenderBase} from '../models/offender-base';
+import {Offender} from '../models/offender';
+import {LatestSuccessfulContact} from '../models/latest-successful-contact';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {from} from 'rxjs';
+import {liveQuery} from 'dexie';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +16,14 @@ import {QueuedContact} from '../models/queued-contact';
 export class ContactService {
   db:Db = inject(Db);
   path = '/field_contact_bff/api';
+
+  queuedContacts: Signal<Array<QueuedContact> | undefined> = toSignal(from(
+    liveQuery(async () => this.db.contactsQueue.toArray()))
+  );
+
+  constructor() {
+
+  }
 
   async getInterviewerOptions(): Promise<Select2String[]> {
     const options: Select2String[] = [];
@@ -43,31 +57,16 @@ export class ContactService {
     return contactType?.text || '';
   }
 
-  async addContact(contact: Contact) {
+  async addContactToIdb(contact: Contact) {
     try {
-      contact.userAgent = navigator.userAgent;
-      await fetch(this.path + '/addContact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(contact),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data: Contact) => {
-          this.db.contacts.add(data);
-          return data;
-        });
+          this.db.contacts.add(contact);
+          return contact;
     } catch (error) {
       console.error('Error inserting data:', error);
       throw error;
     }
   }
+
   syncContactWithDatabase(contact: Contact) {
     try {
       fetch(this.path + '/addContact', {
@@ -127,6 +126,38 @@ export class ContactService {
     await this.db.contactsQueue.add(queuedContact);
   }
 
+  async addOffenderToOtherOffenders(offender: OffenderBase | null) {
+    const newOffender: Offender = {
+      ...(offender == null ? ({} as OffenderBase) : offender),
+      image: new Blob(),
+      offenderAddress: {
+        offenderNumber: offender?.offenderNumber ?? 0,
+        lineOne: '',
+        lineTwo: '',
+        city: '',
+        state: '',
+        zipCode: '',
+      },
+      phone: '',
+      agentId: '',
+      birthDate: new Date(),
+      defaultDob: '',
+      defaultOffenderName: {
+        firstName: offender?.defaultOffenderName.firstName ?? '',
+        lastName: offender?.defaultOffenderName.lastName ?? '',
+      },
+      lastSuccessfulContactDate: new Date(),
+      contactArray: [],
+      nextScheduledContactDate: new Date(),
+      legalStatus: '',
+      lastSuccessfulContact: {} as LatestSuccessfulContact,
+    };
+    await this.db.otherOffenders.add(newOffender);
+  }
+  async removeOffenderFromOtherOffenders(offender: OffenderBase) {
+    await this.db.otherOffenders.delete(offender.offenderNumber);
+  }
+
   async removeContactFromContacts(contactId: number) {
     await this.db.contacts.delete(contactId);
   }
@@ -153,22 +184,6 @@ export class ContactService {
   }
   getAllContacts() {
     return this.db.contacts.toArray();
-  }
-  async getAllContactsByOffenderNumberDesc(offenderNumber: number) {
-    return this.db.contacts
-      .where('offenderNumber')
-      .equals(offenderNumber)
-      .and((contact) => contact.formCompleted === true)
-      .reverse()
-      .toArray();
-  }
-
-  async getExistingContacts(offenderNumber: number) {
-    return this.db.existingContacts
-      .where('offenderNumber')
-      .equals(offenderNumber)
-      .reverse()
-      .toArray();
   }
 
   async getAllQueuedContacts() {

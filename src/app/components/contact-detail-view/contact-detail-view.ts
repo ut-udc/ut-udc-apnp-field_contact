@@ -21,30 +21,45 @@ export class ContactDetailView {
   route: ActivatedRoute = inject(ActivatedRoute);
   contactId: number = Number(this.route.snapshot.params['contactId']);
 
-  currentContact: Signal<Contact | undefined> = toSignal(from(
+  currentExistingContact: Signal<Contact | undefined> = toSignal(from(
     liveQuery(() => this.db.existingContacts
       .get(Number(this.route.snapshot.params['contactId']))
     )));
 
+  currentUnsyncedContact: Signal<Contact | undefined> = toSignal(from(
+    liveQuery(() => this.db.contacts
+      .get(Number(this.route.snapshot.params['contactId']))
+    )));
+
+
   primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentContact()!.primaryInterviewer)
+      .get(this.currentExistingContact()!.primaryInterviewer)
     )));
 
   secondaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentContact()!.primaryInterviewer)
+      .get(this.currentExistingContact()!.primaryInterviewer)
     )));
 
   constructor() {
 
     effect(async () => {
-      if (!this.currentContact()) {
-        this.currentContact = toSignal(from(
+      if (!this.currentExistingContact()) {
+        this.currentExistingContact = toSignal(from(
           liveQuery(() => this.db.existingContacts
             .get(this.contactId)
           )));
-        console.log('ContactDetailView', this.currentContact());
+        console.log('ContactDetailView', this.currentExistingContact());
+      }
+    })
+    effect(async () => {
+      if (!this.currentUnsyncedContact()) {
+        this.currentUnsyncedContact = toSignal(from(
+          liveQuery(() => this.db.contacts
+            .get(this.contactId)
+          )));
+        console.log('ContactDetailView', this.currentUnsyncedContact());
       }
     })
     effect(async () => {
@@ -52,7 +67,7 @@ export class ContactDetailView {
         this.primaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.primaryInterviewer.id)
+            .equals(this.currentExistingContact()!.primaryInterviewer.userId)
             .first()
           )));
         console.log('primary ', this.primaryInterviewer());
@@ -63,7 +78,7 @@ export class ContactDetailView {
         this.secondaryInterviewer = toSignal(from(
           liveQuery(() => this.db.agents
             .where('userId')
-            .equals(this.currentContact()!.secondaryInterviewer.id)
+            .equals(this.currentExistingContact()!.secondaryInterviewer.userId)
             .first()
           )));
         console.log('secondary ', this.secondaryInterviewer());

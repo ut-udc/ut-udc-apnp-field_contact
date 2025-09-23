@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
 import {Home} from './components/home/home';
 import {OffenderDetail} from './components/offender-detail/offender-detail';
-import {ContactForm} from './components/contact-form/contact-form';
+import ContactForm from './components/contact-form/contact-form';
 import {CommentaryForm} from './components/commentary-form/commentary-form';
 import {ContactDetailView} from './components/contact-detail-view/contact-detail-view';
 

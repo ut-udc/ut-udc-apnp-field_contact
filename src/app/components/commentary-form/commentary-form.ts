@@ -18,8 +18,8 @@ import {DetailHeader} from '../detail-header/detail-header';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
-import {Select2Model} from '../../models/select2-model';
 import {ContactService} from '../../services/contact-service';
+import {AgentService} from '../../services/agent-service';
 
 @Component({
   selector: 'app-commentary-form',
@@ -45,6 +45,7 @@ import {ContactService} from '../../services/contact-service';
 export class CommentaryForm implements OnInit {
   db: Db = inject(Db)
   contactService: ContactService = inject(ContactService);
+  agentService:AgentService = inject(AgentService);
   route: ActivatedRoute = inject(ActivatedRoute);
   offenderNumber: number = 0;
   contactId: number = 0;
@@ -60,20 +61,6 @@ export class CommentaryForm implements OnInit {
     liveQuery(() => this.db.contacts
       .where('contactId')
       .equals(Number(this.route.snapshot.params['contactId']))
-      .first()))
-  );
-
-  contactType: Signal<Select2Model | undefined> = toSignal(from(
-    liveQuery(() => this.db.contactTypes
-      .where('id')
-      .equals(this.currentContact()!.contactTypeId)
-      .first()))
-  );
-
-  location: Signal<Select2Model | undefined> = toSignal(from(
-    liveQuery(() => this.db.locations
-      .where('id')
-      .equals(this.currentContact()!.locationId)
       .first()))
   );
 
