@@ -182,7 +182,7 @@ class ContactForm implements OnInit {
         locationId: this.contactForm.value.location ?? '',
         summary: '',
         formCompleted: false,
-        firstPageCompleted: this.currentContact.firstPageCompleted,
+        firstPageCompleted: true,
         wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
         userAgent: '',
@@ -210,7 +210,7 @@ class ContactForm implements OnInit {
         locationId: this.contactForm.value.location ?? '',
         summary: '',
         formCompleted: false,
-        firstPageCompleted: this.currentContact.firstPageCompleted,
+        firstPageCompleted: true,
         wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
         userAgent: '',
@@ -300,11 +300,11 @@ class ContactForm implements OnInit {
         this.contactForm.updateValueAndValidity();
 
         this.contactForm.patchValue({
-          primaryInterviewer: this.currentContact.primaryInterviewer,
+          primaryInterviewer: this.currentContact.primaryInterviewer?.userId,
           contactId: this.currentContact?.contactId,
           contactDate: this.currentContact?.contactDate,
           contactTime: this.currentContact?.contactTime,
-          secondaryInterviewer: this.currentContact?.secondaryInterviewer,
+          secondaryInterviewer: this.currentContact?.secondaryInterviewer?.userId,
           contactType: this.currentContact?.contactTypeId,
           location: this.currentContact?.locationId,
         });

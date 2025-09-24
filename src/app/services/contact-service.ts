@@ -29,7 +29,7 @@ export class ContactService {
     const options: Select2String[] = [];
     const agentList = await this.getAgentList();
     agentList.forEach((agent) => {
-      if (!agent.name) {
+      if (!agent.name || agent.name.trim() !== '') {
         options.push({id: agent.userId, text: agent.name});
       }
     });
@@ -69,25 +69,27 @@ export class ContactService {
 
   syncContactWithDatabase(contact: Contact) {
     try {
-      fetch(this.path + '/addContact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(contact),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
+      if (contact.formCompleted) {
+        fetch(this.path + '/addContact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(contact),
         })
-        .then((data: number) => {
-          this.db.contacts.delete(contact.contactId)
-          contact.contactId = data;
-          this.db.existingContacts.add(contact);
-          return data;
-        });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data: number) => {
+            this.db.contacts.delete(contact.contactId)
+            contact.contactId = data;
+            this.db.existingContacts.add(contact);
+            return data;
+          });
+      }
     } catch (error) {
       console.error('Error in syncContactWithDatabase:', error);
     }

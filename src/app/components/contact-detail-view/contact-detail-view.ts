@@ -34,12 +34,12 @@ export class ContactDetailView {
 
   primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentExistingContact()!.primaryInterviewer)
+      .get(this.currentExistingContact()!.primaryInterviewer.userId)
     )));
 
   secondaryInterviewer: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
-      .get(this.currentExistingContact()!.primaryInterviewer)
+      .get(this.currentExistingContact()!.secondaryInterviewer.userId)
     )));
 
   constructor() {

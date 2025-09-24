@@ -85,10 +85,13 @@
   @if (unsyncedContacts()) {
     <ng-container>
       @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
+        @if (unsyncedContact.formCompleted) {
+
         <app-contact-listing-card
           [contact]="unsyncedContact"
         >
         </app-contact-listing-card>
+        }
       }
     </ng-container>
   }

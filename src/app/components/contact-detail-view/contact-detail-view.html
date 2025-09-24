@@ -87,7 +87,7 @@
         <span class="label_medium">Date</span>
         <span class="body_large"
         >{{ currentUnsyncedContact()?.contactDate | date: 'MM/dd/yyyy' }} |
-          {{ truncateTimeString(currentUnsyncedContact()!.contactTime) || '' }}</span
+          {{ truncateTimeString(currentUnsyncedContact()!.contactTimeString) || '' }}</span
         >
       </div>
       <div class="contact-info-container">
