@@ -8,7 +8,6 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
 import {Contact} from '../../models/contact';
-import {Agent} from '../../models/agent';
 
 @Component({
   selector: 'app-contact-detail-view',
@@ -32,15 +31,6 @@ export class ContactDetailView {
     )));
 
 
-  primaryInterviewer: Signal<Agent | undefined> = toSignal(from(
-    liveQuery(() => this.db.agents
-      .get(this.currentExistingContact()!.primaryInterviewer.userId)
-    )));
-
-  secondaryInterviewer: Signal<Agent | undefined> = toSignal(from(
-    liveQuery(() => this.db.agents
-      .get(this.currentExistingContact()!.secondaryInterviewer.userId)
-    )));
 
   constructor() {
 
@@ -60,28 +50,6 @@ export class ContactDetailView {
             .get(this.contactId)
           )));
         console.log('ContactDetailView', this.currentUnsyncedContact());
-      }
-    })
-    effect(async () => {
-      if (!this.primaryInterviewer()) {
-        this.primaryInterviewer = toSignal(from(
-          liveQuery(() => this.db.agents
-            .where('userId')
-            .equals(this.currentExistingContact()!.primaryInterviewer.userId)
-            .first()
-          )));
-        console.log('primary ', this.primaryInterviewer());
-      }
-    })
-    effect(async () => {
-      if (!this.secondaryInterviewer()) {
-        this.secondaryInterviewer = toSignal(from(
-          liveQuery(() => this.db.agents
-            .where('userId')
-            .equals(this.currentExistingContact()!.secondaryInterviewer.userId)
-            .first()
-          )));
-        console.log('secondary ', this.secondaryInterviewer());
       }
     })
 
