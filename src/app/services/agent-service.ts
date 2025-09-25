@@ -77,6 +77,8 @@ export class AgentService {
   loadExistingContacts(offenderNumber: number) {
     let existingContactPromise: Promise<Array<Contact>> = this.loadDataService.fetchData(this.loadDataService.baseUrl + '/existing-contacts/' + offenderNumber);
     existingContactPromise.then(existingContacts => {
+      let summaryIds = [];
+
       for (let i = 0; i < existingContacts.length; i++) {
         existingContacts[i].contactTimeString = existingContacts[i].contactTime.toString();
         existingContacts[i].summary = 'Which is true. I have been a connoisseur of fast motorcycles all my life. I bought a brand-new 650 BSA Lightning when it was billed as "the fastest motorcycle ever tested by Hot Rod magazine." ' +
@@ -87,9 +89,49 @@ export class AgentService {
         if (existingContacts[i].secondaryInterviewer) {
           existingContacts[i].secondaryInterviewer.userId = existingContacts[i].secondaryInterviewer?.userId?.trim();
         }
+
+        summaryIds.push(existingContacts[i].contactId);
+        if (summaryIds.length > 10) {
+          this.loadSummaries(summaryIds);
+          summaryIds = [];
+        }
       }
+
+      if (summaryIds.length > 0) {
+        this.loadSummaries(summaryIds);
+      }
+
       this.db.existingContacts.bulkAdd(existingContacts)
     });
   }
 
+  loadSummaries(contactIds: Array<number>) {
+    let options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        contactIds: contactIds
+      })
+    };
+
+    fetch(`${this.loadDataService.baseUrl}/existing-contact-summaries`, options)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        else {
+          throw new Error(`Response code ${response.status}`)
+        }
+      })
+      .then((summaries: Array<Contact>) => {
+        summaries.forEach((s: Contact) => {
+          this.db.existingContacts.update(s.contactId, { summary: s.summary });
+        });
+      })
+      .catch(error => {
+        console.error(`Unable to get summaries for ${contactIds}: ${error}`);
+      });
+  }
 }
