@@ -54,7 +54,7 @@
         <span class="label_medium">Contact Result</span>
         <span class="body_large"
         >{{
-            currentExistingContact()?.wasContactSuccessful ? 'Made Contact' :
+            currentExistingContact()?.result === 1 ? 'Made Contact' :
               'Attempted Contact'
           }}</span
         >
@@ -118,7 +118,7 @@
         <span class="label_medium">Contact Result</span>
         <span class="body_large"
         >{{
-            currentUnsyncedContact()?.wasContactSuccessful ? 'Made Contact' :
+            currentUnsyncedContact()?.result == 1 ? 'Made Contact' :
               'Attempted Contact'
           }}</span
         >

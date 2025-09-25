@@ -111,7 +111,6 @@ class ContactForm implements OnInit {
     summary: '',
     formCompleted: false,
     firstPageCompleted: false,
-    wasContactSuccessful: 2,
     contactSyncedWithDatabase: false,
     userAgent: '',
   };
@@ -185,7 +184,6 @@ class ContactForm implements OnInit {
         summary: '',
         formCompleted: false,
         firstPageCompleted: true,
-        wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
         userAgent: '',
       };
@@ -214,7 +212,6 @@ class ContactForm implements OnInit {
         summary: '',
         formCompleted: false,
         firstPageCompleted: true,
-        wasContactSuccessful: 2,
         contactSyncedWithDatabase: false,
         userAgent: '',
       };

@@ -74,11 +74,12 @@ export class ContactService {
     this.contactRecordForBff.offenderNumber = contact.offenderNumber;
     this.contactRecordForBff.contactTypeId = contact.contactTypeId;
     this.contactRecordForBff.locationId = contact.locationId;
-    this.contactRecordForBff.primaryInterviewer = contact.primaryInterviewer.userId;
-    this.contactRecordForBff.secondaryInterviewer = contact.secondaryInterviewer.userId;
+    this.contactRecordForBff.primaryInterviewer = contact.primaryInterviewer;
+    this.contactRecordForBff.secondaryInterviewer = contact.secondaryInterviewer;
     this.contactRecordForBff.summary = contact.summary;
     this.contactRecordForBff.contactTime = contact.contactTimeString;
     this.contactRecordForBff.result = contact.result;
+    this.contactRecordForBff.userAgent = contact.userAgent;
 
 
     try {
