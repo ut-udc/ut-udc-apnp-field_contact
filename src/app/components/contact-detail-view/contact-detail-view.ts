@@ -30,8 +30,6 @@ export class ContactDetailView {
       .get(Number(this.route.snapshot.params['contactId']))
     )));
 
-
-
   constructor() {
 
     effect(async () => {

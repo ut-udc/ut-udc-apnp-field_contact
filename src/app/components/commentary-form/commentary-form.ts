@@ -111,12 +111,12 @@ export class CommentaryForm implements OnInit {
   }
 
   madeContact() {
-    this.currentContact()!.wasContactSuccessful = 1;
+    this.currentContact()!.result = 1;
     this.contactService.updateContact(this.currentContact()!);
   }
 
   attemptedContact() {
-    this.currentContact()!.wasContactSuccessful = 0
+    this.currentContact()!.result = 4
     this.contactService.updateContact(this.currentContact()!);
   }
 

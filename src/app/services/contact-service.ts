@@ -9,6 +9,7 @@ import {LatestSuccessfulContact} from '../models/latest-successful-contact';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {from} from 'rxjs';
 import {liveQuery} from 'dexie';
+import {ContactRecordForBff} from '../models/contact-record-for-bff';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ import {liveQuery} from 'dexie';
 export class ContactService {
   db:Db = inject(Db);
   path = '/field_contact_bff/api';
+  contactRecordForBff: ContactRecordForBff = {} as ContactRecordForBff;
 
   queuedContacts: Signal<Array<QueuedContact> | undefined> = toSignal(from(
     liveQuery(async () => this.db.contactsQueue.toArray()))
@@ -68,6 +70,17 @@ export class ContactService {
   }
 
   syncContactWithDatabase(contact: Contact) {
+    this.contactRecordForBff.contactDate = contact.contactDate.toDateString();
+    this.contactRecordForBff.offenderNumber = contact.offenderNumber;
+    this.contactRecordForBff.contactTypeId = contact.contactTypeId;
+    this.contactRecordForBff.locationId = contact.locationId;
+    this.contactRecordForBff.primaryInterviewer = contact.primaryInterviewer.userId;
+    this.contactRecordForBff.secondaryInterviewer = contact.secondaryInterviewer.userId;
+    this.contactRecordForBff.summary = contact.summary;
+    this.contactRecordForBff.contactTime = contact.contactTimeString;
+    this.contactRecordForBff.result = contact.result;
+
+
     try {
       if (contact.formCompleted) {
         fetch(this.path + '/addContact', {
@@ -75,7 +88,7 @@ export class ContactService {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(contact),
+          body: JSON.stringify(this.contactRecordForBff),
         })
           .then((response) => {
             if (!response.ok) {

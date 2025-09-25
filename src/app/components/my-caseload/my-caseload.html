@@ -13,7 +13,7 @@
         <span class="header-spacer"></span>
         <form [formGroup]="searchForm">
           <mat-form-field class="contact_form_input_field">
-            <mat-label>Search by offender information</mat-label>
+            <mat-label>Filter Offenders</mat-label>
             <input matInput type="text" [(ngModel)]="searchTerm" (ngModelChange)="searchTerm()" formControlName="searchTerm"
              />
             <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
@@ -33,9 +33,9 @@
             <app-offender-card [offender]="offender"></app-offender-card>
           }
         } @else {
-        <ng-template #loading>
+<!--        <ng-template #loading>-->
           <div>Loading...</div>
-        </ng-template>
+<!--        </ng-template>-->
         }
 
       </div>

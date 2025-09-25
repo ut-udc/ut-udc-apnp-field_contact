@@ -3,10 +3,11 @@ import {AgentName} from './agent-name';
 export interface Contact {
   contactId: number;
   offenderNumber: number;
+  result: number; //1=successful and 4=attempted, 5=information.
   primaryInterviewer: AgentName;
   secondaryInterviewer: AgentName;
   contactDate: Date;
-  contactTime: string;
+  contactTime: Date;
   contactTimeString: string;
   contactTypeId: number; //contact type id
   contactType: string;
