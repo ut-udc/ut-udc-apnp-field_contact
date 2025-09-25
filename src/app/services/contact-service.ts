@@ -10,12 +10,15 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {from} from 'rxjs';
 import {liveQuery} from 'dexie';
 import {ContactRecordForBff} from '../models/contact-record-for-bff';
+import {ApiService} from './api-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
   db:Db = inject(Db);
+  apiService:ApiService = inject(ApiService);
+
   path = '/field_contact_bff/api';
   contactRecordForBff: ContactRecordForBff = {} as ContactRecordForBff;
 
@@ -84,12 +87,13 @@ export class ContactService {
 
     try {
       if (contact.formCompleted) {
-        fetch(this.path + '/addContact', {
-          method: 'POST',
+        this.apiService.protectedFetch(this.path + '/offenders/' + contact.offenderNumber + '/contact',
+          {
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(this.contactRecordForBff),
+          body: JSON.stringify(this.contactRecordForBff)
         })
           .then((response) => {
             if (!response.ok) {
