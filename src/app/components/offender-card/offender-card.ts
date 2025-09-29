@@ -39,7 +39,7 @@ export class OffenderCard implements OnInit {
       state: '',
       zipCode: '',
     },
-    phone: '',
+    defaultPhoneNumber: '',
     lastSuccessfulContactDate: new Date(),
     contactArray: [],
     nextScheduledContactDate: new Date(),

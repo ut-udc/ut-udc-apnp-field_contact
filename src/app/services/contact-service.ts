@@ -158,7 +158,7 @@ export class ContactService {
         state: '',
         zipCode: '',
       },
-      phone: '',
+      defaultPhoneNumber: '',
       agentId: '',
       birthDate: new Date(),
       defaultDob: '',

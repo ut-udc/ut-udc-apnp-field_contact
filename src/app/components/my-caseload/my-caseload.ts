@@ -70,7 +70,7 @@ export class MyCaseload implements OnInit {
             var zipCode = offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : '';
             this.addressString = `${lineOne} ${lineTwo} ${city} ${state} ${zipCode}`.toLowerCase();
           }
-          this.phone = offender.phone ? offender.phone : '';
+          this.phone = offender.defaultPhoneNumber ? offender.defaultPhoneNumber : '';
 
           const fullName =
             `${offender.defaultOffenderName.firstName} ${offender.defaultOffenderName.lastName} ${offender.offenderNumber} ${offender.birthDate} ? ${offender.birthDate} : '' ${this.addressString} `.toLowerCase();
@@ -99,7 +99,7 @@ export class MyCaseload implements OnInit {
           var zipCode = offender.offenderAddress.zipCode ? offender.offenderAddress.zipCode : '';
           this.addressString = `${lineOne} ${lineTwo} ${city} ${state} ${zipCode}`.toLowerCase();
         }
-        this.phone = offender.phone ? offender.phone : '';
+        this.phone = offender.defaultPhoneNumber ? offender.defaultPhoneNumber : '';
         this.birthdate = offender.birthDate?.toString() ? offender.birthDate?.toString() : '';
 
         const fullName =

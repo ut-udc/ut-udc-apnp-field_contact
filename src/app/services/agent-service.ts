@@ -9,6 +9,7 @@ import {Offender} from '../models/offender';
 import {Contact} from '../models/contact';
 import {LoadDataService} from './load-data-service';
 import {Select2Model} from '../models/select2-model';
+import {ApiService} from './api-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class AgentService {
   db: Db = inject(Db);
   userService: UserService = inject(UserService);
   loadDataService: LoadDataService = inject(LoadDataService);
+  apiService:ApiService = inject(ApiService);
   contactIdArray: number[] = [];
 
   primaryAgent: Signal<Agent | undefined> = toSignal(from(
@@ -83,10 +85,10 @@ export class AgentService {
       for (let i = 0; i < existingContacts.length; i++) {
         this.contactIdArray.push(existingContacts[i].contactId);
         existingContacts[i].contactTimeString = existingContacts[i].contactTime.toString();
-        existingContacts[i].summary = 'Which is true. I have been a connoisseur of fast motorcycles all my life. I bought a brand-new 650 BSA Lightning when it was billed as "the fastest motorcycle ever tested by Hot Rod magazine." ' +
-          'I have ridden a 500-pound Vincent through traffic on the Ventura Freeway with burning oil on my legs and run the Kawa 750 Triple through Beverly Hills at night with a head full of acid... ' +
-          'I have ridden with Sonny Barger and smoked weed in biker bars with Jack Nicholson, Grace Slick, Ron Zigler and my infamous old friend, Ken Kesey, a legendary Cafe Racer.\n' +
-          '\n';
+        // existingContacts[i].summary = 'Which is true. I have been a connoisseur of fast motorcycles all my life. I bought a brand-new 650 BSA Lightning when it was billed as "the fastest motorcycle ever tested by Hot Rod magazine." ' +
+        //   'I have ridden a 500-pound Vincent through traffic on the Ventura Freeway with burning oil on my legs and run the Kawa 750 Triple through Beverly Hills at night with a head full of acid... ' +
+        //   'I have ridden with Sonny Barger and smoked weed in biker bars with Jack Nicholson, Grace Slick, Ron Zigler and my infamous old friend, Ken Kesey, a legendary Cafe Racer.\n' +
+        //   '\n';
         existingContacts[i].primaryInterviewer.userId = existingContacts[i].primaryInterviewer?.userId?.trim();
         existingContacts[i].contactSyncedWithDatabase = true;
         existingContacts[i].formCompleted = true;
@@ -121,7 +123,7 @@ export class AgentService {
       })
     };
 
-    fetch(`${this.loadDataService.baseUrl}/existing-contact-summaries`, options)
+    this.apiService.protectedFetch(`${this.loadDataService.baseUrl}/existing-contact-summaries`, options)
       .then(response => {
         if (response.ok) {
           return response.json();

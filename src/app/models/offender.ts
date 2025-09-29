@@ -7,7 +7,7 @@ export interface Offender extends OffenderBase {
   image: Blob;
   defaultDob: string;
   offenderAddress: OffenderAddress;
-  phone: string;
+  defaultPhoneNumber: string;
   lastSuccessfulContactDate: Date;
   contactArray: Contact[];
   nextScheduledContactDate: Date;
