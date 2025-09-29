@@ -141,4 +141,5 @@ export class AgentService {
         console.error(`Unable to get summaries for ${contactIds}: ${error}`);
       });
   }
+
 }
