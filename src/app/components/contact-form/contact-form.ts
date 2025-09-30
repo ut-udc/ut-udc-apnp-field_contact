@@ -156,9 +156,6 @@ class ContactForm implements OnInit {
 
   contactCount = 0;
 
-  primaryInterviewerOptions: Select2String[] = [];
-  secondaryInterviewerOptions: Select2String[] = [];
-
   contactTypeOptions: Observable<Select2Model[]> = this.contactTypeList;
   locationOptions: Observable<Select2Model[]> = this.locationList;
 
@@ -264,15 +261,6 @@ class ContactForm implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
 
-    // Initialize with empty array and then update when promise resolves
-    this.contactService.getInterviewerOptions().then((options) => {
-      this.primaryInterviewerOptions = options.filter(value => value.text != null && value.text !== '');
-    });
-    console.log('Primary: ' + this.primaryInterviewerOptions);
-    this.contactService.getInterviewerOptions().then((options) => {
-      this.secondaryInterviewerOptions = options.filter(value => value.text != null && value.text !== '');
-    });
-    console.log('Secondary: ' + this.secondaryInterviewerOptions);
   }
   dateTimeControl = new FormControl('', Validators.required);
   primaryInterviewerControl = new FormControl('', Validators.required);
