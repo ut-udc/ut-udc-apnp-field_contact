@@ -1,6 +1,45 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups": [
+    {
+      "name": "bff-api",
+      "version": 1,
+      "urls": [
+        "http://localhost:8080/field_contact_bff/api/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 1000,
+        "maxAge": "2d",
+        "timeout": "90s",
+        "strategy": "freshness"
+      }
+    },
+    {
+      "name": "images",
+      "version": 1,
+      "urls": [
+        "http://localhost:8080/field_contact_bff/api/offender-photo/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 300,
+        "maxAge": "7d",
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "existing-contacts",
+      "version": 1,
+      "urls": [
+        "http://localhost:8080/field_contact_bff/api/existing-contacts/**"
+      ],
+      "cacheConfig": {
+        "maxSize": 2000,
+        "maxAge": "7d",
+        "strategy": "performance"
+      }
+    }
+  ],
   "assetGroups": [
     {
       "name": "app",
@@ -22,6 +61,9 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "/app/assets/**",
+          "/app/icons/**",
+          "/app/media/**",
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
       }

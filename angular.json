@@ -34,7 +34,9 @@
                 "input": "src/assets/images",
                 "output": "assets/images",
                 "glob": "**/*"
-              }
+              },
+              "src/service-worker.js",
+              "src/ngsw-worker.js"
             ],
             "styles": [
               {
@@ -70,6 +72,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -88,41 +92,7 @@
           }
         },
         "defaultConfiguration": "production"
-      },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "configurations": {
-            "production": {
-              "buildTarget": "field-contact:build:production"
-            },
-            "development": {
-              "buildTarget": "field-contact:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ]
-          }
-        }
       }
-    },
-  "cli": {
-    "analytics": false
+    }
   }
 }
