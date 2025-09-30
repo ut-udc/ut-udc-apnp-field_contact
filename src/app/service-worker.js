@@ -17,6 +17,7 @@ self.addEventListener("fetch", (event) => {
       return response || fetch(event.request);
     })
   );
+  console.log("Fetching:", event.request.url);
 });
 
 const CACHE_NAME = "ut-udc-apnp-field_contact-cache-v1";

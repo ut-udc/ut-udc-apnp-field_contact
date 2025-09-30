@@ -9,7 +9,7 @@ import {CommonModule} from '@angular/common';
 @Component({
   selector: 'app-detail-header',
   standalone: true,
-  imports: [MatIconModule, RouterLink],
+  imports: [MatIconModule, RouterLink, MatListModule, CommonModule],
   templateUrl: './detail-header.html',
   styleUrl: './detail-header.scss',
 })
