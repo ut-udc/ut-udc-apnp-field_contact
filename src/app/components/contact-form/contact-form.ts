@@ -69,15 +69,21 @@ class ContactForm implements OnInit {
   contactId: number = 0;
 
   primaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
-    return this.agentService.allAgents()?.map(agent => {
-      let selectOption:Select2String = { id: agent.userId, text: agent.name };
+    let agents: Agent[] = this.agentService.allAgents() ?? [];
+    agents = agents.filter(agent => agent.name != null && agent.name !== '');
+    agents = agents.sort((a, b) => a.name.localeCompare(b.name));
+    return agents?.map(agent => {
+      let selectOption: Select2String = {id: agent.userId, text: agent.name};
       return selectOption;
     })
   });
   secondaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
-    return this.agentService.allAgents()?.map(agent => {
-      let selectOption:Select2String = { id: agent.userId, text: agent.name };
-      return selectOption;
+    let agents: Agent[] = this.agentService.allAgents() ?? [];
+    agents = agents.filter(agent => agent.name != null && agent.name !== '');
+    agents = agents.sort((a, b) => a.name.localeCompare(b.name));
+    return agents?.map(agent => {
+        let selectOption: Select2String = {id: agent.userId, text: agent.name};
+        return selectOption;
     })
   });
 
@@ -260,11 +266,13 @@ class ContactForm implements OnInit {
 
     // Initialize with empty array and then update when promise resolves
     this.contactService.getInterviewerOptions().then((options) => {
-      this.primaryInterviewerOptions = options.filter(value => value.text !== null);
+      this.primaryInterviewerOptions = options.filter(value => value.text != null && value.text !== '');
     });
+    console.log('Primary: ' + this.primaryInterviewerOptions);
     this.contactService.getInterviewerOptions().then((options) => {
-      this.secondaryInterviewerOptions = options.filter(value => value.text !== null);
+      this.secondaryInterviewerOptions = options.filter(value => value.text != null && value.text !== '');
     });
+    console.log('Secondary: ' + this.secondaryInterviewerOptions);
   }
   dateTimeControl = new FormControl('', Validators.required);
   primaryInterviewerControl = new FormControl('', Validators.required);
