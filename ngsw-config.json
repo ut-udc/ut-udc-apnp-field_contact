@@ -21,18 +21,18 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/field_contact_bff/app/favicon.ico",
-          "/field_contact_bff/app/index.csr.html",
-          "/field_contact_bff/app/index.html",
-          "/field_contact_bff/app/manifest.webmanifest",
-          "/field_contact_bff/app/*.css",
-          "/field_contact_bff/app/*.js"
+          "/favicon.ico",
+          "/index.csr.html",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js"
         ]
       }
     },
     {
       "name": "assets",
-      "installMode": "lazy",
+      "installMode": "prefetch",
       "updateMode": "prefetch",
       "resources": {
         "files": [
