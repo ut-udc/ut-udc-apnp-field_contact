@@ -92,8 +92,6 @@ export class AgentService {
         existingContacts[i].primaryInterviewer.userId = existingContacts[i].primaryInterviewer?.userId?.trim();
         existingContacts[i].contactSyncedWithDatabase = true;
         existingContacts[i].formCompleted = true;
-        // existingContacts[i].sortDate = new Date(existingContacts[i].contactDate.setTime(existingContacts[i].contactTime.getTime()));
-        console.log('Sort Date: '+ existingContacts[i].sortDate);
         if (existingContacts[i].secondaryInterviewer) {
           existingContacts[i].secondaryInterviewer.userId = existingContacts[i].secondaryInterviewer?.userId?.trim();
         }
