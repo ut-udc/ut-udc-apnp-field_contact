@@ -3,19 +3,6 @@
   "index": "/index.html",
   "dataGroups": [
     {
-      "name": "bff-api",
-      "version": 1,
-      "urls": [
-        "http://localhost:8080/field_contact_bff/api/**"
-      ],
-      "cacheConfig": {
-        "maxSize": 1000,
-        "maxAge": "2d",
-        "timeout": "90s",
-        "strategy": "freshness"
-      }
-    },
-    {
       "name": "images",
       "version": 1,
       "urls": [
@@ -23,18 +10,6 @@
       ],
       "cacheConfig": {
         "maxSize": 300,
-        "maxAge": "7d",
-        "strategy": "performance"
-      }
-    },
-    {
-      "name": "existing-contacts",
-      "version": 1,
-      "urls": [
-        "http://localhost:8080/field_contact_bff/api/existing-contacts/**"
-      ],
-      "cacheConfig": {
-        "maxSize": 2000,
         "maxAge": "7d",
         "strategy": "performance"
       }
@@ -46,12 +21,12 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/favicon.ico",
-          "/index.csr.html",
-          "/index.html",
-          "/manifest.webmanifest",
-          "/*.css",
-          "/*.js"
+          "/field_contact_bff/app/favicon.ico",
+          "/field_contact_bff/app/index.csr.html",
+          "/field_contact_bff/app/index.html",
+          "/field_contact_bff/app/manifest.webmanifest",
+          "/field_contact_bff/app/*.css",
+          "/field_contact_bff/app/*.js"
         ]
       }
     },
