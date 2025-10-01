@@ -84,12 +84,10 @@ export class MyCaseload implements OnInit {
 
   filteredItems = computed(() => {
     const searchTerm = this.searchTerm()?.toLowerCase();
-    console.log('searchTerm1: ' + searchTerm);
     if (!searchTerm) {
       return this.agentService.myCaseload();
     } else {
       return this.agentService.myCaseload()?.filter((offender:Offender) => {
-      console.log('searchTerm2: ' + searchTerm);
 
         if (offender.offenderAddress) {
           var lineOne = offender.offenderAddress.lineOne ? offender.offenderAddress.lineOne : '';

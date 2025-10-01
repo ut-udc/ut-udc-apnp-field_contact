@@ -6,8 +6,6 @@ import {Agent} from '../models/agent';
 import {OffenderBase} from '../models/offender-base';
 import {Offender} from '../models/offender';
 import {Select2Model} from '../models/select2-model';
-import {ContactSummary} from '../models/contact-summary';
-import {HttpClient} from '@angular/common/http';
 import {User} from '../models/user';
 
 @Injectable({
@@ -25,9 +23,8 @@ export class Db extends Dexie {
   public otherOffenders!: Table<Offender, number>;
   public locations!: Table<Select2Model, number>;
   public contactTypes!: Table<Select2Model, number>;
-  public contactSummaries!: Table<ContactSummary, number>;
 
-  constructor(private http: HttpClient) {
+  constructor() {
     super('supervisionContactsDB');
     this.version(1).stores({
       contacts:

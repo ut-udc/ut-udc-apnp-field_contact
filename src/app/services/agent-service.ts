@@ -7,7 +7,6 @@ import {Agent} from '../models/agent';
 import {UserService} from './user-service';
 import {Offender} from '../models/offender';
 import {Contact} from '../models/contact';
-import {LoadDataService} from './load-data-service';
 import {Select2Model} from '../models/select2-model';
 import {ApiService} from './api-service';
 
@@ -17,9 +16,9 @@ import {ApiService} from './api-service';
 export class AgentService {
   db: Db = inject(Db);
   userService: UserService = inject(UserService);
-  loadDataService: LoadDataService = inject(LoadDataService);
   apiService:ApiService = inject(ApiService);
   contactIdArray: number[] = [];
+  baseUrl: string = '/field_contact_bff/api';
 
   primaryAgent: Signal<Agent | undefined> = toSignal(from(
     liveQuery(() => this.db.agents
@@ -78,7 +77,7 @@ export class AgentService {
   }
 
   loadExistingContacts(offenderNumber: number) {
-    let existingContactPromise: Promise<Array<Contact>> = this.loadDataService.fetchData(this.loadDataService.baseUrl + '/existing-contacts/' + offenderNumber);
+    let existingContactPromise: Promise<Array<Contact>> = this.fetchData(this.baseUrl + '/existing-contacts/' + offenderNumber);
     existingContactPromise.then(existingContacts => {
       let summaryIds = [];
 
@@ -123,7 +122,7 @@ export class AgentService {
       })
     };
 
-    this.apiService.protectedFetch(`${this.loadDataService.baseUrl}/existing-contact-summaries`, options)
+    this.apiService.protectedFetch(`${this.baseUrl}/existing-contact-summaries`, options)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -140,6 +139,10 @@ export class AgentService {
       .catch(error => {
         console.error(`Unable to get summaries for ${contactIds}: ${error}`);
       });
+  }
+
+  async fetchData(url: string) {
+    return (await fetch(url)).json();
   }
 
 }

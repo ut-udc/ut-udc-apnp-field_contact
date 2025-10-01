@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +35,6 @@ export class ApiService {
     for (let cookie of cookies) {
       cookie = cookie.trim();
       if (cookie.startsWith(cookieName)) {
-        console.log("HERE =====> " + cookie);
         // Decode the cookie value in case it's URL-encoded
         return decodeURIComponent(cookie.substring(cookieName.length));
       }
@@ -45,7 +44,6 @@ export class ApiService {
 
   async protectedFetch(url: string, options: RequestInit = {}): Promise<Response> {
     const token = this.getCsrfToken();
-    console.log("token = " + token)
 
     // 1. Create a new Headers object, safely initializing it from the provided headers.
     // The Headers constructor correctly handles all valid formats (Headers, object, or array).
