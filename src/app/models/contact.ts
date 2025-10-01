@@ -6,6 +6,7 @@ export interface Contact {
   result: number; //1=successful and 4=attempted, 5=information.
   primaryInterviewer: AgentName;
   secondaryInterviewer: AgentName;
+  sortDate: Date;
   contactDate: Date;
   contactTime: Date;
   contactTimeString: string;

@@ -1,4 +1,4 @@
-import {Component, effect, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, Signal} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -53,6 +53,12 @@ export class OffenderDetail implements OnInit {
       .equals(Number(this.route.snapshot.params['offenderNumber'])).reverse()
       .sortBy('contactDate')
   )));
+
+  sortedExistingContacts: Signal<Array<Contact> | undefined> = computed(() => {
+    return (this.existingContacts() || []).sort((a, b) => {
+      return new Date(b.contactDate).getTime() - new Date(a.contactDate).getTime();
+    });
+  });
 
   constructor() {
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);

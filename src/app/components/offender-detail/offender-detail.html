@@ -95,9 +95,9 @@
       }
     </ng-container>
   }
-  @if (existingContacts()) {
+  @if (sortedExistingContacts()) {
     <ng-container>
-      @for (contact of existingContacts(); track contact?.contactId) {
+      @for (contact of sortedExistingContacts(); track contact?.contactId) {
         <app-contact-listing-card
           [contact]="contact"
         >

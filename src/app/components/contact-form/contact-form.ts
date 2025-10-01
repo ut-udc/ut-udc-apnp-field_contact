@@ -107,6 +107,7 @@ class ContactForm implements OnInit {
       name: ""
     },
     contactDate: this.newDate(),
+    sortDate: this.newDate(),
     contactTime: this.newDate(),
     contactTimeString: '',
     contactTypeId: 0,
@@ -177,6 +178,7 @@ class ContactForm implements OnInit {
         primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
         secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? new Date(),
+        sortDate: this.contactForm.value.contactDate ?? new Date(),
         contactTime: this.contactForm.value.contactTime ?? new Date(),
         contactTimeString: formattedTime,
         contactTypeId: this.contactForm.value.contactType ?? '',
@@ -205,6 +207,7 @@ class ContactForm implements OnInit {
         primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
         secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? this.newDate(),
+        sortDate: this.contactForm.value.contactDate ?? this.newDate(),
         contactTime: this.contactForm.value.contactTime ?? this.newDate(),
         contactTimeString: formattedTime,
         contactTypeId: this.contactForm.value.contactType ?? '',
@@ -232,13 +235,6 @@ class ContactForm implements OnInit {
     contactType: new FormControl<string | null>(null),
     location: new FormControl<string | null>(null),
   });
-  contactIdSignal: Signal<number> = signal(0);
-  contactDateSignal: Signal<Date> = signal(new Date());
-  contactTimeSignal: Signal<Date> = signal(new Date());
-  primaryInterviewerSignal: Signal<string> = signal('');
-  secondaryInterviewerSignal: Signal<string> = signal('');
-  contactTypeSignal: Signal<string> = signal('');
-  locationSignal: Signal<string> = signal('');
 
   //This is for the 24-hour clock
   private readonly _adapter =
