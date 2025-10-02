@@ -36,7 +36,6 @@ export class AgentService {
   }
 
   updatePrimaryAgentStatus(status: number) {
-    console.log('update primary agent status ', status);
     this.setPrimaryAgentStatus.set(status);
   }
 
@@ -64,7 +63,6 @@ export class AgentService {
         if(!agent){
           agent = this.allAgents()!.find(a => a.userId == this.proxyUserId());
         }
-        console.log('proxyUserId: ' + this.proxyUserId() + ' setPrimaryAgentStatus: ' + this.setPrimaryAgentStatus());
         let update  = { userId: this.proxyUserId(), primaryUser: this.setPrimaryAgentStatus() };
         if (agent) {
           update.userId = agent.userId;
@@ -83,7 +81,7 @@ export class AgentService {
     });
 
     effect(async () => {
-      if (this.myCaseload()) {
+      if (this.myCaseload() && await this.db.existingContacts.count() === 0) {
         this.myCaseload()?.map(offender => offender.offenderNumber)
           .forEach( offender =>{
               this.loadExistingContacts(offender)
@@ -144,6 +142,7 @@ export class AgentService {
     this.apiService.protectedFetch(`${this.baseUrl}/existing-contact-summaries`, options)
       .then(response => {
         if (response.ok) {
+          console.log('protectedFetch existing-contact-summaries response ok');
           return response.json();
         }
         else {

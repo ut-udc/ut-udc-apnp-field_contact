@@ -39,7 +39,6 @@ export class ProxyUserSelect implements OnInit {
     this.proxyForm = new FormGroup({
       proxyUser: this.proxyUserControl
     });
-    console.log('Proxy Users: ' ,this.proxyUsers());
   }
 
   onSubmit() {
