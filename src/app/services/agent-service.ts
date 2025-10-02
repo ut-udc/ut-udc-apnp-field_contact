@@ -113,15 +113,17 @@ export class AgentService {
         }
 
         summaryIds.push(existingContacts[i].contactId);
-        if (summaryIds.length > 10) {
-          this.loadSummaries(summaryIds);
-          summaryIds = [];
-        }
+        // if (summaryIds.length > 10) {
+        //   this.loadSummaries(summaryIds);
+        //   summaryIds = [];
+        // }
       }
 
       if (summaryIds.length > 0) {
         this.loadSummaries(summaryIds);
       }
+
+      console.log('offender number: ' + offenderNumber + ', summaryIds: ', summaryIds.length);
 
       this.db.existingContacts.bulkAdd(existingContacts)
 

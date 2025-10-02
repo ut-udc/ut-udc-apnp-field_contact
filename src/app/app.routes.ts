@@ -4,10 +4,11 @@ import {OffenderDetail} from './components/offender-detail/offender-detail';
 import ContactForm from './components/contact-form/contact-form';
 import {CommentaryForm} from './components/commentary-form/commentary-form';
 import {ContactDetailView} from './components/contact-detail-view/contact-detail-view';
+import {AgentProfile} from './components/agent-profile/agent-profile';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: Home,
     title: 'Supervision Contact Home',
   },
@@ -31,11 +32,11 @@ export const routes: Routes = [
     component: CommentaryForm,
     title: 'Commentary Form',
   },
-  // {
-  //   path: 'agent-profile',
-  //   component: AgentProfile,
-  //   title: 'Agent Profile',
-  // },
+  {
+    path: '',
+    component: AgentProfile,
+    title: 'Agent Profile',
+  },
   {
     path: 'contact-detail-view/:contactId',
     component: ContactDetailView,

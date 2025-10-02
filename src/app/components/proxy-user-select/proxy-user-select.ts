@@ -46,6 +46,7 @@ export class ProxyUserSelect implements OnInit {
     if (this.proxyForm.valid) {
       const selectedUser = this.proxyForm.get('proxyUser')?.value;
       this.db.caseload.clear();
+      this.db.existingContacts.clear();
       this.agentService.updatePrimaryAgentStatus(1)
       this.agentService.updateProxyUser(selectedUser);
       console.log('Selected Proxy User:', selectedUser);
