@@ -1,4 +1,4 @@
-import {effect, inject, Injectable, Signal} from '@angular/core';
+import {effect, inject, Injectable, signal, Signal} from '@angular/core';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {from} from 'rxjs';
 import {liveQuery} from 'dexie';
@@ -27,6 +27,19 @@ export class AgentService {
       .first()))
   );
 
+  proxyUserId = signal('');
+
+  setPrimaryAgentStatus = signal(1)
+
+  updateProxyUser(userId: string) {
+    this.proxyUserId.set(userId);
+  }
+
+  updatePrimaryAgentStatus(status: number) {
+    console.log('update primary agent status ', status);
+    this.setPrimaryAgentStatus.set(status);
+  }
+
   allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
     liveQuery(async () => this.db.agents.toArray()))
   );
@@ -48,12 +61,16 @@ export class AgentService {
     effect(async () => {
       if (this.allAgents()) {
         let agent: Agent | undefined = this.allAgents()!.find(a => a.userId == this.userService.user()?.userId);
-        let update  = { userId: 'abadger', primaryUser: 1 };
+        if(!agent){
+          agent = this.allAgents()!.find(a => a.userId == this.proxyUserId());
+        }
+        console.log('proxyUserId: ' + this.proxyUserId() + ' setPrimaryAgentStatus: ' + this.setPrimaryAgentStatus());
+        let update  = { userId: this.proxyUserId(), primaryUser: this.setPrimaryAgentStatus() };
         if (agent) {
           update.userId = agent.userId;
         }
-
         this.db.agents.update(update.userId, update);
+
       }
     })
 

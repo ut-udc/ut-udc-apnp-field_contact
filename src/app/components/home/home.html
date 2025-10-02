@@ -1,5 +1,9 @@
-
 <div class="surface">
+@if(!this.userService.user() && !this.agentService.primaryAgent()) {
+  <app-proxy-user-select>
+
+  </app-proxy-user-select>
+} @else {
   <mat-toolbar>
     <mat-toolbar-row>
       <span class="header-spacer">
@@ -19,7 +23,7 @@
         aria-hidden="false"
         aria-label="Notifications Icon"
       ></mat-icon>-->
-      <div class="primary-container">
+      <div class="primary-container" (click)=this.agentService.updatePrimaryAgentStatus(0)>
         <span class="initials">
           <div>
             @if(this.userService.user()) {
@@ -39,6 +43,8 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <app-my-caseload></app-my-caseload>
+
+}
 </div>
 <!--hiding this until we have offender search implemented-->
 <!--@if(this.agentService.allAgents()) {-->
@@ -48,5 +54,3 @@
 
 <!--  }-->
 <!--}-->
-
-

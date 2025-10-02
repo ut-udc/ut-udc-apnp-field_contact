@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, Signal, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {MatDividerModule} from '@angular/material/divider';
@@ -11,6 +11,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {Db} from '../../services/db';
 import {AgentService} from '../../services/agent-service';
+import {UserService} from '../../services/user-service';
 
 @Component({
   selector: 'app-my-caseload',
@@ -32,6 +33,16 @@ import {AgentService} from '../../services/agent-service';
 export class MyCaseload implements OnInit {
   db:Db = inject(Db);
   agentService:AgentService = inject(AgentService);
+  userService:UserService = inject(UserService);
+
+  proxyAgentName: Signal<string> = computed(() => {
+    if (this.agentService.primaryAgent()?.userId && !this.userService.user()?.userId){
+      return this.agentService.primaryAgent()?.name.trim() +  '\'s' ;
+    } else {
+      return 'My ';
+    }
+  });
+
   searchForm: FormGroup = new FormGroup({
     searchTerm: new FormControl<string | null>(null),
   });

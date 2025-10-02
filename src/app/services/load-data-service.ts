@@ -11,8 +11,9 @@ export class LoadDataService {
   db: Db = inject(Db)
   baseUrl: string = '/field_contact_bff/api';
 
+
   constructor() {
-    let userPromise: Promise<User> = this.fetchData(this.baseUrl + '/user');
+    let userPromise: Promise<User> = this.fetchData(this.baseUrl + '/user/');
 
     let agentListPromise: Promise<Array<Agent>> = this.fetchData(this.baseUrl + '/agents-with-offenders');
     let locationListPromise: Promise<Array<Select2Model>> = this.fetchData(this.baseUrl + '/locations');
@@ -41,6 +42,10 @@ export class LoadDataService {
       });
 
     })
+  }
+
+  async loadData(userId: string) {
+
   }
 
   async fetchData(url: string) {
