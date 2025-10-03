@@ -5,6 +5,7 @@ import ContactForm from './components/contact-form/contact-form';
 import {CommentaryForm} from './components/commentary-form/commentary-form';
 import {ContactDetailView} from './components/contact-detail-view/contact-detail-view';
 import {AgentProfile} from './components/agent-profile/agent-profile';
+import {SplashScreen} from './components/splash-screen/splash-screen';
 
 export const routes: Routes = [
   {
@@ -33,9 +34,14 @@ export const routes: Routes = [
     title: 'Commentary Form',
   },
   {
-    path: '',
+    path: 'agent-profile',
     component: AgentProfile,
     title: 'Agent Profile',
+  },
+  {
+    path: '',
+    component: SplashScreen,
+    title: 'Splash Screen',
   },
   {
     path: 'contact-detail-view/:contactId',

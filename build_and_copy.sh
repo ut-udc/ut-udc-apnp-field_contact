@@ -11,7 +11,7 @@ rm -rf "$SPRING_BOOT_STATIC_DIR"
 # 2. Build the Angular application
 echo "Building the Angular application..."
 #   ng cache clean
-ng build --base-href="/field_contact_bff/app/" --configuration=production
+ng build --base-href="/field_contact_bff/app/" --deploy-url="/field_contact_bff/app/" --configuration=production
 
 ##npm run build
 

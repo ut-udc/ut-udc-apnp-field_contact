@@ -1,0 +1,23 @@
+<div class="splash-container" [ngStyle]="{'background-image': 'url(assets/images/splash-bg.jpg)'}">>
+  <div class="splash-card mat-elevation-z4">
+    <!--
+    <div class="env-banner">Test Environment</div>
+    -->
+    <img src="assets/images/UDC-Logo.svg" alt="UDC Logo" class="logo" />
+
+    <h1 class="title">UDC</h1>
+    <p class="subtitle">
+      Utah Department of Corrections <br />
+      Offender Management
+    </p>
+
+    <div class="loading">
+      <p>Redirecting...</p>
+      <mat-progress-spinner
+        mode="indeterminate"
+        diameter="40"
+        color="primary">
+      </mat-progress-spinner>
+    </div>
+  </div>
+</div>
