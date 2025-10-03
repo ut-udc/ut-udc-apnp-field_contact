@@ -12,7 +12,18 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 export class SplashScreen {
   constructor(private router: Router) {
     setTimeout(() => {
-      router.navigateByUrl('home');
+
+      const retrievedString = localStorage.getItem('goodEnough');
+
+      if (retrievedString == null) {
+        localStorage.setItem('goodEnough', 'somethingNotNull');
+        console.log('Reloading');
+        window.location.reload();
+      } else {
+        console.log('Going Home');
+        router.navigateByUrl('home');
+      }
+
     }, 2000);
   }
 }
