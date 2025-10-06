@@ -6,7 +6,7 @@
       "name": "images",
       "version": 1,
       "urls": [
-        "http://localhost:8080/field_contact_bff/api/offender-photo/**"
+        "/field_contact_bff/api/offender-photo/**"
       ],
       "cacheConfig": {
         "maxSize": 300,
