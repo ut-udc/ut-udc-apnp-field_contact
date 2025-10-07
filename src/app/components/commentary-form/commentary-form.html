@@ -7,26 +7,26 @@
     <div class="contact-info-container">
       <span class="label_medium">Offender</span>
       <span class="body_large"
-        >{{offender()?.defaultOffenderName?.firstName}} {{offender()?.defaultOffenderName?.lastName}}</span
+      >{{ offender()?.defaultOffenderName?.firstName }} {{ offender()?.defaultOffenderName?.lastName }}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Date</span>
       <span class="body_large"
-        >{{currentContact()?.contactDate | date: 'MM/dd/yyyy'}} |
-        {{currentContact()?.contactTime | date: 'HH:mm'}}</span
+      >{{ currentContact()?.contactDate | date: 'MM/dd/yyyy' }} |
+        {{ currentContact()?.contactTime | date: 'HH:mm' }}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Primary Interviewer</span>
       <span class="body_large"
-        >{{currentContact()?.primaryInterviewer?.name}}</span
+      >{{ currentContact()?.primaryInterviewer?.name }}</span
       >
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Secondary Interviewer</span>
       <span class="body_large">
-        {{currentContact()?.secondaryInterviewer?.name || 'N/A'}}
+        {{ currentContact()?.secondaryInterviewer?.name || 'N/A' }}
       </span>
     </div>
     <div class="contact-info-container">
@@ -38,7 +38,7 @@
     <div class="contact-info-container">
       <span class="label_medium">Location</span>
       <span class="body_large">
-          {{ currentContact()?.location}}
+          {{ currentContact()?.location }}
       </span>
     </div>
   </div>
@@ -56,17 +56,17 @@
       >
         <mat-button-toggle
           class="successFab"
-          matFab
           (click)="madeContact()"
           value="bold"
-          >Made Contact</mat-button-toggle
+        >Made Contact
+        </mat-button-toggle
         >
         <mat-button-toggle
           class="successFab"
-          matFab
           (click)="attemptedContact()"
           value="italic"
-          >Attempted Contact</mat-button-toggle
+        >Attempted Contact
+        </mat-button-toggle
         >
       </mat-button-toggle-group>
       <mat-form-field class="contact_form_input_field">
@@ -74,15 +74,12 @@
         <textarea
           matInput
           formControlName="commentary"
-          placeholder=""
+          placeholder="Tap the mic next to your keyboard to initiate voice to text"
           [ngModel]="currentContact()?.summary || ''"
           required
         ></textarea>
       </mat-form-field>
     </form>
-    <span class="summary-of-contact-container"
-      >Tap the mic next to your keyboard to initiate voice to text</span
-    >
   </div>
 
   <div class="on-surface-variant">
