@@ -113,38 +113,51 @@ export class ContactService {
     }
   }
   async addPostContactToQueue(contact: Contact) {
+    this.contactRecordForBff.contactDate = contact.contactDate.toDateString();
+    this.contactRecordForBff.offenderNumber = contact.offenderNumber;
+    this.contactRecordForBff.contactTypeId = contact.contactTypeId;
+    this.contactRecordForBff.locationId = contact.locationId;
+    this.contactRecordForBff.primaryInterviewer = contact.primaryInterviewer;
+    this.contactRecordForBff.secondaryInterviewer = contact.secondaryInterviewer;
+    this.contactRecordForBff.summary = contact.summary;
+    this.contactRecordForBff.contactTime = contact.contactTimeString;
+    this.contactRecordForBff.result = contact.result;
+    this.contactRecordForBff.userAgent = contact.userAgent;
+
     const queueLength = await this.db.contactsQueue.count();
     const queuedContact: QueuedContact = {
       id: contact.contactId,
-      method: 'POST',
+      method: 'PUT',
       url: this.path + '/addContact',
-      body: contact,
+      body: this.contactRecordForBff,
     };
+
     queuedContact.id = queueLength + 1;
     await this.db.contactsQueue.add(queuedContact);
   }
 
-  async addUpdateContactToQueue(contact: Contact) {
-    const queueLength = await this.db.contactsQueue.count();
-    const queuedContact: QueuedContact = {
-      id: queueLength + 1,
-      method: 'PUT',
-      url: 'http://localhost:3000/updateContact',
-      body: contact,
-    };
-    await this.db.contactsQueue.add(queuedContact);
-  }
-
-  async addDeleteContactToQueue(contact: Contact) {
-    const queueLength = await this.db.contactsQueue.count();
-    const queuedContact: QueuedContact = {
-      id: queueLength + 1,
-      method: 'DELETE',
-      url: 'http://localhost:3000/deleteContact',
-      body: contact,
-    };
-    await this.db.contactsQueue.add(queuedContact);
-  }
+  // async addUpdateContactToQueue(contact: Contact) {
+  //   const queueLength = await this.db.contactsQueue.count();
+  //   const queuedContact: QueuedContact = {
+  //     id: queueLength + 1,
+  //     method: 'PUT',
+  //     //TODO Update this with a write API URI to send the JSON body
+  //     url: 'http://localhost:3000/updateContact',
+  //     body: contact,
+  //   };
+  //   await this.db.contactsQueue.add(queuedContact);
+  // }
+  //
+  // async addDeleteContactToQueue(contact: Contact) {
+  //   const queueLength = await this.db.contactsQueue.count();
+  //   const queuedContact: QueuedContact = {
+  //     id: queueLength + 1,
+  //     method: 'DELETE',
+  //     url: 'http://localhost:3000/deleteContact',
+  //     body: contact,
+  //   };
+  //   await this.db.contactsQueue.add(queuedContact);
+  // }
 
   async addOffenderToOtherOffenders(offender: OffenderBase | null) {
     const newOffender: Offender = {

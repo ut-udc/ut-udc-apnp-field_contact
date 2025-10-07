@@ -1,5 +1,5 @@
-import { OffenderBase } from './app/models/offender-base';
-import { Contact } from './app/models/contact';
+import {OffenderBase} from './app/models/offender-base';
+import {Contact} from './app/models/contact';
 import {inject} from '@angular/core';
 import {ContactService} from './app/services/contact-service';
 import {Db} from './app/services/db';
@@ -10,13 +10,14 @@ export const addToContactQueue = (
   contactService:ContactService = inject(ContactService),
   method: string
 ) => {
-  if (method === 'POST') {
+  if (method === 'PUT') {
     contactService.addPostContactToQueue(contact);
-  } else if (method === 'PUT') {
-    contactService.addUpdateContactToQueue(contact);
-  } else if (method === 'DELETE') {
-    contactService.addDeleteContactToQueue(contact);
   }
+  // else if (method === 'PUT') {
+  //   contactService.addUpdateContactToQueue(contact);
+  // } else if (method === 'DELETE') {
+  //   contactService.addDeleteContactToQueue(contact);
+  // }
 };
 
 export const addOffendersToOtherOffenders = (
@@ -94,6 +95,7 @@ export const processContactQueue = async (contactService:ContactService, db:Db) 
           if (data) {
             data.contactSyncedWithDatabase = true;
             successful = data.contactSyncedWithDatabase;
+            //TODO update this to only update the contact ID and insert that into existing contacts store.
             db.contacts.add(data);
             return data;
           }
