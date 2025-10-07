@@ -246,25 +246,6 @@ hr {
   /* 127.273% */
 }
 
-.detail-card {
-  width: 100%;
-  padding: 32px 16px;
-  align-items: flex-start;
-  gap: 16px;
-  align-self: stretch;
-  border-radius: 16px;
-  background: var(--md-sys-color-surface-container-low);
-}
-
-.detail-card img {
-  width: 81px;
-  height: 81px;
-  border-radius: 8px;
-  flex-shrink: 0;
-  background: url(../assets/images/placeholder-image.png) lightgray 50% / cover
-  no-repeat;
-}
-
 .label_medium {
   color: var(--md-sys-light-on-surface-variant);
 
