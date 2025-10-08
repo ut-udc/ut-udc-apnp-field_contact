@@ -3,7 +3,7 @@
   "short_name": "Field Contact",
   "display": "standalone",
   "scope": "./",
-  "start_url": "./field_contact_bff/app/index.html",
+  "start_url": "./index.html",
   "icons": [
     {
       "src": "/field_contact_bff/app/icons/icon-72x72.png",
