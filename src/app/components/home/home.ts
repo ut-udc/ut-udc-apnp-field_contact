@@ -36,21 +36,4 @@ export class Home {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
   }
-  getInitials(): string {
-    const user = this.userService.user();
-    if (user?.firstName || user?.lastName) {
-      return ((user.firstName?.[0] || '') + (user.lastName?.[0] || '')).toUpperCase();
-    }
-
-    const agent = this.agentService.primaryAgent();
-    if (agent?.name) {
-      const parts = agent.name.trim().split(' ');
-      return (parts.length > 1
-          ? parts[0][0] + parts[1][0]
-          : agent.name.substring(0, 2)
-      ).toUpperCase();
-    }
-
-    return '';
-  }
 }

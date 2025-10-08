@@ -26,7 +26,10 @@
       <div class="primary-container" (click)=this.agentService.updatePrimaryAgentStatus(0)>
         <span class="initials">
           <div>
-            {{getInitials()}}
+            @if(this.userService.user()) {
+              @let user = this.userService.user();
+              {{user?.firstName?.charAt(0)}}{{user?.lastName?.charAt(0)}}
+            }
           </div>
         </span>
       </div>
