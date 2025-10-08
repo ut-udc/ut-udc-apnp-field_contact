@@ -2,11 +2,11 @@
   "name": "Field Contact",
   "short_name": "Field Contact",
   "display": "standalone",
-  "scope": "./field_contact_bff/app/",
-  "start_url": "./field_contact_bff/app/",
+  "scope": "./",
+  "start_url": "./index.html",
   "icons": [
     {
-      "src": "icons/icon-72x72.png",
+      "src": "/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"

@@ -33,7 +33,7 @@ export class Db extends Dexie {
         '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
       contactsQueue: 'url, method, body',
       users:
-        '&userId, firstName, lastName, fullName, emailAddress,  supervisorId, loggedInUser',
+      '&agentEmail, userId, firstName, lastName, fullName, supervisorId, loggedInUser',
       agents:
         '&userId, firstName, lastName, name, emailAddress, image, phone, supervisorId, primaryUser',
       allOffenders: '&offenderNumber, firstName, lastName, birthDate',
