@@ -5,4 +5,5 @@ export interface User {
   agentEmail: string;
   guid: string;
   loggedInUser: number;
+  tester?: number
 }

@@ -1,5 +1,5 @@
 <div class="surface">
-@if(!this.userService.user() && !this.agentService.primaryAgent()) {
+@if(this.userService.user()?.tester == 1 && !this.agentService.primaryAgent()) {
   <app-proxy-user-select>
 
   </app-proxy-user-select>

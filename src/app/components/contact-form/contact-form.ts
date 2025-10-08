@@ -190,7 +190,7 @@ class ContactForm implements OnInit {
         formCompleted: false,
         firstPageCompleted: true,
         contactSyncedWithDatabase: false,
-        userAgent: '',
+        userAgent: this.agentService.primaryAgent()?.userId || '',
       };
 
       this.currentContact.contactId = this.contactCount + 1;
@@ -219,7 +219,7 @@ class ContactForm implements OnInit {
         formCompleted: false,
         firstPageCompleted: true,
         contactSyncedWithDatabase: false,
-        userAgent: '',
+        userAgent: this.agentService.primaryAgent()?.userId || '',
       };
       this.contactService.updateContact(this.currentContact);
     }
