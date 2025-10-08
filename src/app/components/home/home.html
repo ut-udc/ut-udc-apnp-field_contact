@@ -26,14 +26,12 @@
       <div class="primary-container" (click)=this.agentService.updatePrimaryAgentStatus(0)>
         <span class="initials">
           <div>
-            @if(this.userService.user()) {
-              @let user = this.userService.user();
-              {{user?.firstName?.charAt(0)}}{{user?.lastName?.charAt(0)}}
-            }
+            {{getInitials()}}
           </div>
         </span>
       </div>
     </mat-toolbar-row>
+    <!--
     <mat-toolbar-row>
       <h2
         class="flex-item headline_small"
@@ -41,6 +39,7 @@
         Supervision Contacts
       </h2>
     </mat-toolbar-row>
+    -->
   </mat-toolbar>
   <app-my-caseload></app-my-caseload>
 
