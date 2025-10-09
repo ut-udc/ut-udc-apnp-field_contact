@@ -44,12 +44,15 @@ export class App implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     if (navigator.onLine) {
       for (let contact of await this.db.contacts.toArray()) {
+        console.log('Syncing contact: ', contact);
         await this.contactService.syncContactWithDatabase(contact)
+        await this.db.contactsQueue.delete(contact.contactId)
       }
       // await processContactQueue(this.apiService, this.contactService, this.db);
     }
     window.addEventListener('online', async () => {
       for (let contact of await this.db.contacts.toArray()) {
+        console.log('Syncing contact online: ', contact);
       await this.contactService.syncContactWithDatabase(contact)
       }
       // await processContactQueue(this.apiService, this.contactService, this.db);
