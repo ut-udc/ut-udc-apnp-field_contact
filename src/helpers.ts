@@ -3,7 +3,7 @@ import {Contact} from './app/models/contact';
 import {inject} from '@angular/core';
 import {ContactService} from './app/services/contact-service';
 import {Db} from './app/services/db';
-
+import {ApiService} from './app/services/api-service';
 
 export const addToContactQueue = (
   contact: Contact,
@@ -62,7 +62,7 @@ export const removeOffendersFromOtherOffenders = (
   });
 };
 
-export const processContactQueue = async (contactService:ContactService, db:Db) => {
+export const processContactQueue = async (apiService:ApiService, contactService:ContactService, db:Db) => {
   if (!navigator.onLine) {
     return;
   }
@@ -78,7 +78,7 @@ export const processContactQueue = async (contactService:ContactService, db:Db) 
     let successful = false;
     const queuedContact = contactService.queuedContacts()?.[0];
     try {
-      await fetch(queuedContact!.url, {
+      await apiService.protectedFetch(queuedContact!.url, {
         method: queuedContact!.method,
         headers: {
           'Content-Type': 'application/json',

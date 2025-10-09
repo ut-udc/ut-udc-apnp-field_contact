@@ -2,6 +2,7 @@
   "name": "Field Contact",
   "short_name": "Field Contact",
   "display": "standalone",
+  "id": "/?version=1.2.3&build=abc123", // Example of a computed ID
   "scope": "./",
   "start_url": "./index.html",
   "icons": [

@@ -1,10 +1,10 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {LoadDataService} from './services/load-data-service';
-import {processContactQueue} from '../helpers';
 import {ContactService} from './services/contact-service';
 import {Db} from './services/db';
 import {Subscription} from 'rxjs';
+import {ApiService} from './services/api-service';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +17,7 @@ export class App implements OnInit, OnDestroy {
   private networkSubscription!: Subscription;
   loadDataService:LoadDataService = inject(LoadDataService);
   contactService:ContactService = inject(ContactService);
+  apiService:ApiService = inject(ApiService);
   db:Db = inject(Db);
 
   protected readonly title = this.loadDataService.appTitle();
@@ -42,10 +43,16 @@ export class App implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     if (navigator.onLine) {
-      await processContactQueue(this.contactService, this.db);
+      for (let contact of await this.db.contacts.toArray()) {
+        await this.contactService.syncContactWithDatabase(contact)
+      }
+      // await processContactQueue(this.apiService, this.contactService, this.db);
     }
     window.addEventListener('online', async () => {
-      await processContactQueue(this.contactService, this.db);
+      for (let contact of await this.db.contacts.toArray()) {
+      await this.contactService.syncContactWithDatabase(contact)
+      }
+      // await processContactQueue(this.apiService, this.contactService, this.db);
     });
   }
 

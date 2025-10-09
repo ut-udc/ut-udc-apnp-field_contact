@@ -82,14 +82,15 @@ export class CommentaryForm implements OnInit {
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
       this.contactService.updateContact(this.currentContact()!);
       this.contactService.addPostContactToQueue(this.currentContact()!);
-      this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
+      // this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
 
       return;
     } else {
       this.currentContact()!.formCompleted = true;
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
-      this.contactService.syncContactWithDatabase(this.currentContact()!);
+      this.currentContact()!.result = this.commentaryForm.value.wasContactSuccessful;
       this.contactService.updateContact(this.currentContact()!);
+      this.contactService.syncContactWithDatabase(this.currentContact()!);
     }
     // window.location.href = 'offender-detail/' + this.offenderNumber;
   }

@@ -31,7 +31,7 @@ export class Db extends Dexie {
         '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
       existingContacts:
         '&contactId, offenderNumber, primaryInterviewer, secondaryInterviewer, contactDate, contactType, location, commentary, formCompleted, previouslySuccessful',
-      contactsQueue: 'url, method, body',
+      contactsQueue: '&id, url, method, body',
       users:
       '&agentEmail, userId, firstName, lastName, fullName, supervisorId, loggedInUser',
       agents:
