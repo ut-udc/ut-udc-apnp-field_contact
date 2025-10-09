@@ -36,5 +36,4 @@ export class Home {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/search.svg')
     );
   }
-
 }
