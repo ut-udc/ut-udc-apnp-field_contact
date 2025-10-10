@@ -88,7 +88,6 @@ export class CommentaryForm implements OnInit {
     } else {
       this.currentContact()!.formCompleted = true;
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
-      this.currentContact()!.result = this.commentaryForm.value.wasContactSuccessful;
       this.contactService.updateContact(this.currentContact()!);
       this.contactService.syncContactWithDatabase(this.currentContact()!);
     }
