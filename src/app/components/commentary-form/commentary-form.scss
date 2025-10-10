@@ -139,3 +139,11 @@ background: var(--md-sys-color-surface-container-low);
 .mat-button-toggle-group-appearance-standard {
   border-radius: var(--mat-button-toggle-shape);
 }
+.surface{
+  .action_container {
+    margin-top:auto;
+    button{
+      margin-left: 16px;
+    }
+  }
+}

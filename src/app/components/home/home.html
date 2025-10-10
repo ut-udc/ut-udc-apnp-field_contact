@@ -1,28 +1,26 @@
 <div class="surface">
 @if(this.userService.user()?.tester == 1 && !this.agentService.primaryAgent()) {
-  <app-proxy-user-select>
-
-  </app-proxy-user-select>
+  <app-proxy-user-select/>
 } @else {
-  <mat-toolbar>
+  <mat-toolbar class="udc-home-mat-toolbar">
     <mat-toolbar-row>
       <span class="header-spacer">
         <div>
         </div>
       </span>
-<!--      hiding this until we have search and notifications implemented-->
-     <!-- <mat-icon
+     <!--hiding this until we have search and notifications implemented-->
+     <!--
+     <mat-icon
         class="header-icon"
         svgIcon="search"
         aria-hidden="false"
-        aria-label="Search Icon"
-      ></mat-icon>
+        aria-label="Search Icon"></mat-icon>
       <mat-icon
         class="header-icon"
         svgIcon="bell"
         aria-hidden="false"
-        aria-label="Notifications Icon"
-      ></mat-icon>-->
+        aria-label="Notifications Icon"></mat-icon>
+      -->
       <div class="primary-container" (click)=this.agentService.updatePrimaryAgentStatus(0)>
         <span class="initials">
           <div>
@@ -36,16 +34,13 @@
     </mat-toolbar-row>
     <!--
     <mat-toolbar-row>
-      <h2
-        class="flex-item headline_small"
-      >
-        Supervision Contacts
-      </h2>
+      <h2 class="flex-item headline_small">Supervision Contacts</h2>
     </mat-toolbar-row>
     -->
   </mat-toolbar>
-  <app-my-caseload></app-my-caseload>
-
+  <div class="my-caseload-container">
+    <app-my-caseload />
+  </div>
 }
 </div>
 <!--hiding this until we have offender search implemented-->
