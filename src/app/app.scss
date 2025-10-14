@@ -396,3 +396,14 @@ div.udc-list-item-card{
     justify-content: flex-start;
   }
 }
+// body large
+.mat-mdc-select-value-text, .mat-mdc-form-field.mat-form-field-animations-enabled .mdc-text-field__input{
+  color: var(--UDC-styles-sys-light-on-surface, #1C1B1B) !important;
+  /* UDC-styles/body/large */
+  font-family: "Source Sans 3";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 150% */
+  letter-spacing: 0.5px;
+}

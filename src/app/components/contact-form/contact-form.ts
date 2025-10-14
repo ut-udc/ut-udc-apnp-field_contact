@@ -8,7 +8,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {Observable} from 'rxjs';
+import { Observable, map, startWith } from 'rxjs';
 import {AsyncPipe, CommonModule, NgForOf} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -149,17 +149,12 @@ class ContactForm implements OnInit {
       observer.next(list);
     });
   });
-  locationList = new Observable<Select2Model[]>((observer) => {
-    this.contactService.getListOfLocations().then((list) => {
-      observer.next(list);
-    });
-  });
 
   contactCount = 0;
 
   contactTypeOptions: Observable<Select2Model[]> = this.contactTypeList;
-  locationOptions: Observable<Select2Model[]> = this.locationList;
-
+  locationOptions: Select2Model[] = [];
+  filteredLocations!: Observable<Select2Model[]>;
   searchTerm: string = '';
   searchTerm2: string = '';
 
@@ -251,13 +246,25 @@ class ContactForm implements OnInit {
       'arrow_back',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
-
-    iconRegistry.addSvgIcon(
-      'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
-    );
+    // this.registerPhosphorIcons(iconRegistry,sanitizer);
 
   }
+  /*
+  private registerPhosphorIcons(iconRegistry:MatIconRegistry, sanitizer:DomSanitizer): void {
+    const basePath = 'assets/phosphor-icons/';
+
+    const icons = ['calendar', 'caret-down', 'clock'];
+    icons.forEach(name => {
+      icons.forEach(name => {
+        console.log(`${basePath}${name}.svg`);
+        iconRegistry.addSvgIcon(
+          `ph-${name}`,
+          sanitizer.bypassSecurityTrustResourceUrl(`${basePath}${name}.svg`)
+        );
+      });
+    });
+  }
+  */
   dateTimeControl = new FormControl('', Validators.required);
   primaryInterviewerControl = new FormControl('', Validators.required);
   secondaryInterviewerControl = new FormControl('');
@@ -321,14 +328,29 @@ class ContactForm implements OnInit {
       contactType: this.contactTypeControl,
       location: this.contactLocationControl,
     });
-
-
+    // Load locations as array
+    this.locationOptions = await this.contactService.getListOfLocations();
+    // Setup filteredLocations as an Observable reacting to input
+    this.filteredLocations = this.contactLocationControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? this._filterLocations(value) : this.locationOptions)
+    );
     const contactCount = await this.contactService.getContactCount();
     console.log('Contact data', this.currentContact);
   }
   trackOption(index: number, option: any): any {
     return option?.id;
   }
+  private _filterLocations(value: string): Select2Model[] {
+    const filterValue = value.toLowerCase();
+    return this.locationOptions.filter(option =>
+      option.text.toLowerCase().includes(filterValue)
+    );
+  }
+  getLocationText(id: number | string  | null): string {
+    return this.locationOptions.find(option => option.id === id)?.text || 'Select location';
+  }
+
 }
 
 export default ContactForm

@@ -25,6 +25,11 @@
       <mat-hint style="font-size: 10px; line-height: 0px; margin-top: 0px"
         >MM/DD/YYYY</mat-hint
       >
+      <!--
+      <mat-datepicker-toggle matSuffix [for]="picker" class="custom-toggle">
+        <mat-icon svgIcon="ph-calendar" style="font-size:24px;"></mat-icon>
+      </mat-datepicker-toggle>
+      -->
       <mat-datepicker-toggle
         matIconSuffix
         [for]="picker"
@@ -41,6 +46,11 @@
         placeholder="HH:MM"
         formControlName="contactTime"
       />
+      <!--
+      <mat-timepicker-toggle matSuffix [for]="timePicker">
+        <mat-icon svgIcon="ph-clock"></mat-icon>
+      </mat-timepicker-toggle>
+      -->
       <mat-timepicker-toggle matIconSuffix [for]="timePicker" />
       <mat-timepicker #timePicker />
     </mat-form-field>
@@ -103,11 +113,20 @@
     <mat-form-field class="contact_form_input_field">
       <mat-label class="body_small">Location</mat-label>
       <mat-select [formControl]="contactLocationControl" required>
+        <!-- Search input inside the dropdown -->
+        <mat-select-trigger>
+          {{ getLocationText(contactLocationControl.value) }}
+        </mat-select-trigger>
         <mat-option>
-          <input matInput formControlName="location" />
+          <input
+            matInput
+            placeholder="Search location..."
+            formControlName="location"
+            (click)="$event.stopPropagation()"
+          />
         </mat-option>
         <mat-option
-          *ngFor="let option of locationOptions | async; trackBy: trackOption"
+          *ngFor="let option of filteredLocations | async; trackBy: trackOption"
           [value]="option.id"
           >{{option.text}}</mat-option
         >

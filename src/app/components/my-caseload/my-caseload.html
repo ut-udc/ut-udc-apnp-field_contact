@@ -3,25 +3,26 @@
       <h2 class="flex-item headline_small">{{ proxyAgentName() }} Caseload</h2>
       <mat-divider style="color: lightgray"></mat-divider>
       <div
-        class="on-surface-variant"
-        style="display: flex; align-items: center"
+        class="on-surface-variant d-flex align-items-center justify-content-between"
       >
-        <span class="source-sans"
+        <span class="source-sans" *ngIf="!showSearchForm"
           >{{ (this.agentService.myCaseload())?.length || 0 }} offenders</span
         >
-        <span class="header-spacer"></span>
-        <form [formGroup]="searchForm">
-          <mat-form-field class="contact_form_input_field">
+        <form [formGroup]="searchForm" *ngIf="showSearchForm"
+              (ngSubmit)="$event.preventDefault()"
+              class="d-flex align-items-center w-100">
+          <mat-form-field class="contact_form_input_field flex-grow-1 me-2 no-padding">
             <mat-label>Filter Offenders</mat-label>
             <input matInput type="text" [(ngModel)]="searchTerm" (ngModelChange)="searchTerm()" formControlName="searchTerm"
              />
-            <mat-icon *ngIf="searchForm.value.searchTerm" matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
+            <!--*ngIf="searchForm.value.searchTerm"-->
+            <mat-icon  matSuffix matIconButton aria-label="Clear" (click)="resetSearch()" fontIcon="close"></mat-icon>
           </mat-form-field>
         </form>
-        <span class="header-spacer"></span>
-        <mat-icon
+        <mat-icon *ngIf="!showSearchForm"
           class="header-icon"
           svgIcon="filter"
+          (click)="showSearchForm=true;"
           aria-hidden="false"
           aria-label="Filter Icon"
         ></mat-icon>

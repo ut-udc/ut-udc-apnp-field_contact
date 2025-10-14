@@ -5,7 +5,8 @@ import {ContactService} from './services/contact-service';
 import {Db} from './services/db';
 import {Subscription} from 'rxjs';
 import {ApiService} from './services/api-service';
-
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -23,7 +24,9 @@ export class App implements OnInit, OnDestroy {
   protected readonly title = this.loadDataService.appTitle();
 
 
- constructor() {
+ constructor(    private iconRegistry: MatIconRegistry,
+                 private sanitizer: DomSanitizer) {
+   // this.registerPhosphorIcons();
    if ('serviceWorker' in navigator) {
      window.addEventListener('load', function () {
        navigator.serviceWorker.register('service-worker.js').then(
@@ -64,4 +67,18 @@ export class App implements OnInit, OnDestroy {
       this.networkSubscription.unsubscribe();
     }
   }
+  /*
+  private registerPhosphorIcons(): void {
+    const basePath = 'assets/phosphor-icons/';
+
+    const icons = ['calendar', 'caret-down', 'clock'];
+
+    icons.forEach(name => {
+      this.iconRegistry.addSvgIcon(
+        `ph-${name}`,
+        this.sanitizer.bypassSecurityTrustResourceUrl(`${basePath}${name}.svg`)
+      );
+    });
+  }
+  */
 }

@@ -26,3 +26,22 @@
         }
       }
     }
+/*
+    ::ng-deep .custom-toggle .mat-datepicker-toggle-default-icon {
+      display: none !important;
+    }
+
+    // Hide the MDC mat-select arrow
+
+    .mat-mdc-select .mat-mdc-select-arrow {
+      display: none !important;
+    }
+
+
+    .custom-select-icon {
+      margin-left: auto;      // push to right
+      display: flex;
+      align-self: center;     // vertically center inside trigger
+      pointer-events: none;   // prevent icon from blocking clicks
+    }
+*/

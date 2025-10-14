@@ -50,7 +50,7 @@
       <mat-button-toggle-group
         formControlName="wasContactSuccessful"
         required
-        class="{{errorClass}}"
+        class="{{errorClass}} udh-mat-toggle-group"
         name="fontStyle"
         aria-label="Font Style"
       >
@@ -78,6 +78,7 @@
           [ngModel]="currentContact()?.summary || ''"
           required
         ></textarea>
+        <mat-hint>Tap the mic next to your keyboard to initiate voice to text</mat-hint>
       </mat-form-field>
     </form>
   </div>

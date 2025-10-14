@@ -31,6 +31,7 @@ import {UserService} from '../../services/user-service';
   styleUrl: './my-caseload.scss',
 })
 export class MyCaseload implements OnInit {
+  showSearchForm:boolean = false;
   db:Db = inject(Db);
   agentService:AgentService = inject(AgentService);
   userService:UserService = inject(UserService);
@@ -122,5 +123,6 @@ export class MyCaseload implements OnInit {
   resetSearch(): void {
     this.searchTerm.set('');
     this.searchForm.reset();
+    this.showSearchForm=false;
   }
 }

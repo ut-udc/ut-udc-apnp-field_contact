@@ -147,3 +147,10 @@ background: var(--md-sys-color-surface-container-low);
     }
   }
 }
+mat-button-toggle-group.udh-mat-toggle-group{
+  display: flex;
+  justify-content: center;
+  mat-button-toggle{
+    padding: inherit;
+  }
+}
