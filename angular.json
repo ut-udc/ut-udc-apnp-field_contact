@@ -31,6 +31,11 @@
                 "glob": "**/*"
               },
               {
+                "input": "src/assets/phosphor-icons",
+                "output": "assets/phosphor-icons",
+                "glob": "**/*"
+              },
+              {
                 "input": "src/assets/images",
                 "output": "assets/images",
                 "glob": "**/*"

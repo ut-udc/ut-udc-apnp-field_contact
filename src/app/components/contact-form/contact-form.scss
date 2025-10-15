@@ -26,22 +26,44 @@
         }
       }
     }
-/*
+
     ::ng-deep .custom-toggle .mat-datepicker-toggle-default-icon {
       display: none !important;
     }
-
-    // Hide the MDC mat-select arrow
-
-    .mat-mdc-select .mat-mdc-select-arrow {
+    ::ng-deep .custom-toggle .mat-timepicker-toggle-default-icon {
+      display: none !important;
+    }
+    /* Use :host with ::ng-deep and your custom class to ensure scope */
+    :host ::ng-deep .custom-select-toggle .mat-mdc-select-arrow-wrapper {
       display: none !important;
     }
 
-
-    .custom-select-icon {
-      margin-left: auto;      // push to right
-      display: flex;
-      align-self: center;     // vertically center inside trigger
-      pointer-events: none;   // prevent icon from blocking clicks
+    /* Ensure your custom icon sits correctly */
+    :host ::ng-deep .custom-select-toggle .mat-icon.mat-suffix {
+      pointer-events: none; /* Allows the click to pass through to the select */
+      // Add other positioning/styling here if needed
     }
-*/
+    .custom-select-toggle {
+
+      // New MDC-based classes (Angular 15+)
+      .mat-mdc-select-arrow-wrapper {
+        /* Hide the wrapper which contains the default arrow */
+        opacity: 0 !important;
+      }
+
+      // The custom icon size/position adjustment
+      .mat-mdc-select-value {
+        /* Ensure there's space for the custom icon not to overlap the selected value */
+        padding-right: 20px;
+      }
+
+      .mat-icon.mat-suffix {
+        /* Optional: Fine-tune the position/color of your custom suffix icon */
+        position: absolute;
+        top: 50%;
+        right: 8px; /* Adjust as needed */
+        transform: translateY(-50%);
+        pointer-events: none; /* Allows clicks to pass through to the select */
+        color: var(--mat-sys-color-on-surface-variant); // Use a Material design token for color
+      }
+    }

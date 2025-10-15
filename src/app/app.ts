@@ -26,7 +26,7 @@ export class App implements OnInit, OnDestroy {
 
  constructor(    private iconRegistry: MatIconRegistry,
                  private sanitizer: DomSanitizer) {
-   // this.registerPhosphorIcons();
+   this.registerPhosphorIcons();
    if ('serviceWorker' in navigator) {
      window.addEventListener('load', function () {
        navigator.serviceWorker.register('service-worker.js').then(
@@ -67,7 +67,7 @@ export class App implements OnInit, OnDestroy {
       this.networkSubscription.unsubscribe();
     }
   }
-  /*
+  //*
   private registerPhosphorIcons(): void {
     const basePath = 'assets/phosphor-icons/';
 
@@ -80,5 +80,5 @@ export class App implements OnInit, OnDestroy {
       );
     });
   }
-  */
+  //*/
 }

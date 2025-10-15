@@ -25,15 +25,15 @@
       <mat-hint style="font-size: 10px; line-height: 0px; margin-top: 0px"
         >MM/DD/YYYY</mat-hint
       >
-      <!--
       <mat-datepicker-toggle matSuffix [for]="picker" class="custom-toggle">
-        <mat-icon svgIcon="ph-calendar" style="font-size:24px;"></mat-icon>
+        <mat-icon matDatepickerToggleIcon svgIcon="ph-calendar"></mat-icon>
       </mat-datepicker-toggle>
-      -->
+      <!-- class="custom-toggle"
       <mat-datepicker-toggle
         matIconSuffix
         [for]="picker"
       ></mat-datepicker-toggle>
+      -->
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
@@ -51,11 +51,13 @@
         <mat-icon svgIcon="ph-clock"></mat-icon>
       </mat-timepicker-toggle>
       -->
-      <mat-timepicker-toggle matIconSuffix [for]="timePicker" />
+      <mat-timepicker-toggle matSuffix [for]="timePicker" class="custom-toggle">
+        <mat-icon matTimepickerToggleIcon svgIcon="ph-clock"></mat-icon>
+      </mat-timepicker-toggle>
       <mat-timepicker #timePicker />
     </mat-form-field>
 
-    <mat-form-field class="contact_form_input_field">
+    <mat-form-field class="contact_form_input_field custom-select-toggle">
       <mat-label class="body_small">Primary Interviewer</mat-label>
       <mat-select [formControl]="primaryInterviewerControl">
         <mat-option>
@@ -74,8 +76,9 @@
           }
         </ng-container>
       </mat-select>
+      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
     </mat-form-field>
-    <mat-form-field class="contact_form_input_field">
+    <mat-form-field class="contact_form_input_field custom-select-toggle">
       <mat-label class="body_small">Secondary Interviewer</mat-label>
       <mat-select [formControl]="secondaryInterviewerControl">
         <mat-option>
@@ -94,9 +97,10 @@
           }
         </ng-container>
       </mat-select>
+      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
     </mat-form-field>
 
-    <mat-form-field class="contact_form_input_field">
+    <mat-form-field class="contact_form_input_field custom-select-toggle">
       <mat-label class="body_small">Contact Type</mat-label>
       <mat-select required [formControl]="contactTypeControl">
         <mat-option>
@@ -108,9 +112,10 @@
           >{{option.text}}</mat-option
         >
       </mat-select>
+      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
     </mat-form-field>
 
-    <mat-form-field class="contact_form_input_field">
+    <mat-form-field class="contact_form_input_field custom-select-toggle">
       <mat-label class="body_small">Location</mat-label>
       <mat-select [formControl]="contactLocationControl" required>
         <!-- Search input inside the dropdown -->
@@ -131,6 +136,7 @@
           >{{option.text}}</mat-option
         >
       </mat-select>
+      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
     </mat-form-field>
 
     <div class="action_container">
