@@ -8,7 +8,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import { Observable, map, startWith } from 'rxjs';
+import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe, CommonModule, NgForOf} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -73,7 +73,7 @@ class ContactForm implements OnInit {
     agents = agents.filter(agent => agent.name != null && agent.name !== '');
     agents = agents.sort((a, b) => a.name.localeCompare(b.name));
     return agents?.map(agent => {
-      let selectOption: Select2String = {id: agent.userId, text: agent.name};
+      let selectOption: Select2String = {id: agent.userId, text: agent.name + ' (' + agent.userId + ')'};
       return selectOption;
     })
   });
@@ -82,7 +82,7 @@ class ContactForm implements OnInit {
     agents = agents.filter(agent => agent.name != null && agent.name !== '');
     agents = agents.sort((a, b) => a.name.localeCompare(b.name));
     return agents?.map(agent => {
-        let selectOption: Select2String = {id: agent.userId, text: agent.name};
+        let selectOption: Select2String = {id: agent.userId, text: agent.name + ' (' + agent.userId + ')'};
         return selectOption;
     })
   });
@@ -161,6 +161,14 @@ class ContactForm implements OnInit {
   async onSubmit() {
     console.log('Submitting...', this.currentContact.offenderNumber, this.currentContact.contactId);
 
+    // const indexOfPrimaryOpeningParenthesis = this.contactForm.value.primaryInterviewer.indexOf('(');
+    // const indexOfPrimaryClosingParenthesis = this.contactForm.value.primaryInterviewer.indexOf(')');
+    // const indexOfSecondaryOpeningParenthesis = this.contactForm.value.secondaryInterviewer.indexOf('(');
+    // const indexOfSecondaryClosingParenthesis = this.contactForm.value.secondaryInterviewer.indexOf(')');
+    // const primaryInterviewerUserId = this.contactForm.value.primaryInterviewer.substring(indexOfPrimaryOpeningParenthesis + 1, indexOfPrimaryClosingParenthesis);
+    // const secondaryInterviewerUserId = this.contactForm.value.secondaryInterviewer.substring(indexOfSecondaryOpeningParenthesis + 1, indexOfSecondaryClosingParenthesis);
+    // const primaryInterviewerName = this.contactForm.value.primaryInterviewer.substring(0, indexOfPrimaryOpeningParenthesis - 1);
+    // const secondaryInterviewerName = this.contactForm.value.secondaryInterviewer.substring(0, indexOfSecondaryOpeningParenthesis - 1);
     const hours = this.contactForm.value.contactTime.getHours(); // Get the hour (0-23)
     const minutes = this.contactForm.value.contactTime.getMinutes(); // Get the minute (0-59)
     const seconds = this.contactForm.value.contactTime.getSeconds();
@@ -172,6 +180,8 @@ class ContactForm implements OnInit {
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
         primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
         secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
+        // primaryInterviewer: {userId: primaryInterviewerUserId ?? '', name: primaryInterviewerName ?? ''},
+        // secondaryInterviewer: {userId: secondaryInterviewerUserId ?? '', name: secondaryInterviewerName ?? ''},
         contactDate: this.contactForm.value.contactDate ?? new Date(),
         sortDate: this.contactForm.value.contactDate ?? new Date(),
         contactTime: this.contactForm.value.contactTime ?? new Date(),
