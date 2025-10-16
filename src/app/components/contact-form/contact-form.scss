@@ -26,7 +26,29 @@
         }
       }
     }
+    .search-option input {
+      width: 100%;
+      padding: 6px 8px;
+      box-sizing: border-box;
+    }
+    ::ng-deep .mat-mdc-option.search-option .mdc-list-item__primary-text {
+      width: 100% !important;
+      display: block !important;
+    }
+    .search-option input::placeholder {
+      color: var(--UDC-styles-sys-light-on-surface-variant, #49473F);
+      opacity: 1;
+    }
+    ::ng-deep .mat-mdc-option.search-option {
+      padding: 0 !important; /* remove side padding */
+    }
 
+    .search-wrap {
+      width: 100%;
+      display: flex;
+      padding: 4px 8px; /* add your own padding */
+      box-sizing: border-box;
+    }
     ::ng-deep .custom-toggle .mat-datepicker-toggle-default-icon {
       display: none !important;
     }

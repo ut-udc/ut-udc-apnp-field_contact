@@ -63,7 +63,7 @@ class ContactForm implements OnInit {
   offender: Offender | undefined = undefined;
   contact: Contact | undefined = undefined;
 
-  selectedDateTime: Date = new Date();
+  // selectedDateTime: Date = new Date();
   primaryInterviewer: string = '';
   offenderNumber: number = 0;
   contactId: number = 0;
@@ -144,19 +144,16 @@ class ContactForm implements OnInit {
     });
   });
 
-  contactTypeList = new Observable<Select2Model[]>((observer) => {
-    this.contactService.getListOfContactTypes().then((list) => {
-      observer.next(list);
-    });
-  });
-
   contactCount = 0;
-
-  contactTypeOptions: Observable<Select2Model[]> = this.contactTypeList;
+  contactTypeOptions: Select2Model[] = [];
+  filteredContactTypes!: Observable<Select2Model[]>;
   locationOptions: Select2Model[] = [];
   filteredLocations!: Observable<Select2Model[]>;
-  searchTerm: string = '';
-  searchTerm2: string = '';
+  primaryInterviewerOptions: Select2String[] = [];
+  filterPrimaryInterviewers!: Observable<Select2String[]>;
+  secondaryInterviewerOptions: Select2String[] = [];
+  filterSecondaryInterviewers!: Observable<Select2String[]>;
+
 
   async onSubmit() {
     console.log('Submitting...', this.currentContact.offenderNumber, this.currentContact.contactId);
@@ -250,37 +247,23 @@ class ContactForm implements OnInit {
     const sanitizer = inject(DomSanitizer);
 
     //set this to GB (Great Britain) locale so the timepicker shows 24-hour format
-    this._adapter.setLocale('en-GB');
+    this._adapter.setLocale('en-US');
 
     iconRegistry.addSvgIcon(
       'arrow_back',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
-    // this.registerPhosphorIcons(iconRegistry,sanitizer);
-
   }
-  /*
-  private registerPhosphorIcons(iconRegistry:MatIconRegistry, sanitizer:DomSanitizer): void {
-    const basePath = 'assets/phosphor-icons/';
 
-    const icons = ['calendar', 'caret-down', 'clock'];
-    icons.forEach(name => {
-      icons.forEach(name => {
-        console.log(`${basePath}${name}.svg`);
-        iconRegistry.addSvgIcon(
-          `ph-${name}`,
-          sanitizer.bypassSecurityTrustResourceUrl(`${basePath}${name}.svg`)
-        );
-      });
-    });
-  }
-  */
   dateTimeControl = new FormControl('', Validators.required);
   primaryInterviewerControl = new FormControl('', Validators.required);
   secondaryInterviewerControl = new FormControl('');
   contactTypeControl = new FormControl('', Validators.required);
   contactLocationControl = new FormControl('', Validators.required);
-
+  filterContactTypeControl = new FormControl('');
+  filterContactLocationControl = new FormControl('');
+  filterSecondaryInterviewerControl = new FormControl('');
+  filterPrimaryInterviewerControl = new FormControl('');
   async ngOnInit() {
     this.contactCount = await this.contactService.getContactCount();
 
@@ -337,11 +320,30 @@ class ContactForm implements OnInit {
       secondaryInterviewer: this.secondaryInterviewerControl,
       contactType: this.contactTypeControl,
       location: this.contactLocationControl,
+      filterContactType: this.filterContactTypeControl,
+      filterLocation: this.filterContactLocationControl,
+      filterPrimaryInterviewer: this.filterPrimaryInterviewerControl,
+      filterSecondaryInterviewer: this.filterSecondaryInterviewerControl,
     });
+    this.primaryInterviewerOptions = this.primaryInterviewers() ?? [];
+    this.filterPrimaryInterviewers = this.filterPrimaryInterviewerControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? this._filterPrimaryInterviewers(value) : this.primaryInterviewerOptions)
+    );
+    this.secondaryInterviewerOptions = this.secondaryInterviewers() ??[];
+    this.filterSecondaryInterviewers = this.filterSecondaryInterviewerControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? this._filterSecondaryInterviewers(value) : this.secondaryInterviewerOptions)
+    );
+    this.contactTypeOptions = await this.contactService.getListOfContactTypes();
+    this.filteredContactTypes = this.filterContactTypeControl.valueChanges.pipe(
+      startWith(''),
+      map(value => typeof value === 'string' ? this._filterContactTypes(value) : this.contactTypeOptions)
+    );
     // Load locations as array
     this.locationOptions = await this.contactService.getListOfLocations();
     // Setup filteredLocations as an Observable reacting to input
-    this.filteredLocations = this.contactLocationControl.valueChanges.pipe(
+    this.filteredLocations = this.filterContactLocationControl.valueChanges.pipe(
       startWith(''),
       map(value => typeof value === 'string' ? this._filterLocations(value) : this.locationOptions)
     );
@@ -351,16 +353,42 @@ class ContactForm implements OnInit {
   trackOption(index: number, option: any): any {
     return option?.id;
   }
+  private _filterContactTypes(value: string): Select2Model[] {
+    const filterValue = value.toLowerCase();
+    return this.contactTypeOptions.filter(option =>
+      option.text.toLowerCase().includes(filterValue)
+    );
+  }
   private _filterLocations(value: string): Select2Model[] {
     const filterValue = value.toLowerCase();
     return this.locationOptions.filter(option =>
       option.text.toLowerCase().includes(filterValue)
     );
   }
+  private _filterSecondaryInterviewers(value: string): Select2String[] {
+    const filterValue = value.toLowerCase();
+    return this.secondaryInterviewerOptions.filter(option =>
+      option.text.toLowerCase().includes(filterValue)
+    );
+  }
+  private _filterPrimaryInterviewers(value: string): Select2String[] {
+    const filterValue = value.toLowerCase();
+    return this.primaryInterviewerOptions.filter(option =>
+      option.text.toLowerCase().includes(filterValue)
+    );
+  }
   getLocationText(id: number | string  | null): string {
     return this.locationOptions.find(option => option.id === id)?.text || 'Select location';
   }
-
+  getContactTypeText(id: number | string  | null): string {
+    return this.contactTypeOptions.find(option => option.id === id)?.text || 'Select contact type';
+  }
+  getSecondaryInterviewerText(id: number | string  | null): string {
+    return this.secondaryInterviewerOptions.find(option => option.id === id)?.text || 'Select secondary interviewer';
+  }
+  getPrimaryInterviewerText(id: number | string  | null): string {
+    return this.primaryInterviewerOptions.find(option => option.id === id)?.text || 'Select primary interviewer';
+  }
 }
 
 export default ContactForm
