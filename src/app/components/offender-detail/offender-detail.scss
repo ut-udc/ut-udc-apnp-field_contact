@@ -27,10 +27,19 @@
 }
 
 .detail-card img {
-  width: 81px;
   height: 81px;
+  width: auto;
+  align-self: center;
   border-radius: 8px;
   flex-shrink: 0;
   background: url('./placeholder-image.png') lightgray 50% / cover
   no-repeat;
+}
+.first-flex-detail{
+  flex: 1;
+
+}
+.second-flex-detail{
+  flex: 2;
+  width: 100%;
 }
