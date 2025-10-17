@@ -4,7 +4,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {MatRippleModule} from '@angular/material/core';
-import {CommonModule, DatePipe} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {ContactListingCard} from '../contact-listing-card/contact-listing-card';
 import {from} from 'rxjs';
 import {DetailHeader} from '../detail-header/detail-header';
@@ -13,6 +13,9 @@ import {Contact} from '../../models/contact';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
+import {OffenderNameDetail} from '../offender-name-detail/offender-name-detail';
+import {PhoneNumber} from '../phone-number/phone-number';
+import {Address} from '../address/address';
 
 @Component({
   selector: 'app-offender-detail',
@@ -22,10 +25,12 @@ import {Db} from '../../services/db';
     MatToolbarModule,
     RouterLink,
     MatRippleModule,
-    DatePipe,
     ContactListingCard,
     CommonModule,
     DetailHeader,
+    OffenderNameDetail,
+    PhoneNumber,
+    Address,
   ],
   templateUrl: './offender-detail.html',
   styleUrl: './offender-detail.scss',
@@ -61,8 +66,6 @@ export class OffenderDetail implements OnInit {
   });
 
   constructor() {
-    const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
-
     effect(async () => {
       if (this.currentOffender()) {
         if (!(this.currentOffender()!.lastSuccessfulContact)) {
@@ -77,24 +80,8 @@ export class OffenderDetail implements OnInit {
     const sanitizer = inject(DomSanitizer);
 
     iconRegistry.addSvgIcon(
-      'arrow_back',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
-    );
-    iconRegistry.addSvgIcon(
       'add-white',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/add-white.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'location_on',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/location_on.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'phone',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/phone.svg')
-    );
-    iconRegistry.addSvgIcon(
-      'note',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/note.svg')
     );
   }
 
@@ -106,10 +93,6 @@ export class OffenderDetail implements OnInit {
   async getLatestOffenderContact(offenderNumber: number) {
     console.log('Fetching latest successful contact for offender number:', (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json());
     return (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json();
-  }
-
-  rgba(arg0: number, arg1: number, arg2: number, arg3: number): string {
-    throw new Error('Method not implemented.');
   }
 
   centered = false;

@@ -5,15 +5,14 @@
   left: 0;
   width: 100%;
   display:block;
-  width: 100%;
   padding: 16px 16px 16px 16px;
-  margin-top: 0px;
+  margin-top: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: absolute;
   background-color: var(--UDC-styles-sys-light-tertiary-container, #f8c25e);
-  border-radius:0px;
+  border-radius:0;
 }
 
 .header-icon {
@@ -275,7 +274,7 @@ hr {
 
 .state-icon {
   display: flex;
-  padding: 0px 0px 3px 0px;
+  padding: 0 0 3px 0;
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -286,14 +285,14 @@ hr {
 
 .month_label {
   display: flex;
-  padding: 18px 16px 0px 16px;
+  padding: 18px 16px 0 16px;
   align-items: center;
   align-self: stretch;
 }
 
 .note-icon {
   display: flex;
-  padding: 0px 0px 3px 0px;
+  padding: 0 0 3px 0;
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -366,6 +365,7 @@ div.udc-list-item-card{
   gap: 16px;
   align-self: stretch;
   min-height: 56px;
+}
   .card-icon{
     flex: 0;
     display: flex;
@@ -378,7 +378,6 @@ div.udc-list-item-card{
     flex-direction: column;
     justify-content: flex-start;
   }
-}
 // body large
 .mat-mdc-select-value-text, .mat-mdc-form-field.mat-form-field-animations-enabled .mdc-text-field__input{
   color: var(--UDC-styles-sys-light-on-surface, #1C1B1B) !important;

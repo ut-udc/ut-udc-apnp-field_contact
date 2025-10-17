@@ -1,0 +1,20 @@
+<div class="offender-info-flex" style="display: flex">
+  <div class="first-flex-detail">
+    <ng-container>
+      <img src="/field_contact_bff/api/offender-photo/{{currentOffender?.offenderNumber}}" alt="Offender Photo"/>
+    </ng-container>
+  </div>
+  <div class="second-flex-detail">
+    <div class="label_medium">{{ currentOffender?.offenderNumber }}</div>
+    <div class="title_xlarge">
+      {{ currentOffender?.defaultOffenderName?.lastName }}
+      , {{ currentOffender?.defaultOffenderName?.firstName }}
+    </div>
+    <div class="label_medium">
+      Last Successful Contact:
+      @if (currentOffender?.lastSuccessfulContact) {
+        {{ currentOffender?.lastSuccessfulContact?.contactDate ? (currentOffender?.lastSuccessfulContact?.contactDate | date: 'MM/dd/yyyy') : 'N/A' }}
+      }
+    </div>
+  </div>
+</div>

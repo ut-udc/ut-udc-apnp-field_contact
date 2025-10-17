@@ -6,26 +6,9 @@
     ></app-detail-header>
 
     <div class="detail-card">
-      <div class="offender-info-flex" style="display: flex">
-        <div class="first-flex-detail">
-          <ng-container>
-            <img src="/field_contact_bff/api/offender-photo/{{currentOffender()?.offenderNumber}}"/>
-          </ng-container>
-        </div>
-        <div class="second-flex-detail">
-          <div class="label_medium">{{ currentOffender()?.offenderNumber }}</div>
-          <div class="title_xlarge">
-            {{ currentOffender()?.defaultOffenderName?.lastName }}
-            , {{ currentOffender()?.defaultOffenderName?.firstName }}
-          </div>
-          <div class="label_medium">
-            Last Successful Contact:
-            @if (currentOffender()?.lastSuccessfulContact) {
-              {{ currentOffender()?.lastSuccessfulContact?.contactDate ? (currentOffender()?.lastSuccessfulContact?.contactDate | date: 'MM/dd/yyyy') : 'N/A' }}
-            }
-          </div>
-        </div>
-      </div>
+
+      <app-offender-name-detail [currentOffender]=currentOffender()></app-offender-name-detail>
+
       <br/>
       <button
         class="add-contact-button"
@@ -44,41 +27,8 @@
     <br/>
     <div class="detail-content-card">
       <span class="label_large_prominent">Contact Information</span>
-      <div class="udc-list-item-card udc-list-item-card-phone">
-        <div class="card-icon">
-          <mat-icon
-            class="header-icon"
-            svgIcon="phone"
-            aria-hidden="false"
-            aria-label="Back Icon"
-            style="cursor: pointer"
-          ></mat-icon>
-        </div>
-        <div class="card-content">
-          <div class="label_medium">Primary Phone</div>
-          <div class="body_large">{{ currentOffender()?.defaultPhoneNumber }}</div>
-        </div>
-      </div>
-      <div class="udc-list-item-card">
-        <div class="card-icon">
-          <mat-icon
-            class="header-icon"
-            svgIcon="location_on"
-            aria-hidden="false"
-            aria-label="Back Icon"
-            style="cursor: pointer"
-          ></mat-icon>
-        </div>
-
-        <div class="card-content">
-          <div class="label_medium">Home Address</div>
-          <div class="body_large">
-            {{ currentOffender()?.offenderAddress?.lineOne }}<br/>{{ currentOffender()?.offenderAddress?.city }}
-            , {{ currentOffender()?.offenderAddress?.state }}
-            {{ currentOffender()?.offenderAddress?.zipCode }}
-          </div>
-        </div>
-      </div>
+      <app-phone-number [phoneNumber]="currentOffender()?.defaultPhoneNumber" [phoneType]="'Primary'"></app-phone-number>
+      <app-address [address]="currentOffender()?.offenderAddress" [addressType]="'Home'"></app-address>
     </div>
   }
   <div class="detail-content-card">

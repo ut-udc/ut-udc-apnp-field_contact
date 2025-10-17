@@ -22,7 +22,7 @@
         required
         formControlName="contactDate"
       />
-      <mat-hint style="font-size: 10px; line-height: 0px; margin-top: 0px"
+      <mat-hint style="font-size: 10px; line-height: 0; margin-top: 0"
         >MM/DD/YYYY</mat-hint
       >
       <mat-datepicker-toggle matSuffix [for]="picker" class="custom-toggle">
@@ -82,6 +82,7 @@
       </mat-select>
       <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
     </mat-form-field>
+
     <mat-form-field class="contact_form_input_field custom-select-toggle">
       <mat-label class="body_small">Secondary Interviewer</mat-label>
       <mat-select [formControl]="secondaryInterviewerControl">

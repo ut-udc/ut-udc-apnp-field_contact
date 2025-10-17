@@ -1,11 +1,10 @@
-<div class="udc-list-item-card">
+<div class="udc-list-item-card" [routerLink]="['/contact-detail-view/', contact.contactId]" routerLinkActive="router-link-active">
   <div class="card-icon">
-    <mat-icon [routerLink]="['/contact-detail-view/', contact.contactId]" routerLinkActive="router-link-active"
+    <mat-icon
       class="header-icon"
       svgIcon="note"
       aria-hidden="false"
       aria-label="Back Icon"
-      style="cursor: pointer"
     ></mat-icon>
   </div>
 
