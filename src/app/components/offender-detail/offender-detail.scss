@@ -27,17 +27,27 @@
 }
 
 .detail-card img {
-  height: 81px;
-  width: auto;
+  height: auto;
+  max-width: 81px;
   align-self: center;
   border-radius: 8px;
   flex-shrink: 0;
+  position: relative;
   background: url('./placeholder-image.png') lightgray 50% / cover
   no-repeat;
 }
-.first-flex-detail{
-  flex: 1;
 
+.offender-info-flex{
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+}
+.first-flex-detail{
+  flex: 0;
+  width: 81px;
+  height: auto;
 }
 .second-flex-detail{
   flex: 2;

@@ -89,6 +89,7 @@ hr {
   color: var(--md-sys-color-on-surface-variant);
   margin-top: 16px;
   font-family: "Source Sans 3";
+  padding: 8px;
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -195,27 +196,9 @@ hr {
   line-height: 32px; /* 133.333% */
 }
 
-.offender-card {
-  margin-top: 16px;
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  align-self: stretch;
-  border-radius: 8px;
-  background-color: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
-  padding: 16px;
-}
 
-.offender-card img {
-  width: 81px;
-  height: 81px;
-  border-radius: 8px;
-  flex-shrink: 0;
-  background: url(../assets/images/placeholder-image.png) lightgray 50% / cover
-  no-repeat;
-}
+
+
 
 .title_large {
   color: var(--UDC-styles-sys-light-on-surface-variant, #49473F);
