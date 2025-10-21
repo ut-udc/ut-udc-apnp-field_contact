@@ -2,17 +2,17 @@ import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AgentService} from '../../services/agent-service';
 import {MatButton} from '@angular/material/button';
-import {MatSelectModule} from '@angular/material/select';
 import {Select2String} from '../../models/select2-string';
 import {Agent} from '../../models/agent';
 import {Db} from '../../services/db';
+import {FilterableSelect} from '../filterable-select/filterable-select';
 
 @Component({
   selector: 'app-proxy-user-select',
   imports: [
     ReactiveFormsModule,
-    MatSelectModule,
-    MatButton
+    MatButton,
+    FilterableSelect
   ],
   templateUrl: './proxy-user-select.html',
   styleUrl: './proxy-user-select.scss'
@@ -34,8 +34,7 @@ export class ProxyUserSelect implements OnInit {
       return selectOption;
     })
   });
-
-  ngOnInit() {
+  async ngOnInit() {
     this.proxyForm = new FormGroup({
       proxyUser: this.proxyUserControl
     });

@@ -26,66 +26,11 @@
         }
       }
     }
-    .search-option input {
-      width: 100%;
-      padding: 6px 8px;
-      box-sizing: border-box;
-    }
-    ::ng-deep .mat-mdc-option.search-option .mdc-list-item__primary-text {
-      width: 100% !important;
-      display: block !important;
-    }
-    .search-option input::placeholder {
-      color: var(--UDC-styles-sys-light-on-surface-variant, #49473F);
-      opacity: 1;
-    }
-    ::ng-deep .mat-mdc-option.search-option {
-      padding: 0 !important; /* remove side padding */
-    }
 
-    .search-wrap {
-      width: 100%;
-      display: flex;
-      padding: 4px 8px; /* add your own padding */
-      box-sizing: border-box;
-    }
     ::ng-deep .custom-toggle .mat-datepicker-toggle-default-icon {
       display: none !important;
     }
     ::ng-deep .custom-toggle .mat-timepicker-toggle-default-icon {
       display: none !important;
     }
-    /* Use :host with ::ng-deep and your custom class to ensure scope */
-    :host ::ng-deep .custom-select-toggle .mat-mdc-select-arrow-wrapper {
-      display: none !important;
-    }
 
-    /* Ensure your custom icon sits correctly */
-    :host ::ng-deep .custom-select-toggle .mat-icon.mat-suffix {
-      pointer-events: none; /* Allows the click to pass through to the select */
-      // Add other positioning/styling here if needed
-    }
-    .custom-select-toggle {
-
-      // New MDC-based classes (Angular 15+)
-      .mat-mdc-select-arrow-wrapper {
-        /* Hide the wrapper which contains the default arrow */
-        opacity: 0 !important;
-      }
-
-      // The custom icon size/position adjustment
-      .mat-mdc-select-value {
-        /* Ensure there's space for the custom icon not to overlap the selected value */
-        padding-right: 20px;
-      }
-
-      .mat-icon.mat-suffix {
-        /* Optional: Fine-tune the position/color of your custom suffix icon */
-        position: absolute;
-        top: 50%;
-        right: 8px; /* Adjust as needed */
-        transform: translateY(-50%);
-        pointer-events: none; /* Allows clicks to pass through to the select */
-        color: var(--mat-sys-color-on-surface-variant); // Use a Material design token for color
-      }
-    }

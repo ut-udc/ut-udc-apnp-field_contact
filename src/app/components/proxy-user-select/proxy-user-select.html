@@ -1,20 +1,12 @@
 <form [formGroup]="proxyForm">
-  <mat-form-field class="contact_form_input_field">
-    <mat-label>Select Proxy User</mat-label>
-  <mat-select [formControl]="proxyUserControl">
-    <ng-container>
-      @if (proxyUsers()) {
-        @for (proxyUser of proxyUsers(); track proxyUser.id) {
-          <mat-option
-            [value]="proxyUser.id"
-          >
-            {{ proxyUser.text }}
-          </mat-option>
-        }
-      }
-    </ng-container>proxyUsers
-  </mat-select>
-  </mat-form-field>
+
+  <app-filterable-select
+    [label]="'Select Proxy User'"
+    [options]="proxyUsers()??[]"
+    [placeholder]="'Search proxy user...'"
+    formControlName="proxyUser">
+  </app-filterable-select>
+
   <button
     matButton="filled"
     type="submit"

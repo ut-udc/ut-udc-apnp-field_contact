@@ -1,0 +1,31 @@
+<mat-form-field class="contact_form_input_field custom-select-toggle">
+  <mat-label *ngIf="label" class="body_small">{{label}}</mat-label>
+<mat-select [formControl]="formControl" (openedChange)="onOpened()">
+  <!-- Custom display text -->
+  <mat-select-trigger>
+    {{ getDisplayText(formControl.value) }}
+  </mat-select-trigger>
+
+  <!-- Search input inside dropdown -->
+  <mat-option class="search-option" (click)="$event.stopPropagation()">
+    <input
+      matInput
+      [formControl]="filterControl"
+      [placeholder]="placeholder"
+      (click)="$event.stopPropagation()"
+      (keydown)="$event.stopPropagation()"
+      (input)="onFilterChange($event)"
+      #filterInput
+    />
+  </mat-option>
+
+  <!-- Filtered options -->
+  <mat-option
+    *ngFor="let option of filteredOptions | async; trackBy: trackOption"
+    [value]="option.id">
+    {{ option.text }}
+  </mat-option>
+</mat-select>
+
+<mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
+</mat-form-field>

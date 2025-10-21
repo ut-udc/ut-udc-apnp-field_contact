@@ -28,12 +28,6 @@
       <mat-datepicker-toggle matSuffix [for]="picker" class="custom-toggle">
         <mat-icon matDatepickerToggleIcon svgIcon="ph-calendar"></mat-icon>
       </mat-datepicker-toggle>
-      <!-- class="custom-toggle"
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      -->
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
@@ -46,122 +40,40 @@
         placeholder="HH:MM"
         formControlName="contactTime"
       />
-      <!--
-      <mat-timepicker-toggle matSuffix [for]="timePicker">
-        <mat-icon svgIcon="ph-clock"></mat-icon>
-      </mat-timepicker-toggle>
-      -->
       <mat-timepicker-toggle matSuffix [for]="timePicker" class="custom-toggle">
         <mat-icon matTimepickerToggleIcon svgIcon="ph-clock"></mat-icon>
       </mat-timepicker-toggle>
       <mat-timepicker #timePicker />
     </mat-form-field>
 
-    <mat-form-field class="contact_form_input_field custom-select-toggle">
-      <mat-label class="body_small">Primary Interviewer</mat-label>
-      <mat-select [formControl]="primaryInterviewerControl">
-        <!-- Search input inside the dropdown -->
-        <mat-select-trigger>
-          {{ getPrimaryInterviewerText(primaryInterviewerControl.value) }}
-        </mat-select-trigger>
-        <mat-option class="search-option" (click)="$event.stopPropagation(); $event.preventDefault()">
-          <div class="search-wrap" (click)="$event.stopPropagation()">
-            <input formControlName="primaryInterviewer" type="hidden" />
-            <input
-              matInput [formControl]="filterPrimaryInterviewerControl"
-              placeholder="Search primary interviewer..."
-              (click)="$event.stopPropagation()"
-              (keydown)="$event.stopPropagation()"
-            />
-          </div>
-        </mat-option>
-        <mat-option
-          *ngFor="let option of filterPrimaryInterviewers | async; trackBy: trackOption"
-          [value]="option.id"
-        >{{option.text}}</mat-option>
-      </mat-select>
-      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
-    </mat-form-field>
 
-    <mat-form-field class="contact_form_input_field custom-select-toggle">
-      <mat-label class="body_small">Secondary Interviewer</mat-label>
-      <mat-select [formControl]="secondaryInterviewerControl">
-        <!-- Search input inside the dropdown -->
-        <mat-select-trigger>
-          {{ getSecondaryInterviewerText(secondaryInterviewerControl.value) }}
-        </mat-select-trigger>
-        <mat-option class="search-option" (click)="$event.stopPropagation(); $event.preventDefault()">
-          <div class="search-wrap" (click)="$event.stopPropagation()">
-            <input formControlName="secondaryInterviewer" type="hidden" />
-            <input
-              matInput [formControl]="filterSecondaryInterviewerControl"
-              placeholder="Search secondary interviewer..."
-              (click)="$event.stopPropagation()"
-              (keydown)="$event.stopPropagation()"
-            />
-          </div>
-        </mat-option>
-        <mat-option
-          *ngFor="let option of filterSecondaryInterviewers | async; trackBy: trackOption"
-          [value]="option.id"
-        >{{option.text}}</mat-option>
-      </mat-select>
-      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
-    </mat-form-field>
+    <app-filterable-select
+      [label]="'Primary Interviewer'"
+      [options]="primaryInterviewers() ?? []"
+      [placeholder]="'Search primary interviewer...'"
+      formControlName="primaryInterviewer">
+    </app-filterable-select>
 
-    <mat-form-field class="contact_form_input_field custom-select-toggle">
-      <mat-label class="body_small">Contact Type</mat-label>
-      <mat-select required [formControl]="contactTypeControl">
-        <!-- Search input inside the dropdown -->
-        <mat-select-trigger>
-          {{ getContactTypeText(contactTypeControl.value) }}
-        </mat-select-trigger>
-        <mat-option class="search-option" (click)="$event.stopPropagation(); $event.preventDefault()">
-          <div class="search-wrap" (click)="$event.stopPropagation()">
-          <input formControlName="filterContactType" type="hidden" />
-          <input
-            matInput [formControl]="filterContactTypeControl"
-            placeholder="Search contact type..."
-            (click)="$event.stopPropagation()"
-            (keydown)="$event.stopPropagation()"
-          />
-          </div>
-        </mat-option>
-        <mat-option
-          *ngFor="let option of filteredContactTypes | async; trackBy: trackOption"
-          [value]="option.id"
-          >{{option.text}}</mat-option
-        >
-      </mat-select>
-      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
-    </mat-form-field>
+    <app-filterable-select
+      [label]="'Secondary Interviewer'"
+      [options]="secondaryInterviewers() ??[]"
+      [placeholder]="'Search secondary interviewer...'"
+      formControlName="secondaryInterviewer">
+    </app-filterable-select>
 
-    <mat-form-field class="contact_form_input_field custom-select-toggle">
-      <mat-label class="body_small">Location</mat-label>
-      <mat-select [formControl]="contactLocationControl" required>
-        <!-- Search input inside the dropdown -->
-        <mat-select-trigger>
-          {{ getLocationText(contactLocationControl.value) }}
-        </mat-select-trigger>
-        <mat-option class="search-option" (click)="$event.stopPropagation(); $event.preventDefault()">
-          <div class="search-wrap" (click)="$event.stopPropagation()">
-          <input formControlName="location" type="hidden" />
-          <input
-            matInput [formControl]="filterContactLocationControl"
-            placeholder="Search location..."
-            (click)="$event.stopPropagation()"
-            (keydown)="$event.stopPropagation()"
-          />
-          </div>
-        </mat-option>
-        <mat-option
-          *ngFor="let option of filteredLocations | async; trackBy: trackOption"
-          [value]="option.id"
-          >{{option.text}}</mat-option
-        >
-      </mat-select>
-      <mat-icon matSuffix svgIcon="ph-caret-down"></mat-icon>
-    </mat-form-field>
+    <app-filterable-select
+      [label]="'Contact Type'"
+      [options]="contactTypeOptions"
+      [placeholder]="'Search contact type...'"
+      formControlName="contactType">
+    </app-filterable-select>
+
+    <app-filterable-select
+      [label]="'Location'"
+      [options]="locationOptions"
+      [placeholder]="'Search location...'"
+      formControlName="location">
+    </app-filterable-select>
 
     <div class="action_container">
       <mat-divider style="color: lightgray"></mat-divider>

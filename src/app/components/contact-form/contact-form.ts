@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, Signal,} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed, ElementRef,
+  inject,
+  OnInit,
+  signal,
+  Signal, ViewChild,
+} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -8,12 +17,11 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {map, Observable, startWith} from 'rxjs';
-import {AsyncPipe, CommonModule, NgForOf} from '@angular/common';
+import {Observable} from 'rxjs';
+import {CommonModule} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDividerModule} from '@angular/material/divider';
-import {MatSelectModule} from '@angular/material/select';
 import {DetailHeader} from '../detail-header/detail-header';
 import {ContactService} from '../../services/contact-service';
 import {Contact} from '../../models/contact';
@@ -24,6 +32,7 @@ import {Select2String} from '../../models/select2-string';
 import {UserService} from '../../services/user-service';
 import {Db} from '../../services/db';
 import {AgentService} from '../../services/agent-service';
+import {FilterableSelect} from '../filterable-select/filterable-select';
 
 @Component({
   selector: 'app-contact-form',
@@ -37,14 +46,12 @@ import {AgentService} from '../../services/agent-service';
     MatTimepickerModule,
     FormsModule,
     ReactiveFormsModule,
-    AsyncPipe,
     MatAutocompleteModule,
     MatButtonModule,
     MatDividerModule,
-    MatSelectModule,
-    NgForOf,
     CommonModule,
     DetailHeader,
+    FilterableSelect,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './contact-form.html',
@@ -146,13 +153,7 @@ class ContactForm implements OnInit {
 
   contactCount = 0;
   contactTypeOptions: Select2Model[] = [];
-  filteredContactTypes!: Observable<Select2Model[]>;
   locationOptions: Select2Model[] = [];
-  filteredLocations!: Observable<Select2Model[]>;
-  primaryInterviewerOptions: Select2String[] = [];
-  filterPrimaryInterviewers!: Observable<Select2String[]>;
-  secondaryInterviewerOptions: Select2String[] = [];
-  filterSecondaryInterviewers!: Observable<Select2String[]>;
 
 
   async onSubmit() {
@@ -259,14 +260,12 @@ class ContactForm implements OnInit {
   primaryInterviewerControl = new FormControl('', Validators.required);
   secondaryInterviewerControl = new FormControl('');
   contactTypeControl = new FormControl('', Validators.required);
-  contactLocationControl = new FormControl('', Validators.required);
-  filterContactTypeControl = new FormControl('');
-  filterContactLocationControl = new FormControl('');
-  filterSecondaryInterviewerControl = new FormControl('');
-  filterPrimaryInterviewerControl = new FormControl('');
-  async ngOnInit() {
-    this.contactCount = await this.contactService.getContactCount();
+  contactLocationControl = new FormControl('', Validators.required)
 
+  async ngOnInit() {
+    this.contactCount =  await this.contactService.getContactCount();
+    this.contactTypeOptions = await this.contactService.getListOfContactTypes();
+    this.locationOptions = await this.contactService.getListOfLocations();
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
     this.offender = await this.contactService.getCaseloadOffenderById(offenderNum);
     if (!this.offender) {
@@ -320,74 +319,7 @@ class ContactForm implements OnInit {
       secondaryInterviewer: this.secondaryInterviewerControl,
       contactType: this.contactTypeControl,
       location: this.contactLocationControl,
-      filterContactType: this.filterContactTypeControl,
-      filterLocation: this.filterContactLocationControl,
-      filterPrimaryInterviewer: this.filterPrimaryInterviewerControl,
-      filterSecondaryInterviewer: this.filterSecondaryInterviewerControl,
     });
-    this.primaryInterviewerOptions = this.primaryInterviewers() ?? [];
-    this.filterPrimaryInterviewers = this.filterPrimaryInterviewerControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? this._filterPrimaryInterviewers(value) : this.primaryInterviewerOptions)
-    );
-    this.secondaryInterviewerOptions = this.secondaryInterviewers() ??[];
-    this.filterSecondaryInterviewers = this.filterSecondaryInterviewerControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? this._filterSecondaryInterviewers(value) : this.secondaryInterviewerOptions)
-    );
-    this.contactTypeOptions = await this.contactService.getListOfContactTypes();
-    this.filteredContactTypes = this.filterContactTypeControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? this._filterContactTypes(value) : this.contactTypeOptions)
-    );
-    // Load locations as array
-    this.locationOptions = await this.contactService.getListOfLocations();
-    // Setup filteredLocations as an Observable reacting to input
-    this.filteredLocations = this.filterContactLocationControl.valueChanges.pipe(
-      startWith(''),
-      map(value => typeof value === 'string' ? this._filterLocations(value) : this.locationOptions)
-    );
-    const contactCount = await this.contactService.getContactCount();
-    console.log('Contact data', this.currentContact);
-  }
-  trackOption(index: number, option: any): any {
-    return option?.id;
-  }
-  private _filterContactTypes(value: string): Select2Model[] {
-    const filterValue = value.toLowerCase();
-    return this.contactTypeOptions.filter(option =>
-      option.text.toLowerCase().includes(filterValue)
-    );
-  }
-  private _filterLocations(value: string): Select2Model[] {
-    const filterValue = value.toLowerCase();
-    return this.locationOptions.filter(option =>
-      option.text.toLowerCase().includes(filterValue)
-    );
-  }
-  private _filterSecondaryInterviewers(value: string): Select2String[] {
-    const filterValue = value.toLowerCase();
-    return this.secondaryInterviewerOptions.filter(option =>
-      option.text.toLowerCase().includes(filterValue)
-    );
-  }
-  private _filterPrimaryInterviewers(value: string): Select2String[] {
-    const filterValue = value.toLowerCase();
-    return this.primaryInterviewerOptions.filter(option =>
-      option.text.toLowerCase().includes(filterValue)
-    );
-  }
-  getLocationText(id: number | string  | null): string {
-    return this.locationOptions.find(option => option.id === id)?.text || 'Select location';
-  }
-  getContactTypeText(id: number | string  | null): string {
-    return this.contactTypeOptions.find(option => option.id === id)?.text || 'Select contact type';
-  }
-  getSecondaryInterviewerText(id: number | string  | null): string {
-    return this.secondaryInterviewerOptions.find(option => option.id === id)?.text || 'Select secondary interviewer';
-  }
-  getPrimaryInterviewerText(id: number | string  | null): string {
-    return this.primaryInterviewerOptions.find(option => option.id === id)?.text || 'Select primary interviewer';
   }
 }
 
