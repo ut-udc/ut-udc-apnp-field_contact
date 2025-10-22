@@ -36,6 +36,7 @@ export class AgentService {
   }
 
   updatePrimaryAgentStatus(status: number) {
+    caches.delete('images');
     this.setPrimaryAgentStatus.set(status);
   }
 

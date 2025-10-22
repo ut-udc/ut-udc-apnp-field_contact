@@ -5,8 +5,9 @@ import {ContactService} from './services/contact-service';
 import {Db} from './services/db';
 import {Subscription} from 'rxjs';
 import {ApiService} from './services/api-service';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
@@ -26,6 +27,15 @@ export class App implements OnInit, OnDestroy {
 
  constructor(    private iconRegistry: MatIconRegistry,
                  private sanitizer: DomSanitizer) {
+   if (Notification.permission === 'default') {
+     Notification.requestPermission().then(permission => {
+       if (permission === 'granted') {
+         // User granted permission, now you can show notifications
+       } else {
+         // User denied permission
+       }
+     });
+   }
    this.registerPhosphorIcons();
    if ('serviceWorker' in navigator) {
      window.addEventListener('load', function () {

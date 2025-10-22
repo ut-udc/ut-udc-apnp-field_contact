@@ -21,8 +21,8 @@
         aria-hidden="false"
         aria-label="Notifications Icon"></mat-icon>
       -->
-      <div class="primary-container" (click)=this.agentService.updatePrimaryAgentStatus(0)>
-        <span class="initials">
+      <div class="primary-container">
+        <span class="initials" (click)=this.agentService.updatePrimaryAgentStatus(0)>
           <div>
             @if(this.userService.user()) {
               @let user = this.userService.user();
