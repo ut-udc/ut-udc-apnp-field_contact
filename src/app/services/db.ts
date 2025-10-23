@@ -45,6 +45,5 @@ export class Db extends Dexie {
       contactTypes: '&id, text',
       contactSummaries: '&contactId, summary',
     });
-
   }
 }

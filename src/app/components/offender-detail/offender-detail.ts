@@ -91,7 +91,6 @@ export class OffenderDetail implements OnInit {
   }
 
   async getLatestOffenderContact(offenderNumber: number) {
-    console.log('Fetching latest successful contact for offender number:', (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json());
     return (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json();
   }
 

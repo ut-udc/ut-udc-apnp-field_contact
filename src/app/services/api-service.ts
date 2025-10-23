@@ -28,7 +28,7 @@ export class ApiService {
     }
   }
 
-  private getCsrfToken(): string | null {
+  getCsrfToken(): string | null {
     const cookieName = 'XSRF-TOKEN=';
     const cookies = document.cookie.split(';');
 
