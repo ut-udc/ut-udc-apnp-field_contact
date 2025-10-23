@@ -39,129 +39,135 @@ export class AgentService {
     caches.delete('images');
     this.setPrimaryAgentStatus.set(status);
   }
-
+  // Removed Async in Live Query
   allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
-    liveQuery(async () => this.db.agents.toArray()))
+    liveQuery(() => this.db.agents.toArray()))
   );
-
+  // Removed Async in Live Query
   myCaseload: Signal<Array<Offender> | undefined> = toSignal(from(
-    liveQuery(async ()=> this.db.caseload.toArray()))
+    liveQuery(() => this.db.caseload.toArray()))
   );
-
+  // Removed Async in Live Query
   allLocations: Signal<Array<Select2Model> | undefined> = toSignal(from(
-    liveQuery(async ()=> this.db.locations.toArray()))
+    liveQuery(() => this.db.locations.toArray()))
   );
-
+  // Removed Async in Live Query
   allContactTypes: Signal<Array<Select2Model> | undefined> = toSignal(from(
-    liveQuery(async ()=> this.db.contactTypes.toArray()))
+    liveQuery(() => this.db.contactTypes.toArray()))
   );
 
   constructor() {
-
+    // Effect 1 — Ensure primary agent flag is synced in Dexie
     effect(async () => {
-      if (this.allAgents()) {
-        let agent: Agent | undefined = this.allAgents()!.find(a => a.userId == this.userService.user()?.userId);
-        if(!agent){
-          agent = this.allAgents()!.find(a => a.userId == this.proxyUserId());
-        }
-        let update  = { userId: this.proxyUserId(), primaryUser: this.setPrimaryAgentStatus() };
-        if (agent) {
-          update.userId = agent.userId;
-        }
-        this.db.agents.update(update.userId, update);
+      const agents = this.allAgents();
+      if (!agents || agents.length === 0) return;
+
+      const user = this.userService.user();
+      if (!user) return;
+
+      let agent: Agent | undefined = agents.find(a => a.userId == user.userId)
+        || agents.find(a => a.userId == this.proxyUserId());
+
+      if (!agent) return;
+
+      let update = { userId: agent.userId, primaryUser: this.setPrimaryAgentStatus() };
+      // Enclosed in try catch to avoid exceptions
+      try {
+        await this.db.agents.update(update.userId, update);
+      } catch (e) {
+        console.error('Agent update failed', e);
 
       }
     })
 
+    // Effect 2 — Load caseload for the current primary agent
     effect(async () => {
-      if (this.primaryAgent()) {
-        let response = await fetch('/field_contact_bff/api/agent-caseload/' + this.primaryAgent()?.userId);
-        let offenders:Array<Offender> = await response.json();
-        await this.db.caseload.bulkAdd(offenders);
+      const agent = this.primaryAgent();
+      if (!agent) return;
+      try {
+        const response = await fetch(`${this.baseUrl}/agent-caseload/${agent.userId}`);
+        if (!response.ok) throw new Error(`Error ${response.status}`);
+        const offenders: Offender[] = await response.json();
+        // clearing old data
+        await this.db.caseload.clear();
+        await this.db.caseload.bulkAdd(offenders, { allKeys: true });
+      } catch (error) {
+        console.error('Failed to load agent caseload:', error);
       }
     });
 
+    // Effect 3 — Load existing contacts for each offender
     effect(async () => {
-      if (this.myCaseload() && await this.db.existingContacts.count() === 0) {
-        this.myCaseload()?.map(offender => offender.offenderNumber)
-          .forEach( offender =>{
-              this.loadExistingContacts(offender)
-            }
-          );
+      const caseload = this.myCaseload();
+      if (!caseload?.length) return;
+
+      const count = await this.db.existingContacts.count();
+      if (count > 0) return;
+
+      for (const offender of caseload) {
+        await this.loadExistingContacts(offender.offenderNumber);
       }
     });
   }
+  // Handled in async way
+  async loadExistingContacts(offenderNumber: number) {
+    try {
+      const contacts = await this.fetchData<Array<Contact>>(`${this.baseUrl}/existing-contacts/${offenderNumber}`);
 
-  loadExistingContacts(offenderNumber: number) {
-    let existingContactPromise: Promise<Array<Contact>> = this.fetchData(this.baseUrl + '/existing-contacts/' + offenderNumber);
-    existingContactPromise.then(existingContacts => {
-      let summaryIds = [];
+      if (!contacts?.length) return;
 
-      for (let i = 0; i < existingContacts.length; i++) {
-        this.contactIdArray.push(existingContacts[i].contactId);
-        existingContacts[i].contactTimeString = existingContacts[i].contactTime.toString();
-        // existingContacts[i].summary = 'Which is true. I have been a connoisseur of fast motorcycles all my life. I bought a brand-new 650 BSA Lightning when it was billed as "the fastest motorcycle ever tested by Hot Rod magazine." ' +
-        //   'I have ridden a 500-pound Vincent through traffic on the Ventura Freeway with burning oil on my legs and run the Kawa 750 Triple through Beverly Hills at night with a head full of acid... ' +
-        //   'I have ridden with Sonny Barger and smoked weed in biker bars with Jack Nicholson, Grace Slick, Ron Zigler and my infamous old friend, Ken Kesey, a legendary Cafe Racer.\n' +
-        //   '\n';
-        existingContacts[i].primaryInterviewer.userId = existingContacts[i].primaryInterviewer?.userId?.trim();
-        existingContacts[i].contactSyncedWithDatabase = true;
-        existingContacts[i].formCompleted = true;
-        if (existingContacts[i].secondaryInterviewer) {
-          existingContacts[i].secondaryInterviewer.userId = existingContacts[i].secondaryInterviewer?.userId?.trim();
+      const summaryIds: number[] = [];
+
+      for (const c of contacts) {
+        c.contactTimeString = c.contactTime?.toString() ?? '';
+        c.primaryInterviewer.userId = c.primaryInterviewer?.userId?.trim();
+        c.contactSyncedWithDatabase = true;
+        c.formCompleted = true;
+        if (c.secondaryInterviewer) {
+          c.secondaryInterviewer.userId = c.secondaryInterviewer.userId?.trim();
         }
 
-        summaryIds.push(existingContacts[i].contactId);
-        // if (summaryIds.length > 10) {
-        //   this.loadSummaries(summaryIds);
-        //   summaryIds = [];
-        // }
+        summaryIds.push(c.contactId);
+        this.contactIdArray.push(c.contactId);
       }
 
-      if (summaryIds.length > 0) {
-        this.loadSummaries(summaryIds);
+      await this.db.existingContacts.bulkAdd(contacts, { allKeys: true });
+
+      if (summaryIds.length) {
+        await this.loadSummaries(summaryIds);
       }
 
-      console.log('offender number: ' + offenderNumber + ', summaryIds: ', summaryIds.length);
-
-      this.db.existingContacts.bulkAdd(existingContacts)
-
-    });
+      console.log(`Loaded contacts for offender ${offenderNumber}, count: ${contacts.length}`);
+    } catch (error) {
+      console.error(`Failed to load contacts for offender ${offenderNumber}:`, error);
+    }
   }
+  // Handled in async way
+  async loadSummaries(contactIds: number[]) {
+    try {
+      const options = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contactIds }),
+      };
 
-  loadSummaries(contactIds: Array<number>) {
-    let options = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        contactIds: contactIds
-      })
-    };
+      const response = await this.apiService.protectedFetch(`${this.baseUrl}/existing-contact-summaries`, options);
 
-    this.apiService.protectedFetch(`${this.baseUrl}/existing-contact-summaries`, options)
-      .then(response => {
-        if (response.ok) {
-          console.log('protectedFetch existing-contact-summaries response ok');
-          return response.json();
-        }
-        else {
-          throw new Error(`Response code ${response.status}`)
-        }
-      })
-      .then((summaries: Array<Contact>) => {
-        summaries.forEach((s: Contact) => {
-          this.db.existingContacts.update(s.contactId, { summary: s.summary });
-        });
-      })
-      .catch(error => {
-        console.error(`Unable to get summaries for ${contactIds}: ${error}`);
-      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const summaries: Contact[] = await response.json();
+
+      for (const s of summaries) {
+        await this.db.existingContacts.update(s.contactId, { summary: s.summary });
+      }
+    } catch (error) {
+      console.error(`Unable to get summaries for ${contactIds}:`, error);
+    }
   }
-
-  async fetchData(url: string) {
-    return (await fetch(url)).json();
+  // Handled in async way
+  async fetchData<T>(url: string): Promise<T> {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
+    return response.json();
   }
 
 }
