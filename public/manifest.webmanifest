@@ -2,8 +2,8 @@
   "name": "Field Contact",
   "short_name": "Field Contact",
   "display": "standalone",
-  "scope": "./field_contact_bff/app/",
-  "start_url": "./field_contact_bff/app/",
+  "scope": "./",
+  "start_url": "./index.html",
   "orientation": "portrait-primary",
   "background_color": "#fcf8f7",
   "icons": [
