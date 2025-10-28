@@ -4,6 +4,8 @@
   "display": "standalone",
   "scope": "./field_contact_bff/app/",
   "start_url": "./field_contact_bff/app/",
+  "orientation": "portrait-primary",
+  "background_color": "#fcf8f7",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
