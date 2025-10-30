@@ -14,7 +14,7 @@ export class UserService {
   user: Signal <User | undefined>  = toSignal(from(
     liveQuery( ()=> this.db.users
       .where('loggedInUser')
-      .equals(1)
+      .equals(2)
       .first()))
   );
 

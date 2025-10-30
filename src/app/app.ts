@@ -31,15 +31,15 @@ export class App implements OnInit, OnDestroy {
 
   constructor(private iconRegistry: MatIconRegistry,
               private sanitizer: DomSanitizer) {
-    if (Notification.permission === 'default') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          // User granted permission, now you can show notifications
-        } else {
-          // User denied permission
-        }
-      });
-    }
+    // if (Notification.permission === 'default') {
+    //   Notification.requestPermission().then(permission => {
+    //     if (permission === 'granted') {
+    //       // User granted permission, now you can show notifications
+    //     } else {
+    //       // User denied permission
+    //     }
+    //   });
+    // }
     this.registerPhosphorIcons();
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
