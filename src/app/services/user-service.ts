@@ -18,4 +18,7 @@ export class UserService {
       .first()))
   );
 
+  appVersion() {
+    return new Date().toTimeString();
+  }
 }

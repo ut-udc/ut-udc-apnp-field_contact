@@ -1,6 +1,7 @@
 <div class="surface">
 @if(this.userService.user()?.tester == 1 && !this.agentService.primaryAgent()) {
   <app-proxy-user-select/>
+  <div>Built: {{this.userService.appVersion()}}</div>
 } @else {
   <mat-toolbar class="udc-home-mat-toolbar">
     <mat-toolbar-row>
@@ -41,6 +42,7 @@
   <div class="my-caseload-container">
     <app-my-caseload />
   </div>
+  <div>Built: {{this.userService.appVersion()}}</div>
 }
 </div>
 <!--hiding this until we have offender search implemented-->
