@@ -14,11 +14,11 @@ export class UserService {
   user: Signal <User | undefined>  = toSignal(from(
     liveQuery( ()=> this.db.users
       .where('loggedInUser')
-      .equals(2)
+      .equals(1)
       .first()))
   );
 
   appVersion() {
-    return 1;
+    return 2;
   }
 }
