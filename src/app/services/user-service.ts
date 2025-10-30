@@ -19,6 +19,6 @@ export class UserService {
   );
 
   appVersion() {
-    return new Date().toTimeString();
+    return 1;
   }
 }
