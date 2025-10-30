@@ -9,11 +9,11 @@
   </div>
 
   <div class="card-content">
-    <div class="label_medium">Home Address</div>
+    <div class="label_medium">{{ addressType }} Address...</div>
     <div class="body_large">
-      {{ address.lineOne }}<br/>{{ address.city }}
-      , {{ address.state }}
-      {{ address.zipCode }}
+      {{ address.lineOne ? address.lineOne : 'N/A' }}<br/>{{ address.city ? address.city : '' }}
+      , {{ address.state ? address.state : '' }}
+      {{ address.zipCode ? address.zipCode : '' }}
     </div>
   </div>
 </div>

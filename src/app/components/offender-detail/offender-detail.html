@@ -27,35 +27,40 @@
     <br/>
     <div class="detail-content-card">
       <span class="label_large_prominent">Contact Information</span>
-      <app-phone-number [phoneNumber]="currentOffender()?.defaultPhoneNumber" [phoneType]="'Primary'"></app-phone-number>
-      <app-address [address]="currentOffender()?.offenderAddress" [addressType]="'Home'"></app-address>
+      @if (currentOffender()?.defaultPhoneNumber) {
+      <app-phone-number [phoneNumber]="currentOffender()?.defaultPhoneNumber"
+                        [phoneType]="'Primary'"></app-phone-number>
+      }
+      @if (currentOffender()?.offenderAddress) {
+        <app-address [address]="currentOffender()?.offenderAddress" [addressType]="'Home'"></app-address>
+      }
     </div>
   }
   <div class="detail-content-card">
-  <!-- **********iterate************ -->
-  @if (unsyncedContacts()) {
-    <ng-container>
-      @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
-        @if (unsyncedContact.formCompleted) {
+    <!-- **********iterate************ -->
+    @if (unsyncedContacts()) {
+      <ng-container>
+        @for (unsyncedContact of unsyncedContacts(); track unsyncedContact.contactId) {
+          @if (unsyncedContact.formCompleted) {
 
-        <app-contact-listing-card
-          [contact]="unsyncedContact"
-        >
-        </app-contact-listing-card>
+            <app-contact-listing-card
+              [contact]="unsyncedContact"
+            >
+            </app-contact-listing-card>
+          }
         }
-      }
-    </ng-container>
-  }
-  @if (sortedExistingContacts()) {
-    <ng-container>
-      @for (contact of sortedExistingContacts(); track contact?.contactId) {
-        <app-contact-listing-card
-          [contact]="contact"
-        >
-        </app-contact-listing-card>
-      }
-    </ng-container>
-  }
+      </ng-container>
+    }
+    @if (sortedExistingContacts()) {
+      <ng-container>
+        @for (contact of sortedExistingContacts(); track contact?.contactId) {
+          <app-contact-listing-card
+            [contact]="contact"
+          >
+          </app-contact-listing-card>
+        }
+      </ng-container>
+    }
   </div>
   <ng-template #loading>
     <div class="surface">Loading...</div>

@@ -68,6 +68,7 @@ export class OffenderDetail implements OnInit {
   constructor() {
     effect(async () => {
       if (this.currentOffender()) {
+        console.log('currentOffender: ', this.currentOffender());
         if (!(this.currentOffender()!.lastSuccessfulContact)) {
           this.db.caseload.update(Number(this.route.snapshot.params['offenderNumber']), {
             lastSuccessfulContact: await this.getLatestOffenderContact(Number(this.route.snapshot.params['offenderNumber']))
