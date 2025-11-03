@@ -19,6 +19,6 @@ export class UserService {
   );
 
   appVersion() {
-    return 5;
+    return 6;
   }
 }
