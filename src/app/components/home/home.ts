@@ -6,6 +6,7 @@ import {MatToolbar, MatToolbarRow} from '@angular/material/toolbar';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {ProxyUserSelect} from '../proxy-user-select/proxy-user-select';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,7 @@ export class Home {
   userService = inject(UserService);
   agentService:AgentService = inject(AgentService);
 
+  currentApplicationVersion = environment.appVersion;
   constructor() {
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);

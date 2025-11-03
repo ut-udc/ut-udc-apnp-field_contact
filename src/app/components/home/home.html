@@ -1,7 +1,9 @@
 <div class="surface">
 @if(this.userService.user()?.tester == 1 && !this.agentService.primaryAgent()) {
   <app-proxy-user-select/>
-  <div>Version: {{this.userService.appVersion()}}</div>
+  <br />
+  <br />
+  <div>Version: {{currentApplicationVersion}}</div>
 } @else {
   <mat-toolbar class="udc-home-mat-toolbar">
     <mat-toolbar-row>
