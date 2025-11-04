@@ -2,7 +2,7 @@
   "name": "Field Contact",
   "short_name": "Field Contact",
   "display": "standalone",
-  "scope": "./",
+//   "scope": "./",
   "start_url": "./index.html",
   "orientation": "portrait-primary",
   "background_color": "#fcf8f7",
@@ -34,6 +34,12 @@
     {
       "src": "icons/Icon-152X152.png",
       "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/Icon-180X180.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
     },
