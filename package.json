@@ -1,12 +1,13 @@
 {
   "name": "field-contact",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "prebuild": "npm --no-git-tag-version version patch",
     "build": "ng build",
     "buildasm": "npm --no-git-tag-version version patch && ng build --base-href=\"/field_contact_bff/app/\" --output-path=/Users/andreim/IdeaProjects/ut-udc-apnp-field_contact_bff/src/main/resources/static/ --configuration=production",
+    "buildasmnoversion": "ng build --base-href=\"/field_contact_bff/app/\" --output-path=/Users/andreim/IdeaProjects/ut-udc-apnp-field_contact_bff/src/main/resources/static/ --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
