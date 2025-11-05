@@ -23,6 +23,7 @@ export class Db extends Dexie {
   public otherOffenders!: Table<Offender, number>;
   public locations!: Table<Select2Model, number>;
   public contactTypes!: Table<Select2Model, number>;
+  public contactResultTypes!: Table<Select2Model, number>;
 
   constructor() {
     super('supervisionContactsDB');
@@ -43,6 +44,7 @@ export class Db extends Dexie {
         '&offenderNumber, firstName, lastName, birthDate, image, address, city, state, zip, phone, lastSuccessfulContactDate, nextScheduledContactDate, legalStatus',
       locations: '&id, text',
       contactTypes: '&id, text',
+      contactResultTypes: '&id, text',
       contactSummaries: '&contactId, summary',
     });
   }

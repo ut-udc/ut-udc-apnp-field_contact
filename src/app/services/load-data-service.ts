@@ -30,7 +30,8 @@ export class LoadDataService {
         this.fetchData<User>(`${this.baseUrl}/user`),
         this.fetchData<Array<Agent>>(`${this.baseUrl}/agents-with-offenders`),
         this.fetchData<Array<Select2Model>>(`${this.baseUrl}/locations`),
-        this.fetchData<Array<Select2Model>>(`${this.baseUrl}/contact-types`)
+        this.fetchData<Array<Select2Model>>(`${this.baseUrl}/contact-types`),
+        this.fetchData<Array<Select2Model>>(`${this.baseUrl}/contact-result-types`)
       ]);
 
       // Populate data safely
@@ -38,6 +39,7 @@ export class LoadDataService {
       await this.insertAgents(agents);
       await this.insertLocations(locations);
       await this.insertContactTypes(contactTypes);
+      await this.insertContactResultTypes(contactTypes);
 
       console.log('All base data loaded successfully');
     } catch (error) {
@@ -80,6 +82,14 @@ export class LoadDataService {
     await this.db.contactTypes.clear();
     await this.db.contactTypes.bulkAdd(contactTypeList);
     console.log(`${contactTypeList.length} contact types added`);
+  }
+
+  /** Insert contact result types */
+  private async insertContactResultTypes(contactResultTypeList: Array<Select2Model>) {
+    if (!contactResultTypeList?.length) return;
+    await this.db.contactResultTypes.clear();
+    await this.db.contactResultTypes.bulkAdd(contactResultTypeList);
+    console.log(`${contactResultTypeList.length} contact result types added`);
   }
 
   /** Generic fetch with type safety */

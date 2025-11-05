@@ -52,12 +52,9 @@
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Contact Result</span>
-        <span class="body_large"
-        >{{
-            currentExistingContact()?.result === 1 ? 'Made Contact' :
-              'Attempted Contact'
-          }}</span
-        >
+        <span class="body_large">
+          {{ fetchContactResultTypeDescription(currentExistingContact()?.result) | async }}
+        </span>
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Commentary</span>
@@ -116,12 +113,9 @@
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Contact Result</span>
-        <span class="body_large"
-        >{{
-            currentUnsyncedContact()?.result == 1 ? 'Made Contact' :
-              'Attempted Contact'
-          }}</span
-        >
+        <span class="body_large">
+          {{ fetchContactResultTypeDescription(currentUnsyncedContact()?.result) | async }}
+        </span>
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Commentary</span>

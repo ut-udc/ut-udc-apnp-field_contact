@@ -60,6 +60,11 @@ export class ContactDetailView {
     );
   }
 
+  async fetchContactResultTypeDescription(code: number): Promise<string> {
+    const contactResultType = await this.db.contactResultTypes.get(code);
+    return contactResultType?.text || '';
+  }
+
   truncateTimeString(text: string): string {
     let charlimit = 5;
     if (!text || text.length <= charlimit) {
