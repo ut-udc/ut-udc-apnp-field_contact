@@ -6,6 +6,7 @@
     "start": "ng serve",
     "prebuild": "npm --no-git-tag-version version patch",
     "build": "ng build",
+    "buildwin": "npm --no-git-tag-version version patch && ./build_and_copy.sh",
     "buildasm": "npm --no-git-tag-version version patch && ng build --base-href=\"/field_contact_bff/app/\" --output-path=/Users/andreim/IdeaProjects/ut-udc-apnp-field_contact_bff/src/main/resources/static/ --configuration=production",
     "buildasmnoversion": "ng build --base-href=\"/field_contact_bff/app/\" --output-path=/Users/andreim/IdeaProjects/ut-udc-apnp-field_contact_bff/src/main/resources/static/ --configuration=production",
     "watch": "ng build --watch --configuration development",
