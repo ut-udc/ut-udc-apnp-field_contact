@@ -17,6 +17,7 @@ export class SplashScreen {
       const retrievedString = localStorage.getItem('goodEnough');
 
       if (retrievedString == null) {
+        localStorage.setItem('goodEnough', 'somethingNotNull');
         console.log('Reloading');
         window.location.reload();
       } else {
