@@ -47,7 +47,7 @@ import {CommonDialogService} from '../../services/common-dialog-service';
 export class CommentaryForm implements OnInit {
   db: Db = inject(Db)
   contactService: ContactService = inject(ContactService);
-  // agentService: AgentService = inject(AgentService);
+  agentService: AgentService = inject(AgentService);
   snackBarService: SnackBarService = inject(SnackBarService);
   dialogService: CommonDialogService = inject(CommonDialogService);
   route: ActivatedRoute = inject(ActivatedRoute);
@@ -85,8 +85,6 @@ export class CommentaryForm implements OnInit {
     return this.agentService.allContactResultTypes()?.find(typ => typ.id === this.commentaryForm.value.result)?.text.trim() ?? '';
   });
 
-  async onSubmit() {
-  freshSubmit:boolean = false;
   async confirmSubmit() {
     this.dialogService.openConfirmDialog().subscribe(async result => {
       if(result) {
@@ -105,6 +103,7 @@ export class CommentaryForm implements OnInit {
       }
     });
   }
+      freshSubmit:boolean = false;
   async onSubmit(): Promise<boolean> {
     if (!navigator.onLine) {
       this.currentContact()!.formCompleted = true;
@@ -188,8 +187,8 @@ export class FieldVisitGuidelinesBottomSheet {
   private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> =
     inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
 
-  openLink(event: MouseEvent): void {
-    this._bottomSheetRef.dismiss();
-    event.preventDefault();
+    openLink(event: MouseEvent): void {
+      this._bottomSheetRef.dismiss();
+      event.preventDefault();
+    }
   }
-}
