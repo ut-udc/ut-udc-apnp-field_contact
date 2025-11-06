@@ -1,0 +1,35 @@
+<div class="surface">
+  <div class="surface-container-low">
+      <div class="flex-item headline_small">{{title()}}</div>
+      <div class="flex-item body_large">
+        {{message()}}
+      </div>
+      <div class="flex-item body_small">Error Code: {{errorCode()}} - {{shortMsg()}}</div>
+      <div class="actions-container">
+          @if(showGoBack()) {
+            <button matButton="outlined" class="back-button" (click)="goBack()">
+              <mat-icon svgIcon="arrow_back"  aria-hidden="false" aria-label="Back Icon" ></mat-icon>
+              Go Back
+            </button>
+          }
+        @if(showSignIn()) {
+          <button matButton="outlined" [routerLink]="['/']">
+             Sign In
+          </button>
+        }
+        @if(showReportTheIssue()) {
+        <a class="error-page-action-link"
+           href="https://udc-bopp-jsm.atlassian.net/servicedesk/customer/portal/22/group/45/create/201"
+           target="_blank"
+        >Report the issue</a>
+        }
+        <!--
+        <a (click)="snackBarTest()">SBT</a>
+        -->
+        @if(showTryAgain()) {
+          <a class="error-page-action-link" (click)="tryAgain()">Try again</a>
+        }
+      </div>
+
+    </div>
+  </div>

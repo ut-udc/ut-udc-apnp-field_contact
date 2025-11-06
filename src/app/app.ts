@@ -8,6 +8,7 @@ import {ApiService} from './services/api-service';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {AgentService} from './services/agent-service';
+import {AppInitService} from './utils/app-init.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class App implements OnInit, OnDestroy {
 
   constructor(private iconRegistry: MatIconRegistry,
               private sanitizer: DomSanitizer) {
+    inject(AppInitService).initFetchInterceptor();
     // if (Notification.permission === 'default') {
     //   Notification.requestPermission().then(permission => {
     //     if (permission === 'granted') {

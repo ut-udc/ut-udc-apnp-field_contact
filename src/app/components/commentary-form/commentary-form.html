@@ -106,9 +106,8 @@
         <button
           matButton="filled"
           type="submit"
-          (click)="onSubmit()"
+          (click)="confirmSubmit()"
           [disabled]="!commentaryForm.valid"
-          routerLink="/offender-detail/{{(currentContact())?.offenderNumber}}"
         >
           Save
         </button>

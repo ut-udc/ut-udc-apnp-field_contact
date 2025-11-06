@@ -389,3 +389,7 @@ div.udc-list-item-card{
   line-height: 24px; /* 150% */
   letter-spacing: 0.5px;
 }
+.custom-snack-bar {
+  z-index: 2000 !important;
+  transition: bottom 0.25s ease-in-out;
+}

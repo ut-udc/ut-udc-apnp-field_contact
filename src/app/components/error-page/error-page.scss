@@ -1,0 +1,55 @@
+.surface-container-low{
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  align-self: stretch;
+  .actions-container {
+    display: flex;
+    align-items: center; /* aligns button text + icon vertically */
+    gap: 16px;           /* space between button and link */
+  }
+
+  .back-button {
+    cursor: pointer;
+    flex-direction: row;
+    display: flex;
+    padding: 10px 24px 10px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex: 1 0 0;
+    align-self: stretch;
+    mat-icon {
+      margin-left: auto;
+      margin-right: 0;
+    }
+    color: var(--UDC-styles-sys-light-primary, #001624);
+    text-align: center;
+
+    /* UDC-styles/label/large */
+    font-family: "Source Sans 3";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.1px;
+  }
+
+  .error-page-action-link {
+    cursor: pointer;
+    color: var(--UDC-styles-sys-light-primary, #001624);
+    text-align: center;
+    /* UDC-styles/label/large */
+    font-family: "Source Sans 3";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: 0.1px;
+    text-decoration: none;
+  }
+
+}
+

@@ -6,6 +6,7 @@ import {CommentaryForm} from './components/commentary-form/commentary-form';
 import {ContactDetailView} from './components/contact-detail-view/contact-detail-view';
 import {AgentProfile} from './components/agent-profile/agent-profile';
 import {SplashScreen} from './components/splash-screen/splash-screen';
+import {ErrorPage} from './components/error-page/error-page';
 
 export const routes: Routes = [
   {
@@ -47,6 +48,10 @@ export const routes: Routes = [
     path: 'contact-detail-view/:contactId',
     component: ContactDetailView,
     title: 'Contact Detail View',
+  },
+  {
+    path: '**',
+    component: ErrorPage,
   },
   // {
   //   path: 'add-offender-to-other-offenders',

@@ -72,7 +72,8 @@ export class ContactService {
     }
   }
 
-  syncContactWithDatabase(contact: Contact) {
+  async syncContactWithDatabase(contact: Contact): Promise<Response | null> {
+
     this.contactRecordForBff.contactDate = contact.contactDate.toDateString();
     this.contactRecordForBff.offenderNumber = contact.offenderNumber;
     this.contactRecordForBff.contactTypeId = contact.contactTypeId;
@@ -84,34 +85,47 @@ export class ContactService {
     this.contactRecordForBff.result = contact.result;
     this.contactRecordForBff.userAgent = contact.userAgent;
 
+    if (!contact.formCompleted) return null;
 
     try {
-      if (contact.formCompleted) {
-        this.apiService.protectedFetch(this.path + '/offenders/' + contact.offenderNumber + '/contact',
-          {
+      const response = await this.apiService.protectedFetch(
+        `${this.path}/offenders/${contact.offenderNumber}/contact`,
+        {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.contactRecordForBff)
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-          })
-          .then((data: number) => {
-            this.db.contacts.delete(contact.contactId)
-            contact.contactId = data;
-            this.db.existingContacts.add(contact);
-            return data;
-          });
+        }
+      );
+
+      // Only throw for network-level errors (optional)
+      if (!response) {
+        throw new Error('No response from server');
       }
-    } catch (error) {
-      console.error('Error in syncContactWithDatabase:', error);
+
+      // Parse JSON only if status is OK
+      if (response.ok) {
+        const data: number = await response.json();
+        await this.db.contacts.delete(contact.contactId);
+        contact.contactId = data;
+        await this.db.existingContacts.add(contact);
+      }
+
+      // Always return response, even if response.ok === false (e.g., 500)
+      return response;
+
+    } catch (error:any) {
+      if(error!.message == "Internal Server Error – please try later.") {
+        return new Response(JSON.stringify({ message: error.message }), {
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+      console.error('Network error in syncContactWithDatabase:', error);
+      return null; // Only for true network failures, not HTTP errors
     }
   }
+
   async addPostContactToQueue(contact: Contact) {
     this.contactRecordForBff.contactDate = contact.contactDate.toDateString();
     this.contactRecordForBff.offenderNumber = contact.offenderNumber;

@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 32px); /* full width minus left/right margins */
+  min-width: 344px;
+  max-width: 100%;
+  min-height: 68px;
+  padding: 10px 16px;
+  margin: 0 16px;          /* 16px left & right margins */
+  border-radius: 4px;
+  background: var(--UDC-styles-sys-light-inverse-surface, #313030);
+  box-shadow:
+    0 4px 8px 3px rgba(0, 0, 0, 0.15),
+    0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  color: #fff;
+  box-sizing: border-box;
+  transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  opacity: 1;
+}
+.snackbar-message-text {
+  flex: 1;
+  margin-right: 12px;
+  text-align: left;
+  display: flex;           /* use flex for vertical alignment */
+  align-items: center;     /* vertical center */
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  opacity: 0.8;
+}

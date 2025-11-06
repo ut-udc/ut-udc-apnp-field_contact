@@ -11,7 +11,8 @@ export class LoadDataService {
   db: Db = inject(Db)
   baseUrl: string = '/field_contact_bff/api';
   dbReady = signal(false);
-
+  errorInfo = signal({});
+  dataInitComplete = signal(false);
   constructor() {
     // Start async init but don’t block constructor
     this.initializeData();
@@ -40,7 +41,7 @@ export class LoadDataService {
       await this.insertLocations(locations);
       await this.insertContactTypes(contactTypes);
       await this.insertContactResultTypes(contactTypes);
-
+      this.dataInitComplete.set(true);
       console.log('All base data loaded successfully');
     } catch (error) {
       console.error('Error loading data:', error);
