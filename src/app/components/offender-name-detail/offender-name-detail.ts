@@ -12,6 +12,6 @@ import {Offender} from '../../models/offender';
 })
 export class OffenderNameDetail {
   // @Input('currentOffender()') currentOffender!: Signal<Offender>;
-  @Input() currentOffender!: Offender | undefined;
+  @Input() currentOffender!: Offender | undefined | null;
 
 }

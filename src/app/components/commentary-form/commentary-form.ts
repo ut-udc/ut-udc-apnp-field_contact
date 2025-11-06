@@ -1,6 +1,6 @@
 import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
@@ -20,6 +20,8 @@ import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
 import {ContactService} from '../../services/contact-service';
 import {AgentService} from '../../services/agent-service';
+import {SnackBarService} from '../../services/snack-bar-service';
+import {CommonDialogService} from '../../services/common-dialog-service';
 
 @Component({
   selector: 'app-commentary-form',
@@ -45,11 +47,14 @@ import {AgentService} from '../../services/agent-service';
 export class CommentaryForm implements OnInit {
   db: Db = inject(Db)
   contactService: ContactService = inject(ContactService);
-  agentService: AgentService = inject(AgentService);
+  // agentService: AgentService = inject(AgentService);
+  snackBarService: SnackBarService = inject(SnackBarService);
+  dialogService: CommonDialogService = inject(CommonDialogService);
   route: ActivatedRoute = inject(ActivatedRoute);
-  offenderNumber: number = 0;
+  offenderNumber: number | null | undefined = 0;
   contactId: number = 0;
   errorClass: string = '';
+  router: Router = inject(Router);
 
   private _bottomSheet = inject(MatBottomSheet);
 
@@ -81,6 +86,26 @@ export class CommentaryForm implements OnInit {
   });
 
   async onSubmit() {
+  freshSubmit:boolean = false;
+  async confirmSubmit() {
+    this.dialogService.openConfirmDialog().subscribe(async result => {
+      if(result) {
+        console.log('Action confirmed!');
+        this.freshSubmit = true;
+        this.offenderNumber = this.currentContact()?.offenderNumber;
+        const status:boolean = await this.onSubmit();
+        if(status) {
+          this.snackBarService.show('Contact saved successfully.');
+          if (this.offenderNumber) {
+            this.router.navigate(['/offender-detail', this.offenderNumber]);
+          }
+        }
+      } else {
+        console.log('Cancelled!');
+      }
+    });
+  }
+  async onSubmit(): Promise<boolean> {
     if (!navigator.onLine) {
       this.currentContact()!.formCompleted = true;
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
@@ -90,12 +115,35 @@ export class CommentaryForm implements OnInit {
       // this.contactService.addPostContactToQueue(this.currentContact()!);
       // this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
 
-      return;
+      return true;
     } else {
       this.currentContact()!.formCompleted = true;
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
       this.contactService.updateContact(this.currentContact()!);
-      this.contactService.syncContactWithDatabase(this.currentContact()!);
+      const response: Response | null = await this.contactService.syncContactWithDatabase(this.currentContact()!);
+      if (response != null && !response.ok && response.status == 500) {
+        if (this.freshSubmit) {
+          this.dialogService.open500TryAgainDialog().subscribe(async result => {
+            if (result) {
+              console.log('Action confirmed!');
+              this.freshSubmit = false;
+              const status:boolean = await this.onSubmit();
+              if(status) {
+                this.snackBarService.show('Contact saved successfully.');
+                if (this.offenderNumber) {
+                  this.router.navigate(['/offender-detail', this.offenderNumber]);
+                }
+              }
+            }
+          });
+        } else {
+          this.router.navigate(['/','500']);
+          return false;
+        }
+        return false;
+      } else {
+        return true;
+      }
     }
     // window.location.href = 'offender-detail/' + this.offenderNumber;
   }

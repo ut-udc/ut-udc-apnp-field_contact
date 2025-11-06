@@ -2,7 +2,7 @@ import {Component, computed, effect, inject, OnInit, Signal} from '@angular/core
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatRippleModule} from '@angular/material/core';
 import {CommonModule} from '@angular/common';
 import {ContactListingCard} from '../contact-listing-card/contact-listing-card';
@@ -16,6 +16,7 @@ import {Db} from '../../services/db';
 import {OffenderNameDetail} from '../offender-name-detail/offender-name-detail';
 import {PhoneNumber} from '../phone-number/phone-number';
 import {Address} from '../address/address';
+import {LoadDataService} from '../../services/load-data-service';
 
 @Component({
   selector: 'app-offender-detail',
@@ -38,14 +39,27 @@ import {Address} from '../address/address';
 export class OffenderDetail implements OnInit {
   db: Db = inject(Db);
   route: ActivatedRoute = inject(ActivatedRoute);
+  router = inject(Router);
   path = '/field_contact_bff/api';
-
-  currentOffender: Signal<Offender | undefined> = toSignal(from(
-    liveQuery(() => this.db.caseload
-      .where('offenderNumber')
-      .equals(Number(this.route.snapshot.params['offenderNumber']))
-      .first()))
+  loadDataService = inject(LoadDataService);
+  currentOffender: Signal<Offender | null | undefined> = toSignal(from(
+    liveQuery(async () => {
+      const param = this.route.snapshot.params['offenderNumber'];
+      // Handle null, empty, or not-a-number offenderNumber
+      const offenderNumber = Number(param);
+      if (param == null || isNaN(offenderNumber)) {
+        return null;
+      }
+      // Query DB
+      const result = await this.db.caseload
+        .where('offenderNumber')
+        .equals(offenderNumber)
+        .first();
+      return result ?? null;
+    })),
+    { initialValue: undefined }
   );
+
   existingContacts: Signal<Array<Contact> | undefined> = toSignal(from(
     liveQuery(async () => this.db.existingContacts
       .where('offenderNumber')
@@ -67,15 +81,25 @@ export class OffenderDetail implements OnInit {
 
   constructor() {
     effect(async () => {
-      if (this.currentOffender()) {
-        console.log('currentOffender: ', this.currentOffender());
-        if (!(this.currentOffender()!.lastSuccessfulContact)) {
-          this.db.caseload.update(Number(this.route.snapshot.params['offenderNumber']), {
-            lastSuccessfulContact: await this.getLatestOffenderContact(Number(this.route.snapshot.params['offenderNumber']))
-          },);
-        }
+      if(!this.loadDataService.dataInitComplete()) return;
+      const offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
+      const offender = await this.currentOffender();
+      // Still loading → do nothing
+      if (offender === undefined) return;
+      if (offender === null) {
+        const errorInfo = { offenderNumber: this.route.snapshot.params['offenderNumber'] };
+        this.loadDataService.errorInfo.set(errorInfo);
+        this.router.navigate(['/','404'], {
+          queryParams: errorInfo
+        });
+        return;
       }
-    })
+      if (!(offender!.lastSuccessfulContact)) {
+        this.db.caseload.update(Number(offenderNumber), {
+          lastSuccessfulContact: await this.getLatestOffenderContact(Number(offenderNumber))
+        },);
+      }
+    });
 
     const iconRegistry = inject(MatIconRegistry);
     const sanitizer = inject(DomSanitizer);
