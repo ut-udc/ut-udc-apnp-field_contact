@@ -16,7 +16,7 @@ import {ApiService} from './api-service';
 export class AgentService {
   db: Db = inject(Db);
   userService: UserService = inject(UserService);
-  apiService:ApiService = inject(ApiService);
+  apiService: ApiService = inject(ApiService);
   contactIdArray: number[] = [];
   baseUrl: string = '/field_contact_bff/api';
 
@@ -39,6 +39,7 @@ export class AgentService {
     caches.delete('images');
     this.setPrimaryAgentStatus.set(status);
   }
+
   // Removed Async in Live Query
   allAgents: Signal<Array<Agent> | undefined> = toSignal(from(
     liveQuery(() => this.db.agents.toArray()))
@@ -55,6 +56,9 @@ export class AgentService {
   allContactTypes: Signal<Array<Select2Model> | undefined> = toSignal(from(
     liveQuery(() => this.db.contactTypes.toArray()))
   );
+  allContactResultTypes: Signal<Array<Select2Model> | undefined> = toSignal(from(
+    liveQuery(() => this.db.contactResultTypes.toArray()))
+  );
 
   constructor() {
     // Effect 1 — Ensure primary agent flag is synced in Dexie
@@ -70,7 +74,7 @@ export class AgentService {
 
       if (!agent) return;
 
-      let update = { userId: agent.userId, primaryUser: this.setPrimaryAgentStatus() };
+      let update = {userId: agent.userId, primaryUser: this.setPrimaryAgentStatus()};
       // Enclosed in try catch to avoid exceptions
       try {
         await this.db.agents.update(update.userId, update);
@@ -90,7 +94,7 @@ export class AgentService {
         const offenders: Offender[] = await response.json();
         // clearing old data
         await this.db.caseload.clear();
-        await this.db.caseload.bulkAdd(offenders, { allKeys: true });
+        await this.db.caseload.bulkAdd(offenders, {allKeys: true});
       } catch (error) {
         console.error('Failed to load agent caseload:', error);
       }
@@ -109,6 +113,7 @@ export class AgentService {
       }
     });
   }
+
   // Handled in async way
   async loadExistingContacts(offenderNumber: number) {
     try {
@@ -131,7 +136,7 @@ export class AgentService {
         this.contactIdArray.push(c.contactId);
       }
 
-      await this.db.existingContacts.bulkAdd(contacts, { allKeys: true });
+      await this.db.existingContacts.bulkAdd(contacts, {allKeys: true});
 
       if (summaryIds.length) {
         await this.loadSummaries(summaryIds);
@@ -142,13 +147,14 @@ export class AgentService {
       console.error(`Failed to load contacts for offender ${offenderNumber}:`, error);
     }
   }
+
   // Handled in async way
   async loadSummaries(contactIds: number[]) {
     try {
       const options = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contactIds }),
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({contactIds}),
       };
 
       const response = await this.apiService.protectedFetch(`${this.baseUrl}/existing-contact-summaries`, options);
@@ -157,12 +163,13 @@ export class AgentService {
       const summaries: Contact[] = await response.json();
 
       for (const s of summaries) {
-        await this.db.existingContacts.update(s.contactId, { summary: s.summary });
+        await this.db.existingContacts.update(s.contactId, {summary: s.summary});
       }
     } catch (error) {
       console.error(`Unable to get summaries for ${contactIds}:`, error);
     }
   }
+
   // Handled in async way
   async fetchData<T>(url: string): Promise<T> {
     const response = await fetch(url);

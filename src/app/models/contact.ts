@@ -4,6 +4,7 @@ export interface Contact {
   contactId: number;
   offenderNumber: number;
   result: number; //1=successful and 4=attempted, 5=information.
+  resultDescription: string; //PWA internal use only
   primaryInterviewer: AgentName;
   secondaryInterviewer: AgentName;
   sortDate: Date;

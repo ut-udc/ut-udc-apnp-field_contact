@@ -1,4 +1,4 @@
-import {Component, effect, inject, inject as angularInject, Signal} from '@angular/core';
+import {Component, computed, effect, inject, inject as angularInject, Signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
 import {Contact} from '../../models/contact';
+import {AgentService} from '../../services/agent-service';
 
 @Component({
   selector: 'app-contact-detail-view',
@@ -17,6 +18,7 @@ import {Contact} from '../../models/contact';
 })
 export class ContactDetailView {
   db: Db = inject(Db);
+  agentService:AgentService = inject(AgentService);
   route: ActivatedRoute = inject(ActivatedRoute);
   contactId: number = Number(this.route.snapshot.params['contactId']);
 
@@ -29,6 +31,14 @@ export class ContactDetailView {
     liveQuery(() => this.db.contacts
       .get(Number(this.route.snapshot.params['contactId']))
     )));
+
+  contactResultTypeById: Signal<string> = computed(() => {
+    if (this.currentExistingContact()) {
+      return this.agentService.allContactResultTypes()?.find(typ => typ.id === this.currentExistingContact()?.result)?.text.trim() ?? '';
+    } else {
+      return this.agentService.allContactResultTypes()?.find(typ => typ.id === this.currentUnsyncedContact()?.result)?.text.trim() ?? '';
+    }
+  });
 
   constructor() {
 
@@ -60,18 +70,12 @@ export class ContactDetailView {
     );
   }
 
-  async fetchContactResultTypeDescription(code: number): Promise<string> {
-    const contactResultType = await this.db.contactResultTypes.get(code);
-    return contactResultType?.text || '';
-  }
-
   truncateTimeString(text: string): string {
     let charlimit = 5;
     if (!text || text.length <= charlimit) {
       return text;
     }
     let without_html = text.replace(/<(?:.|\n)*?>/gm, '');
-    let shortened = without_html.substring(0, charlimit) + '';
-    return shortened;
+    return without_html.substring(0, charlimit);
   }
 }

@@ -26,7 +26,7 @@ export class LoadDataService {
       this.dbReady.set(true);
 
       // Fetch data concurrently
-      const [user, agents, locations, contactTypes] = await Promise.all([
+      const [user, agents, locations, contactTypes, contactResultTypes] = await Promise.all([
         this.fetchData<User>(`${this.baseUrl}/user`),
         this.fetchData<Array<Agent>>(`${this.baseUrl}/agents-with-offenders`),
         this.fetchData<Array<Select2Model>>(`${this.baseUrl}/locations`),
@@ -39,7 +39,7 @@ export class LoadDataService {
       await this.insertAgents(agents);
       await this.insertLocations(locations);
       await this.insertContactTypes(contactTypes);
-      await this.insertContactResultTypes(contactTypes);
+      await this.insertContactResultTypes(contactResultTypes);
 
       console.log('All base data loaded successfully');
     } catch (error) {

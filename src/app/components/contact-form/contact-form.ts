@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed, ElementRef,
-  inject,
-  OnInit,
-  signal,
-  Signal, ViewChild,
-} from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal, Signal,} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {DomSanitizer} from '@angular/platform-browser';
@@ -120,6 +111,7 @@ class ContactForm implements OnInit {
     contactTypeId: 0,
     contactType: '',
     result: 99,
+    resultDescription: '',
     location: '',
     locationId: 0,
     summary: '',
@@ -189,6 +181,7 @@ class ContactForm implements OnInit {
         location: this.locationById(),
         locationId: this.contactForm.value.location ?? '',
         result: 99,
+        resultDescription: '',
         summary: '',
         formCompleted: false,
         firstPageCompleted: true,
@@ -218,6 +211,7 @@ class ContactForm implements OnInit {
         location: this.locationById(),
         locationId: this.contactForm.value.location ?? '',
         result: 99,
+        resultDescription: '',
         summary: '',
         formCompleted: false,
         firstPageCompleted: true,

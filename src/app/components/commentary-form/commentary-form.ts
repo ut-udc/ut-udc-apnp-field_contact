@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, inject, OnInit, Signal} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {MatDividerModule} from '@angular/material/divider';
@@ -45,7 +45,7 @@ import {AgentService} from '../../services/agent-service';
 export class CommentaryForm implements OnInit {
   db: Db = inject(Db)
   contactService: ContactService = inject(ContactService);
-  agentService:AgentService = inject(AgentService);
+  agentService: AgentService = inject(AgentService);
   route: ActivatedRoute = inject(ActivatedRoute);
   offenderNumber: number = 0;
   contactId: number = 0;
@@ -76,10 +76,16 @@ export class CommentaryForm implements OnInit {
     commentary: new FormControl<string | null>(null),
   });
 
+  contactResultTypeById: Signal<string> = computed(() => {
+    return this.agentService.allContactResultTypes()?.find(typ => typ.id === this.commentaryForm.value.result)?.text.trim() ?? '';
+  });
+
   async onSubmit() {
     if (!navigator.onLine) {
       this.currentContact()!.formCompleted = true;
       this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
+      const result = this.currentContact()?.result;
+      this.currentContact()!.resultDescription = this.contactResultTypeById();
       this.contactService.updateContact(this.currentContact()!);
       // this.contactService.addPostContactToQueue(this.currentContact()!);
       // this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
@@ -121,20 +127,21 @@ export class CommentaryForm implements OnInit {
   }
 
 }
-  @Component({
-    selector: 'field-visit-guidelines-bottom-sheet',
-    standalone: true,
-    imports: [CommonModule, MatListModule],
-    templateUrl: './field-visit-guidelines-bottom-sheet.html',
-    styleUrl: './field-visit-guidelines-bottom-sheet.scss',
-  })
 
-  export class FieldVisitGuidelinesBottomSheet {
-    private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> =
-      inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
+@Component({
+  selector: 'field-visit-guidelines-bottom-sheet',
+  standalone: true,
+  imports: [CommonModule, MatListModule],
+  templateUrl: './field-visit-guidelines-bottom-sheet.html',
+  styleUrl: './field-visit-guidelines-bottom-sheet.scss',
+})
 
-    openLink(event: MouseEvent): void {
-      this._bottomSheetRef.dismiss();
-      event.preventDefault();
-    }
+export class FieldVisitGuidelinesBottomSheet {
+  private _bottomSheetRef: MatBottomSheetRef<FieldVisitGuidelinesBottomSheet> =
+    inject(MatBottomSheetRef<FieldVisitGuidelinesBottomSheet>);
+
+  openLink(event: MouseEvent): void {
+    this._bottomSheetRef.dismiss();
+    event.preventDefault();
   }
+}

@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router} from '@angular/router';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-splash-screen',
   standalone: true,
@@ -16,7 +17,6 @@ export class SplashScreen {
       const retrievedString = localStorage.getItem('goodEnough');
 
       if (retrievedString == null) {
-        localStorage.setItem('goodEnough', 'somethingNotNull');
         console.log('Reloading');
         window.location.reload();
       } else {
