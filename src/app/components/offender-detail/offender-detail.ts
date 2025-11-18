@@ -71,7 +71,7 @@ export class OffenderDetail implements OnInit {
       .where('offenderNumber')
       .equals(Number(this.route.snapshot.params['offenderNumber'])).reverse()
       .sortBy('contactDate')
-  )));
+    )));
 
   sortedExistingContacts: Signal<Array<Contact> | undefined> = computed(() => {
     return (this.existingContacts() || []).sort((a, b) => {
@@ -83,7 +83,7 @@ export class OffenderDetail implements OnInit {
     effect(async () => {
       if(!this.loadDataService.dataInitComplete()) return;
       const offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
-      const offender = await this.currentOffender();
+      const offender = this.currentOffender();
       // Still loading → do nothing
       if (offender === undefined) return;
       if (offender === null) {
@@ -116,7 +116,7 @@ export class OffenderDetail implements OnInit {
   }
 
   async getLatestOffenderContact(offenderNumber: number) {
-    return (await fetch(this.path +'/latest-successful-contact/' + offenderNumber)).json();
+    return (await fetch(this.path + '/latest-successful-contact/' + offenderNumber)).json();
   }
 
   centered = false;

@@ -29,7 +29,7 @@ export class AgentService {
 
   proxyUserId = signal('');
 
-  setPrimaryAgentStatus = signal(1)
+  setPrimaryAgentStatus = signal(1);
 
   updateProxyUser(userId: string) {
     this.proxyUserId.set(userId);
