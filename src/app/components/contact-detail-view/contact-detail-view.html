@@ -1,9 +1,9 @@
 <div class="surface">
-  @if (currentExistingContact()?.contactTypeId) {
+  @if (locStorageContact?.contactTypeId) {
 
     <span class="detail-header">
     <a
-      [routerLink]="'/offender-detail/' + currentExistingContact()?.offenderNumber"
+      [routerLink]="'/offender-detail/' + locStorageContact?.offenderNumber"
       style="text-decoration: none; color: inherit; cursor: pointer"
       aria-label="Back to Offender Detail"
     >
@@ -22,32 +22,32 @@
       <div class="contact-info-container">
         <span class="label_medium">Date</span>
         <span class="body_large"
-        >{{ currentExistingContact()?.contactDate | date: 'MM/dd/yyyy' }} |
-          {{ truncateTimeString(currentExistingContact()!.contactTimeString) || '' }}</span
+        >{{ locStorageContact?.contactDate | date: 'MM/dd/yyyy' }} |
+          {{ locStorageContact?.contactTimeString }}</span
         >
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Primary Interviewer</span>
         <span class="body_large"
-        >{{ currentExistingContact()?.primaryInterviewer?.name }}</span
+        >{{ locStorageContact?.primaryInterviewer?.name }}</span
         >
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Secondary Interviewer</span>
         <span class="body_large"
-        >{{ currentExistingContact()?.secondaryInterviewer?.name || 'N/A' }}</span
+        >{{ locStorageContact?.secondaryInterviewer?.name || 'N/A' }}</span
         >
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Contact Type</span>
         <span class="body_large"
-        >{{ currentExistingContact()?.contactType }}</span
+        >{{ locStorageContact?.contactType }}</span
         >
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Location</span>
         <span class="body_large"
-        >{{ currentExistingContact()?.location }}</span
+        >{{ locStorageContact?.location }}</span
         >
       </div>
       <div class="contact-info-container">
@@ -58,7 +58,7 @@
       </div>
       <div class="contact-info-container">
         <span class="label_medium">Commentary</span>
-        <span class="body_medium">{{ currentExistingContact()?.summary }}</span>
+        <span class="body_medium">{{ locStorageContact?.summary }}</span>
       </div>
     </div>
   } @else if (currentUnsyncedContact()?.contactTypeId) {
