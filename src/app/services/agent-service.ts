@@ -9,6 +9,7 @@ import {Offender} from '../models/offender';
 import {Contact} from '../models/contact';
 import {Select2Model} from '../models/select2-model';
 import {ApiService} from './api-service';
+import {LocalStorageService} from './local-storage-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class AgentService {
   db: Db = inject(Db);
   userService: UserService = inject(UserService);
   apiService: ApiService = inject(ApiService);
+  localStorageService: LocalStorageService = inject(LocalStorageService);
   contactIdArray: number[] = [];
   baseUrl: string = '/field_contact_bff/api';
 
@@ -29,7 +31,7 @@ export class AgentService {
 
   proxyUserId = signal('');
 
-  setPrimaryAgentStatus = signal(1)
+  setPrimaryAgentStatus = signal(1);
 
   updateProxyUser(userId: string) {
     this.proxyUserId.set(userId);
@@ -164,6 +166,14 @@ export class AgentService {
 
       for (const s of summaries) {
         await this.db.existingContacts.update(s.contactId, {summary: s.summary});
+        //insert these contacts into Local Storage
+        this.localStorageService.removeItem(s.contactId.toString());
+        this.db.existingContacts.get(s.contactId).then((value) => {
+          if (value) {
+            this.localStorageService.setItem(s.contactId.toString(), JSON.stringify(value) );
+          }
+        })
+
       }
     } catch (error) {
       console.error(`Unable to get summaries for ${contactIds}:`, error);
