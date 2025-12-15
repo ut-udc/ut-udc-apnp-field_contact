@@ -1,16 +1,50 @@
 <div class="surface">
   <app-detail-header
     [title]="'Supervision Contact'"
-    [backLink]="'/offender-detail/' + offender?.offenderNumber"
+    [backLink]="offenderNumber>0?('/offender-detail/' + offender?.offenderNumber):'/home'"
   ></app-detail-header>
 
   <div class="body_large">
     Supervision Contact entry for
-    <strong>{{offender?.defaultOffenderName?.firstName}} {{offender?.defaultOffenderName?.lastName}}</strong>.
+    @if(offender) {
+      <strong>{{offender!.defaultOffenderName!.firstName}} {{offender!.defaultOffenderName!.lastName}}</strong>
+    } @else if(currentContact!.formCompleted) {
+      <strong>{{currentContact!.firstName}} {{currentContact!.lastName}}</strong>
+    }.
   </div>
 
   <form [formGroup]="contactForm" (submit)="onSubmit()">
     <ng-template #loading>Loading...</ng-template>
+
+    <app-filterable-select *ngIf="(!offenderNumber || offenderNumber <= 0) && currentContact?.formCompleted"
+      [label]="'Offender'"
+      [options]="availableOffenders() ??[]"
+      [placeholder]="'Search offender...'"
+      formControlName="availableOffender">
+    </app-filterable-select>
+
+    <mat-form-field *ngIf="(!offenderNumber || offenderNumber == 0) && !currentContact?.formCompleted" class="contact_form_input_field">
+      <mat-label class="body_small">First Name</mat-label>
+      <input
+        matInput
+        [formControl]="firstNameControl"
+        placeholder="First Name"
+        aria-label="First Name"
+        formControlName="firstName"
+      />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="(!offenderNumber || offenderNumber == 0) && !currentContact?.formCompleted" class="contact_form_input_field">
+      <mat-label class="body_small">Last Name</mat-label>
+      <input
+        matInput
+        [formControl]="lastNameControl"
+        placeholder="Last Name"
+        aria-label="Last Name"
+        formControlName="lastName"
+      />
+    </mat-form-field>
+
     <mat-form-field class="contact_form_input_field">
       <mat-label class="body_small">Date</mat-label>
       <input
@@ -81,7 +115,7 @@
         <div class="button-row">
           <button
             matButton="outlined"
-            [routerLink]="['/offender-detail', offender?.offenderNumber]"
+            [routerLink]="offender?.offenderNumber?['/offender-detail', offender?.offenderNumber]:['/home']"
           >
             Cancel
           </button>

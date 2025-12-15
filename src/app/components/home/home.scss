@@ -14,3 +14,8 @@ mat-toolbar.udc-home-mat-toolbar {
 .initials {
   cursor: pointer;
 }
+
+:host ::ng-deep .bell-with-badge .mat-badge-content {
+  margin: var(--mat-badge-container-offset, -10px -10px) !important;
+}
+
