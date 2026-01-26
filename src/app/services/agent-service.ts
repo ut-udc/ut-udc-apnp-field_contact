@@ -94,7 +94,8 @@ export class AgentService {
         const offenders: Offender[] = await response.json();
         // clearing old data
         await this.db.caseload.clear();
-        await this.db.caseload.bulkAdd(offenders, {allKeys: true});
+        // Switched from bulkAdd to bulkPut to safely upsert records and avoid duplicate key errors
+        await this.db.caseload.bulkPut(offenders, {allKeys: true});
       } catch (error) {
         console.error('Failed to load agent caseload:', error);
       }
@@ -135,8 +136,8 @@ export class AgentService {
         summaryIds.push(c.contactId);
         this.contactIdArray.push(c.contactId);
       }
-
-      await this.db.existingContacts.bulkAdd(contacts, {allKeys: true});
+      // Switched from bulkAdd to bulkPut to safely upsert records and avoid duplicate key errors
+      await this.db.existingContacts.bulkPut(contacts, {allKeys: true});
 
       if (summaryIds.length) {
         await this.loadSummaries(summaryIds);

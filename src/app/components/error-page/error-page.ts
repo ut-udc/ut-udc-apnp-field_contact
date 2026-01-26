@@ -82,7 +82,16 @@ export class ErrorPage implements OnInit {
         this.showReportTheIssue.set(false);
         this.showTryAgain.set(false);
         break;
-
+      case '400':
+        this.title.set('Bad Request');
+        this.message.set('The request could not be processed due to invalid or missing information. Please verify your input and try again, or contact your administrator if the issue persists.');
+        this.errorCode.set('400');
+        this.shortMsg.set('Bad Request');
+        this.showSignIn.set(false);
+        this.showGoBack.set(true);
+        this.showReportTheIssue.set(true);
+        this.showTryAgain.set(false);
+        break;
       case '403':
         this.title.set('Forbidden Access');
         this.message.set('You don’t have permission to view this page. Request access or report the issue to your administrator if you believe this is an error.');
