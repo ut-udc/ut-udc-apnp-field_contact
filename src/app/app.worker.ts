@@ -12,26 +12,31 @@ self.onmessage = async function (event) {
   await db.open();
 
   // const db = await new Dexie('supervisionContactsDB').open();
-
+  // Prevent fetch call if primaryAgentId is undefined or null
+  if(!event.data?.primaryAgentId) return;
   const response = await fetch('/field_contact_bff/api/agent-caseload/' + event.data?.primaryAgentId);
-
+  let offenders: Array<Offender> = await response.json();
+  // Clear existing data only after confirming offenders response is valid
+  if(!offenders) {
+    return;
+  }
+  console.log(offenders.length + ' offenders fetched in worker');
   // clearing old data
   await db.caseload.clear();
   await db.existingContacts.clear();
 
-  let offenders: Array<Offender> = await response.json();
-  console.log(offenders.length + ' offenders fetched in worker');
-
-  await db.caseload.bulkAdd(offenders);
-
+  // Switched from bulkAdd to bulkPut to safely upsert records and avoid duplicate key errors
+  await db.caseload.bulkPut(offenders, {allKeys: true});
   for (const offender of offenders) {
+    // Skip processing when offender or offenderNumber is missing
+    if(!offender || !offender.offenderNumber) continue;
     console.log(offender.offenderNumber + ' offenderNumber processing in worker');
     console.log('localhost:8080/field_contact_bff/api/existing-contacts/' + offender.offenderNumber);
     const contactsResponse = await fetch('/field_contact_bff/api/existing-contacts/' + offender.offenderNumber);
     let contacts: Array<Contact> = await contactsResponse.json();
     console.log(contacts.length + ' contacts fetched in worker');
-
-    await db.existingContacts.bulkAdd(contacts);
+    // Switched from bulkAdd to bulkPut to safely upsert records and avoid duplicate key errors
+    await db.existingContacts.bulkPut(contacts);
     const contactIds: Array<number> = [];
     for (const contact of contacts) {
       contactIds.push(contact.contactId);
