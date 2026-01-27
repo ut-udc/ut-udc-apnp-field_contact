@@ -1,0 +1,21 @@
+<div class="surface">
+  <app-detail-header
+    [title]="'Notifications'"
+    [backLink]="'/home'"
+  ></app-detail-header>
+
+  <div class="detail-card">
+
+    <div class="detail-content-card">
+    <ng-container>
+      @for (contact of unknownOffenderContacts(); track contact?.contactId) {
+        <app-contact-listing-card
+          [contact]="contact"
+        >
+        </app-contact-listing-card>
+      }
+    </ng-container>
+    </div>
+  </div>
+
+</div>

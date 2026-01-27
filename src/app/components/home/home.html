@@ -18,12 +18,21 @@
         svgIcon="search"
         aria-hidden="false"
         aria-label="Search Icon"></mat-icon>
-      <mat-icon
-        class="header-icon"
-        svgIcon="bell"
-        aria-hidden="false"
-        aria-label="Notifications Icon"></mat-icon>
       -->
+      @if(generalContactsCount()>0) {
+        <mat-icon
+          [routerLink]="'/notifications'"
+          class="header-icon bell-with-badge"
+          svgIcon="bell"
+          style="cursor: pointer"
+          [matBadge]="generalContactsCount() > 0 ? generalContactsCount() : null"
+          matBadgeColor="warn"
+          matBadgeOverlap="false"
+          matBadgePosition="above after"
+          aria-hidden="false"
+          aria-label="Notifications Icon">
+        </mat-icon>
+      }
       <div class="primary-container">
         <span class="initials" (click)=this.agentService.updatePrimaryAgentStatus(0)>
           <div>
@@ -41,6 +50,21 @@
     </mat-toolbar-row>
     -->
   </mat-toolbar>
+  <div class="page-title">
+    <div class="page headline_small">Supervision Contacts</div>
+    <div class="page-actions">
+      <div class="page-actions-container">
+      <mat-icon
+        class="page-actions-icon"
+        svgIcon="add_black"
+        aria-hidden="false"
+        aria-label="Add Icon"
+        style="cursor: pointer"
+        [routerLink]="['/contact-form/0']"
+      ></mat-icon>
+      </div>
+    </div>
+  </div>
   <div class="my-caseload-container">
     <app-my-caseload />
   </div>

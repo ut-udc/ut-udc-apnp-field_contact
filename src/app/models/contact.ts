@@ -3,6 +3,9 @@ import {AgentName} from './agent-name';
 export interface Contact {
   contactId: number;
   offenderNumber: number;
+  selectedOffender: number; //PWA internal use only
+  firstName: string;
+  lastName: string;
   result: number; //1=successful and 4=attempted, 5=information.
   resultDescription: string; //PWA internal use only
   primaryInterviewer: AgentName;

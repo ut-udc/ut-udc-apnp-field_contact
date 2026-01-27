@@ -7,6 +7,7 @@ import {ContactDetailView} from './components/contact-detail-view/contact-detail
 import {AgentProfile} from './components/agent-profile/agent-profile';
 import {SplashScreen} from './components/splash-screen/splash-screen';
 import {ErrorPage} from './components/error-page/error-page';
+import {Notifications} from './components/notifications/notifications';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,11 @@ export const routes: Routes = [
     path: 'agent-profile',
     component: AgentProfile,
     title: 'Agent Profile',
+  },
+  {
+    path: 'notifications',
+    component: Notifications,
+    title: 'Notifications',
   },
   {
     path: '',

@@ -393,3 +393,35 @@ div.udc-list-item-card{
   z-index: 2000 !important;
   transition: bottom 0.25s ease-in-out;
 }
+
+.page-title {
+  display: flex;
+  height: 48px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  .page {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1 0 0;
+  }
+  .page-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    .page-actions-container {
+      border-radius: 100px;
+      border: 1px solid var(--UDC-styles-sys-light-outline, #7A776E);
+      display: flex;
+      padding: 8px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      .page-actions-icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}

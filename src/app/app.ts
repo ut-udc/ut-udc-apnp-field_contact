@@ -103,7 +103,7 @@ export class App implements OnInit, OnDestroy {
   private registerPhosphorIcons(): void {
     const basePath = 'assets/phosphor-icons/';
 
-    const icons = ['calendar', 'caret-down', 'clock'];
+    const icons = ['calendar', 'caret-down', 'caret-right', 'clock'];
 
     icons.forEach(name => {
       this.iconRegistry.addSvgIcon(

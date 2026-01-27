@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, effect, inject, Signal, ViewChild} from '@angular/core';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatDividerModule} from '@angular/material/divider';
@@ -7,15 +7,13 @@ import {MatInputModule} from '@angular/material/input';
 import {CommonModule, DatePipe} from '@angular/common';
 import {DomSanitizer} from '@angular/platform-browser';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {from} from 'rxjs';
+import {from, of, switchMap} from 'rxjs';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import {Offender} from '../../models/offender';
-import {Contact} from '../../models/contact';
 import {MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef,} from '@angular/material/bottom-sheet';
 import {MatListModule} from '@angular/material/list';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatButtonToggle, MatButtonToggleModule} from '@angular/material/button-toggle';
 import {DetailHeader} from '../detail-header/detail-header';
-import {toSignal} from '@angular/core/rxjs-interop';
+import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {liveQuery} from 'dexie';
 import {Db} from '../../services/db';
 import {ContactService} from '../../services/contact-service';
@@ -44,7 +42,7 @@ import {CommonDialogService} from '../../services/common-dialog-service';
   templateUrl: './commentary-form.html',
   styleUrl: './commentary-form.scss',
 })
-export class CommentaryForm implements OnInit {
+export class CommentaryForm  {
   db: Db = inject(Db)
   contactService: ContactService = inject(ContactService);
   agentService: AgentService = inject(AgentService);
@@ -62,19 +60,49 @@ export class CommentaryForm implements OnInit {
     this._bottomSheet.open(FieldVisitGuidelinesBottomSheet);
   }
 
-  currentContact: Signal<Contact | undefined> = toSignal(from(
-    liveQuery(() => this.db.contacts
-      .where('contactId')
-      .equals(Number(this.route.snapshot.params['contactId']))
-      .first()))
+
+// 1. Current contact signal
+  currentContact = toSignal(
+    from(
+      liveQuery(() =>
+        this.db.contacts
+          .where('contactId')
+          .equals(Number(this.route.snapshot.params['contactId']))
+          .first()
+      )
+    ),
+    { initialValue: undefined }
+  );
+routeOffenderNumber: number = Number(this.route.snapshot.params['offenderNumber']);
+// 2. Compute selected offender number
+  selectedOffenderNumber = computed(() => {
+    const contact = this.currentContact();
+    if (contact?.selectedOffender && contact.formCompleted) {
+      return contact.selectedOffender;
+    }
+    return Number(this.route.snapshot.params['offenderNumber']);
+  });
+
+// 3. Convert signal to Observable
+  selectedOffenderNumber$ = toObservable(this.selectedOffenderNumber);
+
+// 4. Reactive offender signal
+  offender = toSignal(
+    this.selectedOffenderNumber$.pipe(
+      switchMap(num => {
+        if (!num) return of(undefined);
+        return liveQuery(() =>
+          this.db.caseload
+            .where('offenderNumber')
+            .equals(num)
+            .first()
+        );
+      })
+    ),
+    { initialValue: undefined }
   );
 
-  offender: Signal<Offender | undefined> = toSignal(from(
-    liveQuery(() => this.db.caseload
-      .where('offenderNumber')
-      .equals(Number(this.route.snapshot.params['offenderNumber']))
-      .first()))
-  );
+
 
   commentaryForm: FormGroup = new FormGroup({
     wasContactSuccessful: new FormControl<number | null>(null),
@@ -94,8 +122,14 @@ export class CommentaryForm implements OnInit {
         const status:boolean = await this.onSubmit();
         if(status) {
           this.snackBarService.show('Contact saved successfully.');
-          if (this.offenderNumber) {
-            this.router.navigate(['/offender-detail', this.offenderNumber]);
+          if (this.offenderNumber == 0) {
+            setTimeout(()=>{
+              this.router.navigate(['/home']);
+            },100);
+          } else {
+            setTimeout(()=>{
+              this.router.navigate(['/offender-detail', this.offenderNumber]);
+            },100);
           }
         }
       } else {
@@ -103,22 +137,27 @@ export class CommentaryForm implements OnInit {
       }
     });
   }
-      freshSubmit:boolean = false;
+  freshSubmit:boolean = false;
   async onSubmit(): Promise<boolean> {
-    if (!navigator.onLine) {
-      this.currentContact()!.formCompleted = true;
-      this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
-      const result = this.currentContact()?.result;
-      this.currentContact()!.resultDescription = this.contactResultTypeById();
-      this.contactService.updateContact(this.currentContact()!);
+    const contact = this.currentContact();
+    if(!contact) {
+      return false;
+    }
+    if((contact.selectedOffender ?? 0) > 0){
+      contact.offenderNumber = Number(contact.selectedOffender);
+      this.offenderNumber = contact.offenderNumber;
+    }
+    contact.formCompleted = true;
+    contact.summary = this.commentaryForm.value.commentary ?? '';
+    if (!navigator.onLine || contact!.offenderNumber == 0) {
+      // const result = this.currentContact()?.result;
+      contact.resultDescription = this.contactResultTypeById();
+      await this.contactService.updateContact(contact);
       // this.contactService.addPostContactToQueue(this.currentContact()!);
       // this.contactService.removeContactFromContacts(this.currentContact()!.contactId);
-
       return true;
     } else {
-      this.currentContact()!.formCompleted = true;
-      this.currentContact()!.summary = this.commentaryForm.value.commentary ?? '';
-      this.contactService.updateContact(this.currentContact()!);
+      await this.contactService.updateContact(contact);
       const response: Response | null = await this.contactService.syncContactWithDatabase(this.currentContact()!);
       if (response != null && !response.ok && response.status == 500) {
         if (this.freshSubmit) {
@@ -130,13 +169,13 @@ export class CommentaryForm implements OnInit {
               if(status) {
                 this.snackBarService.show('Contact saved successfully.');
                 if (this.offenderNumber) {
-                  this.router.navigate(['/offender-detail', this.offenderNumber]);
+                  await this.router.navigate(['/offender-detail', this.offenderNumber]);
                 }
               }
             }
           });
         } else {
-          this.router.navigate(['/','500']);
+          await this.router.navigate(['/','500']);
           return false;
         }
         return false;
@@ -147,8 +186,8 @@ export class CommentaryForm implements OnInit {
     // window.location.href = 'offender-detail/' + this.offenderNumber;
   }
 
-  async ngOnInit() {
-  }
+  @ViewChild('madeContactToggle') madeContactToggle!: MatButtonToggle;
+  @ViewChild('attemptedContactToggle') attemptedContactToggle!: MatButtonToggle;
 
   constructor() {
     this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
@@ -161,6 +200,26 @@ export class CommentaryForm implements OnInit {
       'arrow_back',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
+    effect(() => {
+      const contact = this.currentContact();
+      if (!contact) return;
+      if(contact && contact.selectedOffender && contact.selectedOffender> 0 && contact.formCompleted) {
+        setTimeout(() => {
+          // this.commentaryForm.updateValueAndValidity();
+          this.commentaryForm.patchValue({
+            commentary: contact?.summary,
+          });
+          if (contact.result == 1) {
+            // this.madeContact();
+            this.madeContactToggle._buttonElement.nativeElement.click();
+          }
+          if (contact.result == 4) {
+            // this.attemptedContact();
+            this.attemptedContactToggle._buttonElement.nativeElement.click();
+          }
+        }, 100);
+      }
+    });
   }
 
   madeContact() {

@@ -1,14 +1,26 @@
 <div class="surface">
   <app-detail-header
     [title]="'Add Commentary'"
-    [backLink]="'/contact-form/' + currentContact()?.offenderNumber + '/' + currentContact()?.contactId"
+    [backLink]="'/contact-form/' + routeOffenderNumber + '/' + currentContact()?.contactId"
   ></app-detail-header>
   <div class="surface-container-low-outlined">
-    <div class="contact-info-container">
-      <span class="label_medium">Offender</span>
-      <span class="body_large"
-      >{{ offender()?.defaultOffenderName?.firstName }} {{ offender()?.defaultOffenderName?.lastName }}</span
-      >
+    @if ((currentContact()?.offenderNumber ?? 0) > 0
+    || (currentContact()?.selectedOffender ?? 0) > 0) {
+      <div class="contact-info-container">
+        <span class="label_medium">Offender</span>
+        <span class="body_large">
+              {{ offender()?.defaultOffenderName?.firstName }}
+              {{ offender()?.defaultOffenderName?.lastName }}
+        </span>
+      </div>
+    }
+    <div class="contact-info-container" *ngIf="currentContact()?.offenderNumber == 0 && !currentContact()?.formCompleted">
+      <span class="label_medium">First Name</span>
+      <span class="body_large">{{ currentContact()?.firstName }}</span>
+    </div>
+    <div class="contact-info-container" *ngIf="currentContact()?.offenderNumber == 0 && !currentContact()?.formCompleted">
+      <span class="label_medium">Last Name</span>
+      <span class="body_large">{{ currentContact()?.lastName }}</span>
     </div>
     <div class="contact-info-container">
       <span class="label_medium">Date</span>
@@ -55,6 +67,7 @@
         aria-label="Font Style"
       >
         <mat-button-toggle
+          #madeContactToggle
           class="successFab"
           (click)="madeContact()"
           value="bold"
@@ -62,6 +75,7 @@
         </mat-button-toggle
         >
         <mat-button-toggle
+          #attemptedContactToggle
           class="successFab"
           (click)="attemptedContact()"
           value="italic"
@@ -98,7 +112,7 @@
       <div class="button-row">
         <button
           matButton="outlined"
-          routerLink="/offender-detail/{{(currentContact())?.offenderNumber}}"
+          [routerLink]="currentContact()?.offenderNumber?['/offender-detail', currentContact()?.offenderNumber]:['/home']"
         >
           Cancel
         </button>
