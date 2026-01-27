@@ -42,13 +42,18 @@ export class OffenderDetail implements OnInit {
   router = inject(Router);
   path = '/field_contact_bff/api';
   loadDataService = inject(LoadDataService);
+  // Added DB empty check to return undefined until caseload data is loaded
   currentOffender: Signal<Offender | null | undefined> = toSignal(from(
     liveQuery(async () => {
       const param = this.route.snapshot.params['offenderNumber'];
       // Handle null, empty, or not-a-number offenderNumber
       const offenderNumber = Number(param);
-      if (param == null || isNaN(offenderNumber)) {
+      if (param == null || isNaN(param)) {
         return null;
+      }
+      const _count = await this.db.caseload.count();
+      if(_count === 0) {
+        return undefined;
       }
       // Query DB
       const result = await this.db.caseload
@@ -81,17 +86,16 @@ export class OffenderDetail implements OnInit {
 
   constructor() {
     effect(async () => {
-      if(!this.loadDataService.dataInitComplete()) return;
-      const offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
-      const offender = await this.currentOffender();
+      // Removed dataInitComplete check and made currentOffender call synchronous; added console log and await on router navigation
+      const offenderNumber = this.route.snapshot.params['offenderNumber'];
+      const offender = this.currentOffender();
+      console.log(offender);
       // Still loading → do nothing
       if (offender === undefined) return;
       if (offender === null) {
-        const errorInfo = { offenderNumber: this.route.snapshot.params['offenderNumber'] };
+        const errorInfo = { offenderNumber: offenderNumber };
         this.loadDataService.errorInfo.set(errorInfo);
-        this.router.navigate(['/','404'], {
-          queryParams: errorInfo
-        });
+        await this.router.navigate(['/','404'], { queryParams: errorInfo });
         return;
       }
       if (!(offender!.lastSuccessfulContact)) {
