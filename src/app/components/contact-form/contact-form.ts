@@ -8,7 +8,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {DateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {MatTimepickerModule} from '@angular/material/timepicker';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {CommonModule} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -66,6 +66,8 @@ class ContactForm implements OnInit {
   offenderNumber: number = 0;
   contactId: number = 0;
 
+  availableOffenders: Signal<Array<Select2Model> |undefined> = signal<Array<Select2Model> | undefined>(undefined);
+
   primaryInterviewers: Signal<Array<Select2String> |undefined> =  computed(() => {
     let agents: Agent[] = this.agentService.allAgents() ?? [];
     agents = agents.filter(agent => agent.name != null && agent.name !== '');
@@ -96,6 +98,9 @@ class ContactForm implements OnInit {
   currentContact: Contact = {
     contactId: 0,
     offenderNumber: 0,
+    selectedOffender: 0,
+    firstName: '',
+    lastName: '',
     primaryInterviewer: {
       userId: "",
       name: ""
@@ -163,11 +168,19 @@ class ContactForm implements OnInit {
     const minutes = this.contactForm.value.contactTime.getMinutes(); // Get the minute (0-59)
     const seconds = this.contactForm.value.contactTime.getSeconds();
     const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
+    let contactOffenderNum = offenderNum;
+    if(offenderNum === 0 && this.currentContact.contactId > 0 && this.contactForm.value.availableOffender != '') {
+      contactOffenderNum = this.contactForm.value.availableOffender;
+    }
     if (this.currentContact.contactId === 0) {
       this.currentContact.firstPageCompleted = true;
       this.currentContact = {
+        firstName: this.contactForm.value.firstName,
+        lastName: this.contactForm.value.lastName,
         contactId: this.currentContact.contactId,
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
+        selectedOffender: contactOffenderNum,
         primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
         secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         // primaryInterviewer: {userId: primaryInterviewerUserId ?? '', name: primaryInterviewerName ?? ''},
@@ -191,15 +204,18 @@ class ContactForm implements OnInit {
 
       this.currentContact.contactId = this.contactCount + 1;
       console.log('Contact to save: '+this.currentContact);
-      this.contactService.addContactToIdb(this.currentContact);
+      await this.contactService.addContactToIdb(this.currentContact);
     } else if (
-      this.currentContact.contactId > 0 &&
-      this.currentContact.formCompleted === false
+      this.currentContact.contactId > 0  &&
+      !this.currentContact.formCompleted
     ) {
-      this.currentContact.contactId = this.currentContact.contactId;
+      // this.currentContact.contactId = this.currentContact.contactId;
       this.currentContact = {
+        firstName: this.contactForm.value.firstName,
+        lastName: this.contactForm.value.lastName,
         contactId: this.currentContact.contactId,
         offenderNumber: Number(this.route.snapshot.params['offenderNumber']),
+        selectedOffender: contactOffenderNum,
         primaryInterviewer: {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''},
         secondaryInterviewer: {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''},
         contactDate: this.contactForm.value.contactDate ?? this.newDate(),
@@ -218,19 +234,38 @@ class ContactForm implements OnInit {
         contactSyncedWithDatabase: false,
         userAgent: this.agentService.primaryAgent()?.userId || '',
       };
-      this.contactService.updateContact(this.currentContact);
+      await this.contactService.updateContact(this.currentContact);
+    } else if (
+      this.currentContact.contactId > 0  &&
+      this.currentContact.formCompleted
+    ) {
+      this.currentContact.selectedOffender = contactOffenderNum;
+      this.currentContact.primaryInterviewer = {userId: this.contactForm.value.primaryInterviewer ?? '', name: this.primaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.primaryInterviewer)?.text ?? ''};
+      this.currentContact.secondaryInterviewer = {userId: this.contactForm.value.secondaryInterviewer ?? '', name: this.secondaryInterviewers()?.filter(() => true).find(option => option.id === this.contactForm.value.secondaryInterviewer)?.text ?? ''};
+      this.currentContact.contactDate = this.contactForm.value.contactDate ?? this.newDate();
+      this.currentContact.sortDate = this.contactForm.value.contactDate ?? this.newDate();
+      this.currentContact.contactTime = this.contactForm.value.contactTime ?? this.newDate();
+      this.currentContact.contactTimeString = formattedTime;
+      this.currentContact.contactTypeId = this.contactForm.value.contactType ?? '';
+      this.currentContact.contactType = this.contactTypeById();
+      this.currentContact.location = this.locationById();
+      this.currentContact.locationId = this.contactForm.value.location ?? '';
+      await this.contactService.updateContact(this.currentContact);
     }
       // window.location.href = 'commentary-form/', this.currentContact.offenderNumber, this.currentContact.contactId;
   }
 
   contactForm: FormGroup = new FormGroup({
     contactId: new FormControl<number | null>(null),
+    firstName: new FormControl<string | null>(null),
+    lastName: new FormControl<string | null>(null),
     contactDate: new FormControl<Date | null>(null),
     contactTime: new FormControl<Date | null>(null),
     primaryInterviewer: new FormControl<string | null>(null),
     secondaryInterviewer: new FormControl<string | null>(null),
     contactType: new FormControl<string | null>(null),
     location: new FormControl<string | null>(null),
+    availableOffender: new FormControl<string | null>(null),
   });
 
   //This is for the 24-hour clock
@@ -249,7 +284,9 @@ class ContactForm implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/arrow_back.svg')
     );
   }
-
+  firstNameControl = new FormControl('');
+  lastNameControl = new FormControl('');
+  availableOffenderControl = new FormControl('');
   dateTimeControl = new FormControl('', Validators.required);
   primaryInterviewerControl = new FormControl('', Validators.required);
   secondaryInterviewerControl = new FormControl('');
@@ -261,18 +298,46 @@ class ContactForm implements OnInit {
     this.contactTypeOptions = await this.contactService.getListOfContactTypes();
     this.locationOptions = await this.contactService.getListOfLocations();
     const offenderNum = Number(this.route.snapshot.params['offenderNumber']);
-    this.offender = await this.contactService.getCaseloadOffenderById(offenderNum);
-    if (!this.offender) {
-      this.offender = await this.contactService.getOtherOffendersOffenderById(
-        offenderNum
-      );
+    if(offenderNum || offenderNum > 0) {
+      // offender exists → not require first/last name
+      this.firstNameControl.clearValidators();
+      this.lastNameControl.clearValidators();
+      this.availableOffenderControl.clearValidators();
+      this.offender = await this.contactService.getCaseloadOffenderById(offenderNum);
+      if (!this.offender) {
+        this.offender = await this.contactService.getOtherOffendersOffenderById(
+          offenderNum
+        );
+      }
+      // FIX → Patch offender name so validation passes
+      this.firstNameControl.patchValue(this.offender?.defaultOffenderName?.firstName ?? '');
+      this.lastNameControl.patchValue(this.offender?.defaultOffenderName?.lastName ?? '');
+      this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
+      this.currentContact.offenderNumber = this.offenderNumber;
+    } else {
+      this.offender = undefined;
+      this.offenderNumber = 0;
+      this.firstNameControl.setValidators([Validators.required]);
+      this.lastNameControl.setValidators([Validators.required]);
     }
-    this.offenderNumber = Number(this.route.snapshot.params['offenderNumber']);
-    this.currentContact.offenderNumber = this.offenderNumber;
+    // MUST CALL THIS
+    this.firstNameControl.updateValueAndValidity();
+    this.lastNameControl.updateValueAndValidity();
     this.contactId = Number(this.route.snapshot.params['contactId']);
     if (this.contactId || this.contactId > 0) {
       const contact = await this.contactService.getContactById(this.contactId);
       this.currentContact = contact ?? this.currentContact;
+      if(offenderNum === 0 && contact.formCompleted) {
+        this.availableOffenderControl.setValidators([Validators.required]);
+        this.availableOffenderControl.updateValueAndValidity();
+        this.availableOffenders = computed(() => {
+          let offenders: Offender[] = this.agentService.myCaseload() ?? [];
+          return offenders?.map(offender => {
+            let selectOption: Select2Model = {id: offender.offenderNumber, text: offender.defaultOffenderName.firstName + offender.defaultOffenderName.lastName + ' (' + offender.offenderNumber + ')'};
+            return selectOption;
+          })
+        });
+      }
     } else if (this.offenderNumber > 0) {
       this.contact =
         await this.contactService.getUncompletedContactByOffenderNumber(
@@ -283,10 +348,12 @@ class ContactForm implements OnInit {
     if (this.currentContact.contactId > 0) {
       setTimeout(() => {
         this.contactForm.updateValueAndValidity();
-
         this.contactForm.patchValue({
           primaryInterviewer: this.currentContact.primaryInterviewer?.userId,
           contactId: this.currentContact?.contactId,
+          firstName: this.currentContact?.firstName,
+          lastName: this.currentContact?.lastName,
+          availableOffender: this.currentContact?.selectedOffender>0?this.currentContact?.selectedOffender:'',
           contactDate: this.currentContact?.contactDate,
           contactTime: this.currentContact?.contactTime,
           secondaryInterviewer: this.currentContact?.secondaryInterviewer?.userId,
@@ -299,20 +366,24 @@ class ContactForm implements OnInit {
         this.currentContact.contactId = this.contactCount + 1;
         this.contactForm.patchValue({
           contactId: this.currentContact?.contactId,
+          firstName: '',
+          lastName: '',
           primaryInterviewer: this.agentService.primaryAgent()?.userId,
           contactDate: this.newDate(),
           contactTime: this.newDate(),
         });
       }, 100);
     }
-
     this.contactForm = new FormGroup({
+      firstName: this.firstNameControl,
+      lastName: this.lastNameControl,
       contactDate: this.dateTimeControl,
       contactTime: this.dateTimeControl,
       primaryInterviewer: this.primaryInterviewerControl,
       secondaryInterviewer: this.secondaryInterviewerControl,
       contactType: this.contactTypeControl,
       location: this.contactLocationControl,
+      availableOffender: this.availableOffenderControl,
     });
   }
 }
